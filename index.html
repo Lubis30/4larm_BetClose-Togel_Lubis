@@ -5,6 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Togel Lubis · Alarm Jadwal</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+<!-- ═══ PROTEKSI KODE ═══ -->
+<script>
+(function(){
+  // Disable right click
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); return false; });
+
+  // Disable keyboard shortcuts: F12, Ctrl+U, Ctrl+Shift+C/I/J/K, Ctrl+S
+  document.addEventListener('keydown', function(e){
+    // F12
+    if(e.key === 'F12'){ e.preventDefault(); return false; }
+    // Ctrl combinations
+    if(e.ctrlKey){
+      // Ctrl+U (view source)
+      if(e.key === 'u' || e.key === 'U'){ e.preventDefault(); return false; }
+      // Ctrl+S (save)
+      if(e.key === 's' || e.key === 'S'){ e.preventDefault(); return false; }
+      // Ctrl+Shift+...
+      if(e.shiftKey){
+        if(['i','I','c','C','j','J','k','K'].includes(e.key)){
+          e.preventDefault(); return false;
+        }
+      }
+    }
+    // F5 optionally block (refresh): comment out jika tidak mau
+    // if(e.key === 'F5'){ e.preventDefault(); return false; }
+  }, true);
+
+  // Detect DevTools open via window size trick
+  var threshold = 160;
+  setInterval(function(){
+    if(
+      window.outerWidth - window.innerWidth > threshold ||
+      window.outerHeight - window.innerHeight > threshold
+    ){
+      document.body.innerHTML = '<div style="background:#0b0c0e;color:#c8a84b;height:100vh;display:flex;align-items:center;justify-content:center;font-family:serif;font-size:22px;letter-spacing:4px;">⛔ AKSES DILARANG</div>';
+    }
+  }, 1000);
+
+  // Disable text selection
+  document.addEventListener('selectstart', function(e){ e.preventDefault(); });
+
+  // Disable drag
+  document.addEventListener('dragstart', function(e){ e.preventDefault(); });
+})();
+</script>
+
 <style>
 /* ═══════════════════════════════
    DESIGN SYSTEM
@@ -12,42 +59,33 @@
    3D via realistic light physics
 ═══════════════════════════════ */
 :root {
-  /* Surface colors — layered depth */
-  --z0: #0b0c0e;        /* void — deepest */
-  --z1: #111318;        /* base layer */
-  --z2: #181b22;        /* card surface */
-  --z3: #1e2130;        /* raised element */
-  --z4: #252840;        /* highlight */
+  --z0: #0b0c0e;
+  --z1: #111318;
+  --z2: #181b22;
+  --z3: #1e2130;
+  --z4: #252840;
 
-  /* Gold palette — warm, not neon */
-  --gold-hi:  #f0d080;  /* highlight / catch light */
-  --gold:     #c8a84b;  /* primary gold */
-  --gold-mid: #a0802a;  /* mid gold */
-  --gold-shd: #5a4010;  /* gold shadow */
+  --gold-hi:  #f0d080;
+  --gold:     #c8a84b;
+  --gold-mid: #a0802a;
+  --gold-shd: #5a4010;
   --gold-dim: rgba(200,168,75, 0.12);
 
-  /* Status */
   --emerald:  #3d9970;
   --emerald2: #a8d8c0;
   --crimson:  #9b2335;
   --crimson2: #d9806a;
   --amber:    #c8a84b;
 
-  /* Text */
-  --text-1: #e8e4da;    /* primary */
-  --text-2: #9a9590;    /* secondary */
-  --text-3: #5a5650;    /* tertiary */
+  --text-1: #e8e4da;
+  --text-2: #9a9590;
+  --text-3: #5a5650;
 
-  /* 3D light — TOP light source, angle 135deg */
-  /* Cards feel physically raised off the page */
   --lift-sm:
-    /* top-left catch */
     inset 0 1px 0 rgba(255,255,255, 0.07),
     inset 1px 0 0 rgba(255,255,255, 0.04),
-    /* bottom-right shadow */
     inset 0 -1px 0 rgba(0,0,0, 0.5),
     inset -1px 0 0 rgba(0,0,0, 0.3),
-    /* drop */
     0 4px 12px rgba(0,0,0, 0.5),
     0 1px 3px rgba(0,0,0, 0.7);
 
@@ -78,7 +116,6 @@
     0 2px 6px rgba(0,0,0, 0.8),
     0 0 20px rgba(200,168,75, 0.15);
 
-  /* Engraved text — gold bevel */
   --engrave:
     0 1px 0 rgba(240,208,128, 0.5),
     0 -1px 0 rgba(0,0,0, 0.9),
@@ -103,7 +140,8 @@
     0 0 12px rgba(61,153,112, 0.4);
 }
 
-* { margin:0; padding:0; box-sizing:border-box }
+* { margin:0; padding:0; box-sizing:border-box;
+    -webkit-user-select:none; -moz-user-select:none; user-select:none; }
 html { scroll-behavior:smooth }
 
 body {
@@ -113,7 +151,6 @@ body {
   font-weight: 400;
   min-height: 100vh;
   overflow-x: hidden;
-  /* subtle grain texture */
   background-image:
     radial-gradient(ellipse 140% 70% at 50% -5%, rgba(200,168,75,0.07) 0%, transparent 55%),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
@@ -212,7 +249,6 @@ body {
 }
 @keyframes pip-grow2 { from { height:0; opacity:0 } to { height:48px; opacity:1 } }
 
-
 /* ═══ APP ═══ */
 #app {
   max-width: 1400px; margin: 0 auto;
@@ -234,7 +270,6 @@ body {
   position: absolute; bottom: -1px; left: 0; width: 120px; height: 1px;
   background: linear-gradient(to right, var(--gold-mid), transparent);
 }
-
 .hdr-left {}
 .hdr-tag {
   font-size: 10px; font-weight: 600; letter-spacing: 7px;
@@ -256,9 +291,7 @@ body {
   text-shadow: var(--engrave);
   letter-spacing: 2px;
 }
-.hdr-right {
-  text-align: right;
-}
+.hdr-right { text-align: right; }
 .hdr-sub {
   font-size: 10px; font-weight: 300; letter-spacing: 5px;
   text-transform: uppercase; color: var(--text-3);
@@ -277,7 +310,6 @@ body {
   padding: 22px 26px;
   position: relative; overflow: hidden;
 }
-/* bevel: top-left bright edge, bottom-right dark edge */
 .clk-cell::before {
   content: '';
   position: absolute; inset: 0; pointer-events: none;
@@ -287,9 +319,7 @@ body {
     rgba(0,0,0,0.15) 100%
   );
 }
-.clk-cell.accent {
-  background: var(--z3);
-}
+.clk-cell.accent { background: var(--z3); }
 .clk-cell-label {
   font-size: 9px; font-weight: 600; letter-spacing: 5px;
   text-transform: uppercase; color: var(--gold-mid);
@@ -327,21 +357,15 @@ body {
 .status-strip::before {
   content: '';
   position: absolute; top:0; left:0; bottom:0; width: 2px;
-  background: linear-gradient(to bottom,
-    transparent, var(--gold-mid), transparent
-  );
+  background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
 }
 .status-strip::after {
   content: '';
   position: absolute; inset:0; pointer-events: none;
-  background: linear-gradient(135deg,
-    rgba(255,255,255,0.03) 0%, transparent 50%
-  );
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
 }
 
-.s-live {
-  display: flex; align-items: center; gap: 7px;
-}
+.s-live { display: flex; align-items: center; gap: 7px; }
 .s-live-dot {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--emerald);
@@ -358,12 +382,8 @@ body {
   text-transform: uppercase; color: var(--emerald2);
   text-shadow: var(--engrave-green);
 }
-
 .s-divider { color: var(--text-3); font-size: 10px }
-
-.s-stat {
-  font-size: 11px; font-weight: 400; color: var(--text-2); letter-spacing: 0.3px;
-}
+.s-stat { font-size: 11px; font-weight: 400; color: var(--text-2); letter-spacing: 0.3px; }
 .s-stat strong { font-weight: 600 }
 .s-stat strong.g { color: var(--emerald2); text-shadow: var(--engrave-green) }
 .s-stat strong.r { color: var(--crimson2); text-shadow: var(--engrave-red) }
@@ -391,10 +411,7 @@ body {
   box-shadow: var(--lift-md), 0 0 14px rgba(200,168,75,0.12);
 }
 .s-btn:active { transform: translateY(1px); box-shadow: var(--lift-sm) }
-.s-btn.notif-ok {
-  border-color: rgba(61,153,112,0.4);
-  color: var(--emerald2);
-}
+.s-btn.notif-ok { border-color: rgba(61,153,112,0.4); color: var(--emerald2); }
 
 /* ═══ STATS ROW ═══ */
 .stats-row {
@@ -419,7 +436,6 @@ body {
   background: linear-gradient(to right, transparent, rgba(200,168,75,0.2), transparent);
 }
 .stat:hover { background: var(--z3) }
-
 .stat-n {
   font-family: 'DM Serif Display', serif;
   font-size: 26px; line-height: 1; margin-bottom: 5px;
@@ -447,8 +463,7 @@ body {
   background: transparent; border: 1px solid rgba(255,255,255,0.07);
   color: var(--text-3); cursor: pointer; transition: all 0.18s;
 }
-.filter-btn:hover,
-.filter-btn.on {
+.filter-btn:hover, .filter-btn.on {
   background: var(--z2); border-color: rgba(200,168,75,0.3);
   color: var(--gold); box-shadow: var(--lift-sm);
 }
@@ -461,6 +476,7 @@ body {
   outline: none; width: 200px;
   box-shadow: var(--lift-sm);
   transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-user-select: text; -moz-user-select: text; user-select: text;
 }
 .search-box:focus {
   border-color: rgba(200,168,75,0.4);
@@ -484,8 +500,6 @@ body {
   transition: background 0.2s, box-shadow 0.25s, transform 0.25s;
   cursor: default;
 }
-
-/* BEVEL — the core of 3D effect */
 .card::before {
   content: '';
   position: absolute; inset:0; pointer-events: none;
@@ -496,15 +510,12 @@ body {
     rgba(0,0,0,0.12) 100%
   );
 }
-
-/* top edge gold accent */
 .card::after {
   content: '';
   position: absolute; top:0; left:0; right:0; height:1px;
   background: linear-gradient(to right, var(--gold-mid), transparent 60%);
   opacity: 0.4;
 }
-
 .card:hover {
   background: var(--z3);
   box-shadow: var(--lift-md);
@@ -512,11 +523,7 @@ body {
   z-index: 1;
 }
 .card:hover::after { opacity: 0.8 }
-
-/* CLOSED state */
-.card.closed {
-  background: #100c0d;
-}
+.card.closed { background: #100c0d; }
 .card.closed::after {
   background: linear-gradient(to right, var(--crimson), transparent 60%);
   opacity: 0.4;
@@ -526,18 +533,13 @@ body {
   box-shadow: var(--lift-md), 0 0 0 1px rgba(155,35,53,0.2);
 }
 .card.closed:hover::after { opacity: 0.8 }
-
-/* SOON state */
-.card.soon {
-  animation: soon-aura 2.5s ease-in-out infinite;
-}
+.card.soon { animation: soon-aura 2.5s ease-in-out infinite; }
 @keyframes soon-aura {
   0%,100% { box-shadow: none }
   50%      { box-shadow: 0 0 0 1px rgba(200,168,75,0.25), 0 0 20px rgba(200,168,75,0.08) }
 }
 .card.soon::after { opacity: 0.7 }
 
-/* left accent line */
 .card-accent {
   position: absolute; top:0; left:0; bottom:0; width:2px;
   background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
@@ -592,13 +594,10 @@ body {
   border: 1px solid rgba(255,255,255,0.05);
   position: relative; overflow: hidden;
 }
-/* micro bevel on time cells */
 .ct::before {
   content: '';
   position: absolute; inset:0; pointer-events: none;
-  background: linear-gradient(135deg,
-    rgba(255,255,255,0.03) 0%, transparent 50%
-  );
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
 }
 .ct-close { border-color: rgba(155,35,53,0.18) }
 .ct-open  { border-color: rgba(200,168,75,0.12) }
@@ -615,9 +614,7 @@ body {
   color: var(--gold); text-shadow: var(--engrave-sm);
   line-height: 1;
 }
-.ct-close .ct-val {
-  color: var(--crimson2); text-shadow: var(--engrave-red);
-}
+.ct-close .ct-val { color: var(--crimson2); text-shadow: var(--engrave-red); }
 .ct-wib {
   font-family: 'DM Sans', sans-serif;
   font-size: 9px; font-weight: 300; color: var(--text-3);
@@ -631,7 +628,6 @@ body {
 }
 .card-cd::before { content: '·'; font-size: 16px; line-height: 1 }
 
-/* HOKIDRAW special */
 .hoki-row {
   display: flex; align-items: center; gap: 10px;
   padding: 10px 12px; margin-top: 4px;
@@ -690,13 +686,9 @@ body {
 .modal::before {
   content: '';
   position: absolute; inset:0; pointer-events: none;
-  background: linear-gradient(135deg,
-    rgba(255,255,255,0.05) 0%,
-    transparent 40%
-  );
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%);
 }
 
-/* animated red top line */
 .modal-alarm-line {
   position: absolute; top:0; left:0; right:0; height:2px;
   background: linear-gradient(to right, transparent, var(--crimson), var(--crimson2), var(--crimson), transparent);
@@ -814,7 +806,6 @@ body {
 }
 .m-btn:active { transform: translateY(1px) }
 
-/* pulse ring */
 .m-pulse {
   position: absolute; inset:-1px;
   border: 1px solid rgba(155,35,53,0.5);
@@ -946,7 +937,6 @@ body {
 <!-- ═══ APP ═══ -->
 <div id="app">
 
-  <!-- HEADER -->
   <div class="hdr">
     <div class="hdr-left">
       <div class="hdr-tag">Sistem Monitoring</div>
@@ -958,7 +948,6 @@ body {
     </div>
   </div>
 
-  <!-- CLOCK -->
   <div class="clock-panel">
     <div class="clk-cell">
       <div class="clk-cell-label">Waktu WIB</div>
@@ -972,7 +961,6 @@ body {
     </div>
   </div>
 
-  <!-- STATUS STRIP -->
   <div class="status-strip">
     <div class="s-live">
       <div class="s-live-dot"></div>
@@ -991,16 +979,14 @@ body {
     </div>
   </div>
 
-  <!-- STATS -->
   <div class="stats-row">
-    <div class="stat"><div class="stat-n"  id="stT">0</div><div class="stat-l">Total</div></div>
+    <div class="stat"><div class="stat-n"   id="stT">0</div><div class="stat-l">Total</div></div>
     <div class="stat"><div class="stat-n g" id="stO">0</div><div class="stat-l">Buka</div></div>
     <div class="stat"><div class="stat-n r" id="stC">0</div><div class="stat-l">Tutup</div></div>
-    <div class="stat"><div class="stat-n"  id="stS">0</div><div class="stat-l">Segera Tutup</div></div>
-    <div class="stat"><div class="stat-n"  id="stA">0</div><div class="stat-l">Alarm Hari Ini</div></div>
+    <div class="stat"><div class="stat-n"   id="stS">0</div><div class="stat-l">Segera Tutup</div></div>
+    <div class="stat"><div class="stat-n"   id="stA">0</div><div class="stat-l">Alarm Hari Ini</div></div>
   </div>
 
-  <!-- FILTER -->
   <div class="filter-bar">
     <span class="filter-label">Filter</span>
     <button class="filter-btn on" onclick="setFilter('all',this)">Semua</button>
@@ -1010,7 +996,6 @@ body {
     <input class="search-box" id="srch" placeholder="Cari pasaran..." oninput="renderCards()">
   </div>
 
-  <!-- GRID -->
   <div class="grid" id="grid"></div>
 
   <div class="footer">
@@ -1018,7 +1003,7 @@ body {
     <div class="footer-copy">© 2024 · Alarm Jadwal Result · All Rights Reserved</div>
   </div>
 
-</div><!-- /app -->
+</div>
 
 <script>
 /* ══ DATA ══ */
@@ -1086,176 +1071,344 @@ const DATA = [
   }, 3900);
 })();
 
-/* ══ AUDIO ENGINE ══ */
-let AC = null, audioUnlocked = false;
+/* ══════════════════════════════════════════
+   PREMIUM AUDIO ENGINE v2
+   — Elegant luxury sound design —
+   1. crystalHarp   : delicate harp pluck (open / hoki)
+   2. grandBell     : deep resonant gong (alarm close)
+   3. Reverb via ConvolverNode (impulse response)
+   4. Stereo width  via StereoPannerNode
+   5. Compressor + EQ mastering chain
+══════════════════════════════════════════ */
+let AC = null, reverbBuf = null, audioUnlocked = false;
+
 function getAC(){
   if(!AC) AC = new(window.AudioContext||window.webkitAudioContext)();
   if(AC.state==='suspended') AC.resume();
   return AC;
 }
+
 function unlockAudio(){
   if(audioUnlocked) return;
   try{
-    const ac=getAC(), buf=ac.createBuffer(1,1,22050), src=ac.createBufferSource();
-    src.buffer=buf; src.connect(ac.destination); src.start(0); audioUnlocked=true;
+    const ac=getAC();
+    // build reverb impulse response once
+    buildReverb(ac);
+    const buf=ac.createBuffer(1,1,22050), src=ac.createBufferSource();
+    src.buffer=buf; src.connect(ac.destination); src.start(0);
+    audioUnlocked=true;
   }catch(e){}
 }
 document.addEventListener('click', unlockAudio);
 document.addEventListener('touchstart', unlockAudio);
 
-function crystalBell(ac, freq, t, dur, vol){
-  const master = ac.createGain();
-  master.gain.setValueAtTime(0, t);
-  master.gain.linearRampToValueAtTime(vol, t+.008);
-  master.gain.exponentialRampToValueAtTime(vol*.5, t+.06);
-  master.gain.exponentialRampToValueAtTime(.0001, t+dur);
-  [[1,.9],[2.756,.42],[4.07,.2],[5.41,.09],[6.79,.04]].forEach(([m,v])=>{
-    const o=ac.createOscillator(), g=ac.createGain();
-    o.type='sine';
-    o.frequency.setValueAtTime(freq*m, t);
-    o.frequency.exponentialRampToValueAtTime(freq*m*.997, t+dur);
-    g.gain.setValueAtTime(v, t);
-    o.connect(g); g.connect(master);
-    o.start(t); o.stop(t+dur+.1);
-  });
-  const d1=ac.createDelay(2), d2=ac.createDelay(2);
-  d1.delayTime.value=.17; d2.delayTime.value=.31;
-  const fb1=ac.createGain(), fb2=ac.createGain(), rv=ac.createGain();
-  fb1.gain.value=.25; fb2.gain.value=.16; rv.gain.value=.25;
-  master.connect(d1); d1.connect(fb1); fb1.connect(d1);
-  master.connect(d2); d2.connect(fb2); fb2.connect(d2);
-  d1.connect(rv); d2.connect(rv);
-  const shelf=ac.createBiquadFilter();
-  shelf.type='highshelf'; shelf.frequency.value=3200; shelf.gain.value=3;
-  const comp=ac.createDynamicsCompressor();
-  comp.threshold.value=-18; comp.ratio.value=3;
-  master.connect(shelf); rv.connect(shelf);
-  shelf.connect(comp); comp.connect(ac.destination);
+/* ── Build synthetic reverb IR (large hall) ── */
+function buildReverb(ac){
+  if(reverbBuf) return;
+  const sr = ac.sampleRate, len = sr * 3.2;
+  reverbBuf = ac.createBuffer(2, len, sr);
+  for(let ch=0; ch<2; ch++){
+    const d = reverbBuf.getChannelData(ch);
+    for(let i=0; i<len; i++){
+      const t = i/sr;
+      d[i] = (Math.random()*2-1) * Math.exp(-t*2.8);
+      if(i < sr*.005) d[i] *= (i/(sr*.005)); // fade in
+    }
+  }
 }
 
+/* ── Master bus: EQ + Compress + Limit ── */
+function masterBus(ac){
+  const hpf = ac.createBiquadFilter();
+  hpf.type='highpass'; hpf.frequency.value=60; hpf.Q.value=0.7;
+  const shelf = ac.createBiquadFilter();
+  shelf.type='highshelf'; shelf.frequency.value=5000; shelf.gain.value=2.5;
+  const presence = ac.createBiquadFilter();
+  presence.type='peaking'; presence.frequency.value=2800; presence.Q.value=1.2; presence.gain.value=1.8;
+  const comp = ac.createDynamicsCompressor();
+  comp.threshold.value=-14; comp.knee.value=6;
+  comp.ratio.value=3.5; comp.attack.value=0.003; comp.release.value=0.18;
+  const limiter = ac.createDynamicsCompressor();
+  limiter.threshold.value=-1; limiter.knee.value=0;
+  limiter.ratio.value=20; limiter.attack.value=0.001; limiter.release.value=0.06;
+  const out = ac.createGain(); out.gain.value=0.88;
+  hpf.connect(shelf); shelf.connect(presence);
+  presence.connect(comp); comp.connect(limiter); limiter.connect(out);
+  out.connect(ac.destination);
+  return hpf; // input node
+}
+
+/* ── Reverb send ── */
+function makeReverb(ac, wet=0.28){
+  if(!reverbBuf) buildReverb(ac);
+  const conv = ac.createConvolver();
+  conv.buffer = reverbBuf;
+  const send = ac.createGain(); send.gain.value=wet;
+  const dry  = ac.createGain(); dry.gain.value=1-wet;
+  // returns {input, output}
+  // signal → dry → master  AND  signal → send → conv → master
+  return { conv, send, dry };
+}
+
+/* ── Single partial with pan ── */
+function partial(ac, freq, type, vol, pan, t, attack, decay){
+  const osc = ac.createOscillator();
+  const gEnv= ac.createGain();
+  const pnr = ac.createStereoPanner ? ac.createStereoPanner() : null;
+  osc.type = type; osc.frequency.value = freq;
+  gEnv.gain.setValueAtTime(0, t);
+  gEnv.gain.linearRampToValueAtTime(vol, t+attack);
+  gEnv.gain.exponentialRampToValueAtTime(vol*0.55, t+attack+decay*.18);
+  gEnv.gain.exponentialRampToValueAtTime(0.0001, t+attack+decay);
+  osc.connect(gEnv);
+  if(pnr){ pnr.pan.value=pan; gEnv.connect(pnr); }
+  osc.start(t); osc.stop(t+attack+decay+0.1);
+  return pnr || gEnv;
+}
+
+/* ══════════════════
+   🎵 ALARM SOUND
+   Deep ceremonial gong + warm pads
+   Sequence: gong → pad swell → chime cascade
+══════════════════ */
 function playAlarm(){
   try{
-    const ac=getAC(), t0=ac.currentTime+.05;
-    [{f:880,t:.00,d:2.2,v:.13},{f:659,t:.13,d:2.0,v:.11},{f:523,t:.26,d:1.8,v:.10},
-     {f:440,t:.40,d:1.6,v:.09},{f:659,t:.70,d:1.5,v:.07},{f:880,t:1.05,d:2.2,v:.06}]
-    .forEach(n => crystalBell(ac, n.f, t0+n.t, n.d, n.v));
-  }catch(e){}
+    const ac = getAC();
+    buildReverb(ac);
+    const mb = masterBus(ac);
+    const rv = makeReverb(ac, 0.35);
+    rv.conv.connect(mb); rv.dry.connect(mb);
+
+    function send(node){ node.connect(rv.send); node.connect(rv.dry); }
+
+    const t0 = ac.currentTime + 0.06;
+
+    /* — Layer 1: Deep gong strike — */
+    const gongFreqs = [
+      {f:82.4, m:[1, 2.76, 5.40, 8.93], v:0.18, pan:0},
+      {f:110,  m:[1, 2.76, 5.40],       v:0.12, pan:-0.2},
+    ];
+    gongFreqs.forEach(({f,m,v,pan})=>{
+      m.forEach((mult,i)=>{
+        const p = partial(ac, f*mult, 'sine', v/(i+1)*0.9, pan, t0, 0.004, 4.5-i*0.4);
+        send(p);
+      });
+    });
+
+    /* — Layer 2: Mid warning tone with tremolo — */
+    const tremFreq = 220;
+    [0, 0.08, 0.16].forEach((off, idx)=>{
+      const osc = ac.createOscillator();
+      const lfo = ac.createOscillator();
+      const lfoG= ac.createGain();
+      const env = ac.createGain();
+      osc.type='triangle'; osc.frequency.value = tremFreq * [1, 1.5, 2][idx];
+      lfo.type='sine'; lfo.frequency.value = 5.5 + idx;
+      lfoG.gain.value = 18;
+      lfo.connect(lfoG); lfoG.connect(osc.frequency);
+      env.gain.setValueAtTime(0, t0+off);
+      env.gain.linearRampToValueAtTime(0.055-idx*0.012, t0+off+0.18);
+      env.gain.exponentialRampToValueAtTime(0.025, t0+off+0.9);
+      env.gain.exponentialRampToValueAtTime(0.0001, t0+off+2.2);
+      const pan = ac.createStereoPanner ? ac.createStereoPanner() : null;
+      if(pan){ pan.pan.value=(idx-1)*0.3; osc.connect(env); env.connect(pan); send(pan); }
+      else   { osc.connect(env); send(env); }
+      osc.start(t0+off); lfo.start(t0+off);
+      osc.stop(t0+off+2.5); lfo.stop(t0+off+2.5);
+    });
+
+    /* — Layer 3: Descending crystal chimes — */
+    const chimes = [880, 784, 698, 622, 523, 440, 392];
+    chimes.forEach((f, i)=>{
+      const tt = t0 + 0.55 + i*0.11;
+      const p = partial(ac, f, 'sine', 0.07, (i/6-0.5)*0.5, tt, 0.005, 2.4-i*0.1);
+      send(p);
+      // add 2nd harmonic shimmer
+      const p2= partial(ac, f*2.007, 'sine', 0.025, -(i/6-0.5)*0.5, tt+0.002, 0.004, 1.8);
+      send(p2);
+    });
+
+    /* — Layer 4: Sub bass pulse — */
+    const sub = ac.createOscillator();
+    const subG= ac.createGain();
+    sub.type='sine'; sub.frequency.value=41.2;
+    subG.gain.setValueAtTime(0,t0);
+    subG.gain.linearRampToValueAtTime(0.22,t0+0.02);
+    subG.gain.exponentialRampToValueAtTime(0.0001,t0+0.9);
+    sub.connect(subG); subG.connect(mb);
+    sub.start(t0); sub.stop(t0+1.2);
+
+    lfo_sync: {
+      rv.send.connect(rv.conv);
+    }
+
+  }catch(e){ console.warn('Audio err', e); }
 }
+
+/* ══════════════════
+   🌟 HOKI SOUND
+   Ascending pentatonic harp glissando
+   + golden shimmer + warm choir pad
+══════════════════ */
 function playHoki(){
   try{
-    const ac=getAC(), t0=ac.currentTime+.05;
-    [261.6,293.7,329.6,392,440,523.3,587.3,659.3,784,880,1046.5]
-    .forEach((f,i) => crystalBell(ac, f, t0+i*.09, 2.8-i*.08, .09+(i>5?.02:0)));
-    [523.3,659.3,784,1046.5].forEach((f,i) => crystalBell(ac, f, t0+1.2+i*.04, 3.5, .07));
-  }catch(e){}
+    const ac = getAC();
+    buildReverb(ac);
+    const mb = masterBus(ac);
+    const rv = makeReverb(ac, 0.42);
+    rv.conv.connect(mb); rv.dry.connect(mb);
+
+    function send(node){ node.connect(rv.send); node.connect(rv.dry); }
+
+    const t0 = ac.currentTime + 0.06;
+
+    /* — Pentatonic scale: C D E G A (2 octaves up) — */
+    const penta = [261.6,293.7,329.6,392.0,440.0, 523.3,587.3,659.3,784.0,880.0, 1046.5,1174.7,1318.5];
+    penta.forEach((f,i)=>{
+      const tt = t0 + i*0.072;
+      const vol = 0.08 + (i>6 ? 0.015 : 0);
+      const decay = 3.2 - i*0.08;
+      const pan = (i/12-0.5)*0.7;
+      const p = partial(ac, f,  'sine', vol,    pan,  tt, 0.004, decay);
+      const p2= partial(ac, f*2,'sine', vol*.22, -pan, tt+0.003, 0.004, decay*0.7);
+      send(p); send(p2);
+    });
+
+    /* — Golden shimmer: high partials — */
+    [2093,2349,2637,3136].forEach((f,i)=>{
+      const tt = t0 + 0.6 + i*0.08;
+      const p = partial(ac, f, 'sine', 0.025, (i%2===0?.4:-.4), tt, 0.003, 2.8);
+      send(p);
+    });
+
+    /* — Warm choir pad swell — */
+    const padFreqs = [130.8, 164.8, 196.0, 261.6, 329.6];
+    padFreqs.forEach((f,i)=>{
+      const osc  = ac.createOscillator();
+      const osc2 = ac.createOscillator();
+      const env  = ac.createGain();
+      osc.type='triangle';  osc.frequency.value = f;
+      osc2.type='sawtooth'; osc2.frequency.value = f * 1.003; // slight detune
+      env.gain.setValueAtTime(0,t0+0.2);
+      env.gain.linearRampToValueAtTime(0.028-i*0.002, t0+0.8+i*0.1);
+      env.gain.setValueAtTime(0.028-i*0.002, t0+1.8);
+      env.gain.exponentialRampToValueAtTime(0.0001, t0+4.5);
+      const pan = ac.createStereoPanner ? ac.createStereoPanner() : null;
+      if(pan){ pan.pan.value=(i%2===0?.2:-.2)*0.5; osc.connect(env); osc2.connect(env); env.connect(pan); send(pan); }
+      else   { osc.connect(env); osc2.connect(env); send(env); }
+      osc.start(t0+0.2); osc2.start(t0+0.2);
+      osc.stop(t0+5); osc2.stop(t0+5);
+    });
+
+    /* — Final crown: high bell chord — */
+    [1046.5,1318.5,1568.0].forEach((f,i)=>{
+      const tt = t0 + 1.1 + i*0.05;
+      const p = partial(ac, f, 'sine', 0.06, (i-1)*0.35, tt, 0.004, 3.5);
+      send(p);
+    });
+
+    rv.send.connect(rv.conv);
+
+  }catch(e){ console.warn('Audio err', e); }
 }
 
-/* ── Alarm loop: bunyi terus sampai diklik Matikan ── */
-let loopTimer = null, looping = false, loopIsHoki = false;
-
+/* ── Alarm loop ── */
+let loopTimer=null, looping=false, loopIsHoki=false;
 function startLoop(isHoki){
   stopLoop();
-  looping = true; loopIsHoki = isHoki;
+  looping=true; loopIsHoki=isHoki;
   unlockAudio();
-  (isHoki ? playHoki : playAlarm)();
-  loopTimer = setInterval(()=>{
+  (isHoki?playHoki:playAlarm)();
+  loopTimer=setInterval(()=>{
     if(!looping) return;
-    if(AC && AC.state==='suspended')
-      AC.resume().then(()=> (loopIsHoki?playHoki:playAlarm)());
-    else
-      (loopIsHoki ? playHoki : playAlarm)();
-  }, isHoki ? 5200 : 4800);
+    if(AC&&AC.state==='suspended') AC.resume().then(()=>(loopIsHoki?playHoki:playAlarm)());
+    else (loopIsHoki?playHoki:playAlarm)();
+  }, isHoki?5800:5400);
 }
 function stopLoop(){
-  looping = false;
-  if(loopTimer){ clearInterval(loopTimer); loopTimer=null; }
+  looping=false;
+  if(loopTimer){clearInterval(loopTimer);loopTimer=null;}
 }
-document.addEventListener('visibilitychange', ()=>{
-  if(!document.hidden && looping && AC && AC.state==='suspended')
-    AC.resume().then(()=> (loopIsHoki?playHoki:playAlarm)());
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden&&looping&&AC&&AC.state==='suspended')
+    AC.resume().then(()=>(loopIsHoki?playHoki:playAlarm)());
 });
-function testSuara(h){ unlockAudio(); setTimeout(()=> h?playHoki():playAlarm(), 60); }
+function testSuara(h){ unlockAudio(); setTimeout(()=>h?playHoki():playAlarm(),60); }
 
 /* ══ NOTIFIKASI ══ */
-let notifOk = false;
+let notifOk=false;
 function doNotif(){
-  if(!('Notification' in window)){ alert('Browser tidak mendukung notifikasi.'); return; }
+  if(!('Notification' in window)){alert('Browser tidak mendukung notifikasi.');return;}
   Notification.requestPermission().then(p=>{
-    notifOk = p==='granted';
-    const b = document.getElementById('notifBtn');
-    if(notifOk){ b.textContent='✅ Notifikasi Aktif'; b.classList.add('notif-ok'); }
-    else b.textContent = '❌ Ditolak';
+    notifOk=p==='granted';
+    const b=document.getElementById('notifBtn');
+    if(notifOk){b.textContent='✅ Notifikasi Aktif';b.classList.add('notif-ok');}
+    else b.textContent='❌ Ditolak';
   });
 }
-function sendNotif(name, t, b){
-  if(!notifOk) return;
+function sendNotif(name,t,b){
+  if(!notifOk)return;
   try{
-    const n = new Notification('⚠ Bet Close — Togel Lubis', {
-      body: `${name}\nTutup: ${t} WIB  ·  Buka: ${b} WIB`,
-      requireInteraction: true, tag: name+t
+    const n=new Notification('⚠ Bet Close — Togel Lubis',{
+      body:`${name}\nTutup: ${t} WIB  ·  Buka: ${b} WIB`,
+      requireInteraction:true,tag:name+t
     });
-    n.onclick = ()=>{ window.focus(); n.close(); };
+    n.onclick=()=>{window.focus();n.close();};
   }catch(e){}
 }
-if(typeof Notification!=='undefined' && Notification.permission==='granted'){
-  notifOk = true;
-  window.addEventListener('load', ()=>{
-    const b = document.getElementById('notifBtn');
-    if(b){ b.textContent='✅ Notifikasi Aktif'; b.classList.add('notif-ok'); }
+if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
+  notifOk=true;
+  window.addEventListener('load',()=>{
+    const b=document.getElementById('notifBtn');
+    if(b){b.textContent='✅ Notifikasi Aktif';b.classList.add('notif-ok');}
   });
 }
 
 /* ══ HELPERS ══ */
-const pad  = n => String(n).padStart(2,'0');
-const toM  = s => { const[h,m]=s.split(':').map(Number); return h*60+m; };
-const nowM = ()=>{ const d=new Date(); return d.getHours()*60+d.getMinutes(); };
-const nowS = ()=>{ const d=new Date(); return d.getHours()*3600+d.getMinutes()*60+d.getSeconds(); };
-const fmtCd= s=>{ if(s<0)s+=86400; return`${pad(~~(s/3600))}:${pad(~~(s%3600/60))}:${pad(s%60)}`; };
+const pad  = n=>String(n).padStart(2,'0');
+const toM  = s=>{const[h,m]=s.split(':').map(Number);return h*60+m;};
+const nowM = ()=>{const d=new Date();return d.getHours()*60+d.getMinutes();};
+const nowS = ()=>{const d=new Date();return d.getHours()*3600+d.getMinutes()*60+d.getSeconds();};
+const fmtCd= s=>{if(s<0)s+=86400;return`${pad(~~(s/3600))}:${pad(~~(s%3600/60))}:${pad(s%60)}`;};
 const DAYS = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 const MON  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
 
 function getStatus(p){
-  if(p.hoki) return 'open';
-  const nm=nowM(), tm=toM(p.t), bm=toM(p.b), diff=tm-nm;
-  if(diff>15) return 'open';
-  if(diff>0)  return 'soon';
-  if(nm-bm>=0 && nm-bm<120) return 'open';
+  if(p.hoki)return 'open';
+  const nm=nowM(),tm=toM(p.t),bm=toM(p.b),diff=tm-nm;
+  if(diff>15)return 'open';
+  if(diff>0) return 'soon';
+  if(nm-bm>=0&&nm-bm<120)return 'open';
   return 'closed';
 }
 function cdTxt(p){
-  if(p.hoki||!p.t) return '';
-  const d = toM(p.t)-nowM();
-  if(d>0 && d<=60)  return `Tutup dalam ${d} menit`;
-  if(d<=0 && d>-30) return `Tutup ${Math.abs(d)} menit lalu`;
+  if(p.hoki||!p.t)return '';
+  const d=toM(p.t)-nowM();
+  if(d>0&&d<=60)  return`Tutup dalam ${d} menit`;
+  if(d<=0&&d>-30) return`Tutup ${Math.abs(d)} menit lalu`;
   return '';
 }
 
 /* ══ RENDER ══ */
-let curFilter = 'all';
+let curFilter='all';
 function renderCards(){
-  const grid = document.getElementById('grid');
-  const q = (document.getElementById('srch').value||'').toUpperCase().trim();
-  grid.innerHTML = '';
-  let nO=0, nC=0, nS=0;
-
+  const grid=document.getElementById('grid');
+  const q=(document.getElementById('srch').value||'').toUpperCase().trim();
+  grid.innerHTML='';
+  let nO=0,nC=0,nS=0;
   DATA.forEach(p=>{
-    const st = getStatus(p);
-    if(st==='open') nO++; else if(st==='closed') nC++; else if(st==='soon') nS++;
-    if(curFilter!=='all' && st!==curFilter) return;
-    if(q && !p.n.includes(q)) return;
-
-    const lbl   = st==='open' ? 'Buka' : st==='soon' ? 'Segera' : 'Tutup';
-    const bcls  = st==='open' ? 'badge-open' : st==='soon' ? 'badge-soon' : 'badge-closed';
-    const cd    = cdTxt(p);
-    let body = '';
-
+    const st=getStatus(p);
+    if(st==='open')nO++;else if(st==='closed')nC++;else if(st==='soon')nS++;
+    if(curFilter!=='all'&&st!==curFilter)return;
+    if(q&&!p.n.includes(q))return;
+    const lbl  =st==='open'?'Buka':st==='soon'?'Segera':'Tutup';
+    const bcls =st==='open'?'badge-open':st==='soon'?'badge-soon':'badge-closed';
+    const cd   =cdTxt(p);
+    let body='';
     if(p.hoki){
-      body = `<div class="hoki-row">
-        <div class="hoki-dot"></div>
-        <div class="hoki-txt">Setiap Jam · 24× Sehari</div>
-      </div>`;
-    } else {
-      body = `<div class="card-times">
+      body=`<div class="hoki-row"><div class="hoki-dot"></div><div class="hoki-txt">Setiap Jam · 24× Sehari</div></div>`;
+    }else{
+      body=`<div class="card-times">
         <div class="ct ct-close">
           <div class="ct-lbl">Bet Close</div>
           <div class="ct-val">${p.t} <span class="ct-wib">WIB</span></div>
@@ -1266,10 +1419,9 @@ function renderCards(){
         </div>
       </div>`;
     }
-
-    const div = document.createElement('div');
-    div.className = `card ${st==='closed'?'closed':st==='soon'?'soon':''}`;
-    div.innerHTML = `
+    const div=document.createElement('div');
+    div.className=`card ${st==='closed'?'closed':st==='soon'?'soon':''}`;
+    div.innerHTML=`
       <div class="card-accent"></div>
       <div class="card-head">
         <div class="card-name">${p.n}</div>
@@ -1277,21 +1429,19 @@ function renderCards(){
       </div>
       <div class="card-day">${p.d}</div>
       ${body}
-      ${cd ? `<div class="card-cd">${cd}</div>` : ''}
+      ${cd?`<div class="card-cd">${cd}</div>`:''}
     `;
     grid.appendChild(div);
   });
-
-  document.getElementById('sO').textContent = nO;
-  document.getElementById('sC').textContent = nC;
-  document.getElementById('stT').textContent = DATA.length;
-  document.getElementById('stO').textContent = nO;
-  document.getElementById('stC').textContent = nC;
-  document.getElementById('stS').textContent = nS;
+  document.getElementById('sO').textContent=nO;
+  document.getElementById('sC').textContent=nC;
+  document.getElementById('stT').textContent=DATA.length;
+  document.getElementById('stO').textContent=nO;
+  document.getElementById('stC').textContent=nC;
+  document.getElementById('stS').textContent=nS;
 }
-
-function setFilter(f, btn){
-  curFilter = f;
+function setFilter(f,btn){
+  curFilter=f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   renderCards();
@@ -1299,108 +1449,105 @@ function setFilter(f, btn){
 
 /* ══ CLOCK ══ */
 function tickClock(){
-  const n = new Date();
-  document.getElementById('clkM').textContent =
-    `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
-  document.getElementById('clkD').textContent =
-    `${DAYS[n.getDay()]}, ${n.getDate()} ${MON[n.getMonth()]} ${n.getFullYear()}`;
-  document.getElementById('aTime').textContent =
-    `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  const n=new Date();
+  document.getElementById('clkM').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  document.getElementById('clkD').textContent=`${DAYS[n.getDay()]}, ${n.getDate()} ${MON[n.getMonth()]} ${n.getFullYear()}`;
+  document.getElementById('aTime').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
 }
 function tickNext(){
-  const ns=nowS(), nm=~~(ns/60);
-  let best=Infinity, bn='', bt='';
+  const ns=nowS(),nm=~~(ns/60);
+  let best=Infinity,bn='',bt='';
   DATA.forEach(p=>{
     if(p.hoki){
-      const nxt = ((~~(ns/3600)+1)*3600)-ns;
-      if(nxt<best){ best=nxt; bn='Hokidraw 5D'; bt=`${pad((~~(ns/3600)+1)%24)}:00`; }
+      const nxt=((~~(ns/3600)+1)*3600)-ns;
+      if(nxt<best){best=nxt;bn='Hokidraw 5D';bt=`${pad((~~(ns/3600)+1)%24)}:00`;}
       return;
     }
-    if(!p.t) return;
-    let dm = toM(p.t)-nm; if(dm<=0) dm+=1440;
-    const ds = dm*60-(ns%60);
-    if(ds>0 && ds<best){ best=ds; bn=p.n; bt=p.t; }
+    if(!p.t)return;
+    let dm=toM(p.t)-nm;if(dm<=0)dm+=1440;
+    const ds=dm*60-(ns%60);
+    if(ds>0&&ds<best){best=ds;bn=p.n;bt=p.t;}
   });
-  document.getElementById('clkN').textContent  = best<Infinity ? fmtCd(best) : '--:--:--';
-  document.getElementById('clkNI').textContent = bn ? `${bn}  ·  ${bt} WIB` : '';
+  document.getElementById('clkN').textContent =best<Infinity?fmtCd(best):'--:--:--';
+  document.getElementById('clkNI').textContent=bn?`${bn}  ·  ${bt} WIB`:'';
 }
 
 /* ══ ALARM QUEUE ══ */
-let queue=[], showing=false, fired=new Set(), alarmCnt=0, titleTmr=null;
-const dayKey = ()=>{ const d=new Date(); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; };
-const aKey   = (n,t) => `${dayKey()}-${n}-${t}`;
+let queue=[],showing=false,fired=new Set(),alarmCnt=0,titleTmr=null;
+const dayKey=()=>{const d=new Date();return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;};
+const aKey=(n,t)=>`${dayKey()}-${n}-${t}`;
 
-function enqueue(name, t, b){
-  const k = aKey(name, t);
-  if(fired.has(k)) return;
-  fired.add(k); alarmCnt++;
-  document.getElementById('sA').textContent  = alarmCnt;
-  document.getElementById('stA').textContent = alarmCnt;
-  queue.push({name,t,b}); updateQ(); sendNotif(name,t,b);
-  if(!showing) showNext();
+function enqueue(name,t,b){
+  const k=aKey(name,t);
+  if(fired.has(k))return;
+  fired.add(k);alarmCnt++;
+  document.getElementById('sA').textContent=alarmCnt;
+  document.getElementById('stA').textContent=alarmCnt;
+  queue.push({name,t,b});updateQ();sendNotif(name,t,b);
+  if(!showing)showNext();
 }
 function showNext(){
-  if(!queue.length){ showing=false; return; }
-  showing = true;
-  const a = queue[0];
-  document.getElementById('aMkt').textContent   = a.name;
-  document.getElementById('aTutup').textContent = a.t + ' WIB';
-  document.getElementById('aBuka').textContent  = a.b + ' WIB';
+  if(!queue.length){showing=false;return;}
+  showing=true;
+  const a=queue[0];
+  document.getElementById('aMkt').textContent  =a.name;
+  document.getElementById('aTutup').textContent=a.t+' WIB';
+  document.getElementById('aBuka').textContent =a.b+' WIB';
   document.getElementById('overlay').classList.add('on');
   updateQ();
-  startLoop(a.name === 'HOKIDRAW 5D');
+  startLoop(a.name==='HOKIDRAW 5D');
   flashTitle(a.name);
 }
 function dismissAlarm(){
   queue.shift();
   document.getElementById('overlay').classList.remove('on');
-  stopLoop(); stopFlash(); updateQ(); renderCards();
-  if(queue.length) setTimeout(showNext, 350);
-  else showing = false;
+  stopLoop();stopFlash();updateQ();renderCards();
+  if(queue.length)setTimeout(showNext,350);
+  else showing=false;
 }
 function updateQ(){
-  const n = queue.length;
-  document.getElementById('qnum').textContent = n;
-  document.getElementById('q-badge').style.display = n>1 ? 'block' : 'none';
+  const n=queue.length;
+  document.getElementById('qnum').textContent=n;
+  document.getElementById('q-badge').style.display=n>1?'block':'none';
 }
 function flashTitle(name){
-  let on = true;
-  titleTmr = setInterval(()=>{
-    document.title = on ? `⚠ Bet Close: ${name}` : 'Togel Lubis';
-    on = !on;
-  }, 700);
+  let on=true;
+  titleTmr=setInterval(()=>{
+    document.title=on?`⚠ Bet Close: ${name}`:'Togel Lubis';
+    on=!on;
+  },700);
 }
 function stopFlash(){
-  if(titleTmr){ clearInterval(titleTmr); titleTmr=null; }
-  document.title = 'Togel Lubis · Alarm Jadwal';
+  if(titleTmr){clearInterval(titleTmr);titleTmr=null;}
+  document.title='Togel Lubis · Alarm Jadwal';
 }
 function checkAlarms(){
-  const n = new Date(), s = n.getSeconds();
-  if(s > 2) return;
-  const nm = nowM();
+  const n=new Date(),s=n.getSeconds();
+  if(s>2)return;
+  const nm=nowM();
   DATA.forEach(p=>{
     if(p.hoki){
       if(n.getMinutes()===0){
-        const k = aKey('HOKIDRAW 5D', `${pad(n.getHours())}:00`);
+        const k=aKey('HOKIDRAW 5D',`${pad(n.getHours())}:00`);
         if(!fired.has(k))
-          enqueue('HOKIDRAW 5D', `${pad(n.getHours())}:00`, `${pad((n.getHours()+1)%24)}:00`);
+          enqueue('HOKIDRAW 5D',`${pad(n.getHours())}:00`,`${pad((n.getHours()+1)%24)}:00`);
       }
       return;
     }
-    if(!p.t) return;
-    if(toM(p.t)===nm) enqueue(p.n, p.t, p.b);
+    if(!p.t)return;
+    if(toM(p.t)===nm)enqueue(p.n,p.t,p.b);
   });
 }
 
 /* ══ MAIN LOOP ══ */
-let lastMin = -1;
+let lastMin=-1;
 function loop(){
-  tickClock(); tickNext(); checkAlarms();
-  const m = new Date().getMinutes();
-  if(m !== lastMin){ lastMin=m; renderCards(); }
+  tickClock();tickNext();checkAlarms();
+  const m=new Date().getMinutes();
+  if(m!==lastMin){lastMin=m;renderCards();}
 }
 renderCards();
-setInterval(loop, 1000);
+setInterval(loop,1000);
 loop();
 </script>
 </body>
