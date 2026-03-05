@@ -4,360 +4,346 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Togel Lubis · Alarm Jadwal</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Cinzel:wght@700;800;900&family=Raleway:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- ═══ PROTEKSI KODE ═══ -->
 <script>
 (function(){
-  // Disable right click
   document.addEventListener('contextmenu', function(e){ e.preventDefault(); return false; });
-
-  // Disable keyboard shortcuts: F12, Ctrl+U, Ctrl+Shift+C/I/J/K, Ctrl+S
   document.addEventListener('keydown', function(e){
-    // F12
     if(e.key === 'F12'){ e.preventDefault(); return false; }
-    // Ctrl combinations
     if(e.ctrlKey){
-      // Ctrl+U (view source)
       if(e.key === 'u' || e.key === 'U'){ e.preventDefault(); return false; }
-      // Ctrl+S (save)
       if(e.key === 's' || e.key === 'S'){ e.preventDefault(); return false; }
-      // Ctrl+Shift+...
       if(e.shiftKey){
-        if(['i','I','c','C','j','J','k','K'].includes(e.key)){
-          e.preventDefault(); return false;
-        }
+        if(['i','I','c','C','j','J','k','K'].includes(e.key)){ e.preventDefault(); return false; }
       }
     }
-    // F5 optionally block (refresh): comment out jika tidak mau
-    // if(e.key === 'F5'){ e.preventDefault(); return false; }
   }, true);
-
-  // Detect DevTools open via window size trick
   var threshold = 160;
   setInterval(function(){
-    if(
-      window.outerWidth - window.innerWidth > threshold ||
-      window.outerHeight - window.innerHeight > threshold
-    ){
-      document.body.innerHTML = '<div style="background:#0b0c0e;color:#c8a84b;height:100vh;display:flex;align-items:center;justify-content:center;font-family:serif;font-size:22px;letter-spacing:4px;">⛔ AKSES DILARANG</div>';
+    if(window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold){
+      document.body.innerHTML = '<div style="background:#050407;color:#b8962e;height:100vh;display:flex;align-items:center;justify-content:center;font-family:serif;font-size:22px;letter-spacing:6px;">⛔ AKSES DILARANG</div>';
     }
   }, 1000);
-
-  // Disable text selection
   document.addEventListener('selectstart', function(e){ e.preventDefault(); });
-
-  // Disable drag
   document.addEventListener('dragstart', function(e){ e.preventDefault(); });
 })();
 </script>
 
 <style>
-/* ═══════════════════════════════
-   DESIGN SYSTEM
-   Luxury dark: charcoal + gold
-   3D via realistic light physics
-═══════════════════════════════ */
 :root {
-  --z0: #0b0c0e;
-  --z1: #111318;
-  --z2: #181b22;
-  --z3: #1e2130;
-  --z4: #252840;
+  --bg0: #050407;
+  --bg1: #0a0910;
+  --bg2: #0f0d18;
+  --bg3: #151220;
+  --bg4: #1c1830;
 
-  --gold-hi:  #f0d080;
-  --gold:     #c8a84b;
-  --gold-mid: #a0802a;
-  --gold-shd: #5a4010;
-  --gold-dim: rgba(200,168,75, 0.12);
+  --gold-hi:   #fde68a;
+  --gold:      #d4a017;
+  --gold-mid:  #b8862a;
+  --gold-dim:  #7a5515;
+  --gold-glow: rgba(212,160,23,0.18);
 
-  --emerald:  #3d9970;
-  --emerald2: #a8d8c0;
-  --crimson:  #9b2335;
-  --crimson2: #d9806a;
-  --amber:    #c8a84b;
+  --platinum:  #e8e4f0;
+  --silver:    #c4bfd8;
+  --mist:      #7a7592;
 
-  --text-1: #e8e4da;
-  --text-2: #9a9590;
-  --text-3: #5a5650;
+  --ruby:      #c0152a;
+  --ruby2:     #e85065;
+  --emerald:   #14a870;
+  --emerald2:  #7fddbb;
+  --sapphire:  #1a4ba0;
 
-  --lift-sm:
-    inset 0 1px 0 rgba(255,255,255, 0.07),
-    inset 1px 0 0 rgba(255,255,255, 0.04),
-    inset 0 -1px 0 rgba(0,0,0, 0.5),
-    inset -1px 0 0 rgba(0,0,0, 0.3),
-    0 4px 12px rgba(0,0,0, 0.5),
-    0 1px 3px rgba(0,0,0, 0.7);
+  --text-1: #f0eaf8;
+  --text-2: #a09ab5;
+  --text-3: #5a5570;
 
-  --lift-md:
-    inset 0 1px 0 rgba(255,255,255, 0.09),
-    inset 1px 0 0 rgba(255,255,255, 0.05),
-    inset 0 -1px 0 rgba(0,0,0, 0.6),
-    inset -1px 0 0 rgba(0,0,0, 0.4),
-    0 8px 24px rgba(0,0,0, 0.6),
-    0 2px 6px rgba(0,0,0, 0.8),
-    0 24px 48px rgba(0,0,0, 0.3);
+  --shadow-deep:
+    inset 0 1px 0 rgba(255,255,255,0.09),
+    inset 0 -2px 0 rgba(0,0,0,0.8),
+    0 20px 60px rgba(0,0,0,0.9),
+    0 4px 16px rgba(0,0,0,0.7);
 
-  --lift-lg:
-    inset 0 1px 0 rgba(255,255,255, 0.12),
-    inset 1px 0 0 rgba(255,255,255, 0.06),
-    inset 0 -2px 0 rgba(0,0,0, 0.7),
-    inset -1px 0 0 rgba(0,0,0, 0.5),
-    0 16px 40px rgba(0,0,0, 0.7),
-    0 4px 12px rgba(0,0,0, 0.9),
-    0 32px 80px rgba(0,0,0, 0.4);
+  --shadow-gold:
+    inset 0 1px 0 rgba(253,230,138,0.3),
+    inset 0 -2px 0 rgba(60,30,0,0.9),
+    0 12px 40px rgba(0,0,0,0.8),
+    0 0 30px rgba(212,160,23,0.2),
+    0 0 60px rgba(212,160,23,0.08);
 
-  --lift-gold:
-    inset 0 1px 0 rgba(240,208,128, 0.25),
-    inset 1px 0 0 rgba(240,208,128, 0.12),
-    inset 0 -1px 0 rgba(80,50,0, 0.8),
-    inset -1px 0 0 rgba(80,50,0, 0.5),
-    0 8px 24px rgba(0,0,0, 0.6),
-    0 2px 6px rgba(0,0,0, 0.8),
-    0 0 20px rgba(200,168,75, 0.15);
+  --text-engrave:
+    0 1px 0 rgba(253,230,138,0.6),
+    0 -1px 0 rgba(0,0,0,1),
+    0 2px 8px rgba(0,0,0,0.9),
+    0 0 20px rgba(212,160,23,0.4);
 
-  --engrave:
-    0 1px 0 rgba(240,208,128, 0.5),
-    0 -1px 0 rgba(0,0,0, 0.9),
-    0 2px 6px rgba(0,0,0, 0.8),
-    0 0 16px rgba(200,168,75, 0.35);
+  --text-engrave-sm:
+    0 1px 0 rgba(253,230,138,0.35),
+    0 -1px 0 rgba(0,0,0,0.9),
+    0 2px 6px rgba(0,0,0,0.8);
 
-  --engrave-sm:
-    0 1px 0 rgba(240,208,128, 0.3),
-    0 -1px 0 rgba(0,0,0, 0.8),
-    0 2px 4px rgba(0,0,0, 0.7);
+  --text-ruby:
+    0 1px 0 rgba(255,180,170,0.4),
+    0 -1px 0 rgba(0,0,0,1),
+    0 2px 8px rgba(0,0,0,0.9),
+    0 0 18px rgba(192,21,42,0.6);
 
-  --engrave-red:
-    0 1px 0 rgba(255,180,160, 0.3),
-    0 -1px 0 rgba(0,0,0, 0.9),
-    0 2px 6px rgba(0,0,0, 0.8),
-    0 0 14px rgba(155,35,53, 0.5);
-
-  --engrave-green:
-    0 1px 0 rgba(168,216,192, 0.3),
-    0 -1px 0 rgba(0,0,0, 0.8),
-    0 2px 4px rgba(0,0,0, 0.7),
-    0 0 12px rgba(61,153,112, 0.4);
+  --text-emerald:
+    0 1px 0 rgba(127,221,187,0.35),
+    0 -1px 0 rgba(0,0,0,0.8),
+    0 2px 6px rgba(0,0,0,0.8),
+    0 0 14px rgba(20,168,112,0.4);
 }
 
 * { margin:0; padding:0; box-sizing:border-box;
-    -webkit-user-select:none; -moz-user-select:none; user-select:none; }
+    -webkit-user-select:none; user-select:none; }
 html { scroll-behavior:smooth }
 
 body {
-  background: var(--z0);
+  background: var(--bg0);
   color: var(--text-1);
-  font-family: 'DM Sans', system-ui, sans-serif;
-  font-weight: 400;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 600;
   min-height: 100vh;
   overflow-x: hidden;
   background-image:
-    radial-gradient(ellipse 140% 70% at 50% -5%, rgba(200,168,75,0.07) 0%, transparent 55%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    radial-gradient(ellipse 160% 80% at 50% -10%, rgba(212,160,23,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 40% at 80% 80%, rgba(26,75,160,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 30% at 10% 60%, rgba(192,21,42,0.04) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 }
 
-/* ═══ WELCOME ═══ */
+/* ═══════════════ WELCOME SCREEN ═══════════════ */
 #welcome {
   position: fixed; inset: 0; z-index: 9000;
   display: flex; align-items: center; justify-content: center;
-  background: var(--z0);
-  transition: opacity 1.2s ease, visibility 1.2s ease;
+  background: var(--bg0);
+  transition: opacity 1.4s ease, visibility 1.4s ease;
 }
 #welcome.hide { opacity: 0; visibility: hidden; pointer-events: none }
 
-.wlc {
-  text-align: center;
-  animation: rise 1s cubic-bezier(0.22, 1, 0.36, 1) both 0.2s;
-}
+.wlc { text-align: center; animation: rise 1s cubic-bezier(0.22,1,0.36,1) both 0.3s; }
 @keyframes rise {
-  from { opacity:0; transform:translateY(24px) }
+  from { opacity:0; transform:translateY(30px) }
   to   { opacity:1; transform:translateY(0) }
 }
 
-.wlc-pip {
-  width: 1px; height: 48px; margin: 0 auto 28px;
-  background: linear-gradient(to bottom, transparent, var(--gold));
-  animation: pip-grow 0.8s ease both 0.4s;
+.wlc-ornament {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-bottom: 28px; animation: rise 1s both 0.5s;
 }
-@keyframes pip-grow { from { height:0; opacity:0 } to { height:48px; opacity:1 } }
+.wlc-orn-line {
+  height: 1px; width: 80px;
+  background: linear-gradient(to right, transparent, var(--gold));
+}
+.wlc-orn-line.r { background: linear-gradient(to left, transparent, var(--gold)); }
+.wlc-orn-center {
+  display: flex; gap: 6px; align-items: center;
+}
+.wlc-diamond {
+  width: 7px; height: 7px;
+  background: var(--gold); transform: rotate(45deg);
+  box-shadow: 0 0 12px rgba(212,160,23,0.8), 0 0 24px rgba(212,160,23,0.4);
+}
+.wlc-diamond.sm { width: 4px; height: 4px; background: var(--gold-mid); box-shadow: 0 0 6px rgba(212,160,23,0.5); }
 
 .wlc-tag {
-  font-size: 10px; font-weight: 600; letter-spacing: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 10px;
   text-transform: uppercase; color: var(--gold-mid);
-  margin-bottom: 18px;
+  margin-bottom: 20px;
+  animation: rise 1s both 0.6s;
 }
 
 .wlc-h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(28px, 5vw, 52px);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px,5.5vw,58px);
+  font-weight: 900;
   color: var(--text-1);
-  text-shadow: var(--engrave);
-  line-height: 1.15; margin-bottom: 2px;
+  text-shadow: var(--text-engrave);
+  line-height: 1.1; margin-bottom: 4px;
+  animation: rise 1s both 0.65s;
 }
 .wlc-h2 {
-  font-family: 'DM Serif Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: clamp(22px, 4vw, 40px);
+  font-size: clamp(26px,4.5vw,48px);
+  font-weight: 700;
   color: var(--gold);
-  text-shadow: var(--engrave);
-  letter-spacing: 3px; margin-bottom: 28px;
+  text-shadow: var(--text-engrave);
+  letter-spacing: 4px; margin-bottom: 30px;
+  animation: rise 1s both 0.7s;
 }
 
-.wlc-rule {
-  display: flex; align-items: center; gap: 12px;
-  justify-content: center; margin-bottom: 28px;
+.wlc-divider {
+  display: flex; align-items: center; gap: 14px;
+  justify-content: center; margin-bottom: 30px;
+  animation: rise 1s both 0.75s;
 }
-.wlc-rule-line {
-  width: 60px; height: 1px;
-  background: linear-gradient(to right, transparent, var(--gold-mid));
-}
-.wlc-rule-line.r { background: linear-gradient(to left, transparent, var(--gold-mid)) }
-.wlc-rule-gem {
-  width: 5px; height: 5px; background: var(--gold);
+.wlc-div-line { width: 70px; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dim)); }
+.wlc-div-line.r { background: linear-gradient(to left, transparent, var(--gold-dim)); }
+.wlc-div-gem {
+  width: 6px; height: 6px; background: var(--gold-mid);
   transform: rotate(45deg);
-  box-shadow: 0 0 8px rgba(200,168,75,0.6);
+  box-shadow: 0 0 10px rgba(212,160,23,0.6);
 }
 
 .wlc-sub {
-  font-size: 11px; font-weight: 300; letter-spacing: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 6px;
   text-transform: uppercase; color: var(--text-3);
-  margin-bottom: 32px;
+  margin-bottom: 36px;
+  animation: rise 1s both 0.8s;
 }
 
 .wlc-loader {
-  width: 180px; height: 1px; margin: 0 auto 10px;
-  background: rgba(255,255,255,0.06);
-  overflow: hidden;
+  width: 200px; height: 1px; margin: 0 auto 12px;
+  background: rgba(255,255,255,0.05); overflow: hidden;
+  animation: rise 1s both 0.85s;
 }
 .wlc-loader-bar {
   height: 100%; width: 0;
-  background: linear-gradient(to right, var(--gold-shd), var(--gold));
-  animation: load 2.8s ease both 0.9s;
+  background: linear-gradient(to right, var(--gold-dim), var(--gold-hi));
+  animation: load 3s ease both 1s;
 }
 @keyframes load { to { width:100% } }
 
 .wlc-status {
-  font-size: 10px; font-weight: 300; letter-spacing: 4px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 5px;
   text-transform: uppercase; color: var(--text-3);
-  min-height: 14px;
+  min-height: 16px; animation: rise 1s both 0.9s;
 }
 
-.wlc-pip-bot {
-  width: 1px; height: 48px; margin: 28px auto 0;
-  background: linear-gradient(to bottom, var(--gold), transparent);
-  animation: pip-grow2 0.8s ease both 0.5s;
-}
-@keyframes pip-grow2 { from { height:0; opacity:0 } to { height:48px; opacity:1 } }
-
-/* ═══ APP ═══ */
+/* ═══════════════ APP ═══════════════ */
 #app {
-  max-width: 1400px; margin: 0 auto;
-  padding: 0 20px 60px;
-  opacity: 0; transition: opacity 1s ease;
+  max-width: 1440px; margin: 0 auto;
+  padding: 0 24px 70px;
+  opacity: 0; transition: opacity 1.2s ease;
 }
 #app.on { opacity: 1 }
 
-/* ═══ HEADER ═══ */
+/* ═══════════════ HEADER ═══════════════ */
 .hdr {
-  padding: 44px 0 32px;
+  padding: 52px 0 36px;
   display: flex; align-items: flex-end; justify-content: space-between;
-  border-bottom: 1px solid rgba(200,168,75, 0.12);
-  gap: 20px; flex-wrap: wrap;
-  position: relative;
+  gap: 24px; flex-wrap: wrap; position: relative;
 }
 .hdr::after {
   content: '';
-  position: absolute; bottom: -1px; left: 0; width: 120px; height: 1px;
-  background: linear-gradient(to right, var(--gold-mid), transparent);
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(to right, var(--gold-dim), rgba(212,160,23,0.1), transparent);
 }
-.hdr-left {}
+
+.hdr-ornament {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+}
+.hdr-orn-line { height: 1px; width: 50px; background: linear-gradient(to right, var(--gold), transparent); }
+.hdr-orn-dot { width: 4px; height: 4px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 8px var(--gold); }
+
 .hdr-tag {
-  font-size: 10px; font-weight: 600; letter-spacing: 7px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 8px;
   text-transform: uppercase; color: var(--gold-mid);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .hdr-h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(24px, 4vw, 44px);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px,4.5vw,52px);
+  font-weight: 900;
   color: var(--text-1);
-  text-shadow: var(--engrave);
-  line-height: 1.1; margin-bottom: 3px;
+  text-shadow: var(--text-engrave);
+  line-height: 1.05; margin-bottom: 6px;
 }
 .hdr-h2 {
-  font-family: 'DM Serif Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: clamp(18px, 3vw, 34px);
+  font-size: clamp(22px,3.5vw,40px);
+  font-weight: 700;
   color: var(--gold);
-  text-shadow: var(--engrave);
-  letter-spacing: 2px;
+  text-shadow: var(--text-engrave);
+  letter-spacing: 3px;
 }
 .hdr-right { text-align: right; }
 .hdr-sub {
-  font-size: 10px; font-weight: 300; letter-spacing: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 5px;
   text-transform: uppercase; color: var(--text-3);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-/* ═══ CLOCK PANEL ═══ */
+/* ═══════════════ CLOCK PANEL ═══════════════ */
 .clock-panel {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-  margin: 24px 0;
-  background: rgba(200,168,75, 0.08);
-  box-shadow: var(--lift-md);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+  margin: 28px 0;
+  box-shadow: var(--shadow-deep);
 }
 .clk-cell {
-  background: var(--z2);
-  padding: 22px 26px;
-  position: relative; overflow: hidden;
+  background: var(--bg2);
+  padding: 28px 32px; position: relative; overflow: hidden;
 }
 .clk-cell::before {
   content: '';
   position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(135deg,
-    rgba(255,255,255,0.05) 0%,
-    transparent 40%,
-    rgba(0,0,0,0.15) 100%
+    rgba(255,255,255,0.06) 0%,
+    rgba(255,255,255,0.01) 30%,
+    transparent 60%,
+    rgba(0,0,0,0.18) 100%
   );
 }
-.clk-cell.accent { background: var(--z3); }
+.clk-cell::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(to right, var(--gold-dim), rgba(212,160,23,0.1), transparent);
+}
+.clk-cell.accent {
+  background: var(--bg3);
+  box-shadow: inset 0 0 40px rgba(212,160,23,0.04);
+}
 .clk-cell-label {
-  font-size: 9px; font-weight: 600; letter-spacing: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 6px;
   text-transform: uppercase; color: var(--gold-mid);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 .clk-cell-time {
-  font-family: 'DM Serif Display', serif;
-  font-size: 34px; color: var(--gold-hi);
-  text-shadow: var(--engrave);
-  letter-spacing: 1px; line-height: 1;
+  font-family: 'Playfair Display', serif;
+  font-size: 42px; font-weight: 900;
+  color: var(--gold-hi);
+  text-shadow: var(--text-engrave);
+  letter-spacing: 2px; line-height: 1;
 }
 .clk-cell-time.plain {
-  color: var(--text-1);
+  color: var(--platinum);
   text-shadow:
-    0 1px 0 rgba(255,255,255, 0.1),
-    0 -1px 0 rgba(0,0,0, 0.8),
-    0 2px 8px rgba(0,0,0, 0.7);
+    0 1px 0 rgba(255,255,255,0.15),
+    0 -1px 0 rgba(0,0,0,0.9),
+    0 3px 10px rgba(0,0,0,0.8);
 }
 .clk-cell-info {
-  font-size: 11px; font-weight: 300;
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px; font-weight: 600;
   color: var(--text-2); letter-spacing: 0.5px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
-.clk-cell-info.gold { color: var(--gold-mid) }
+.clk-cell-info.gold { color: var(--gold-mid); }
 
-/* ═══ STATUS STRIP ═══ */
+/* ═══════════════ STATUS STRIP ═══════════════ */
 .status-strip {
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  padding: 12px 18px;
-  background: var(--z2);
-  box-shadow: var(--lift-sm);
-  margin-bottom: 20px;
-  position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  padding: 14px 22px;
+  background: var(--bg2);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    0 6px 20px rgba(0,0,0,0.6);
+  margin-bottom: 24px; position: relative; overflow: hidden;
 }
 .status-strip::before {
   content: '';
-  position: absolute; top:0; left:0; bottom:0; width: 2px;
-  background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
+  position: absolute; top:0; left:0; bottom:0; width: 3px;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
 }
 .status-strip::after {
   content: '';
@@ -365,274 +351,288 @@ body {
   background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
 }
 
-.s-live { display: flex; align-items: center; gap: 7px; }
+.s-live { display: flex; align-items: center; gap: 8px; }
 .s-live-dot {
-  width: 7px; height: 7px; border-radius: 50%;
+  width: 8px; height: 8px; border-radius: 50%;
   background: var(--emerald);
-  box-shadow: 0 0 0 2px rgba(61,153,112,0.2), 0 0 8px rgba(61,153,112,0.5);
-  animation: live-pulse 2.2s ease-in-out infinite;
+  box-shadow: 0 0 0 3px rgba(20,168,112,0.2), 0 0 12px rgba(20,168,112,0.6);
+  animation: live-pulse 2s ease-in-out infinite;
   flex-shrink: 0;
 }
 @keyframes live-pulse {
-  0%,100% { box-shadow: 0 0 0 2px rgba(61,153,112,0.2), 0 0 8px rgba(61,153,112,0.5) }
-  50%      { box-shadow: 0 0 0 4px rgba(61,153,112,0.1), 0 0 4px rgba(61,153,112,0.3) }
+  0%,100% { box-shadow: 0 0 0 3px rgba(20,168,112,0.2), 0 0 12px rgba(20,168,112,0.6) }
+  50%      { box-shadow: 0 0 0 5px rgba(20,168,112,0.08), 0 0 6px rgba(20,168,112,0.3) }
 }
 .s-live-txt {
-  font-size: 10px; font-weight: 600; letter-spacing: 3px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
   text-transform: uppercase; color: var(--emerald2);
-  text-shadow: var(--engrave-green);
+  text-shadow: var(--text-emerald);
 }
-.s-divider { color: var(--text-3); font-size: 10px }
-.s-stat { font-size: 11px; font-weight: 400; color: var(--text-2); letter-spacing: 0.3px; }
-.s-stat strong { font-weight: 600 }
-.s-stat strong.g { color: var(--emerald2); text-shadow: var(--engrave-green) }
-.s-stat strong.r { color: var(--crimson2); text-shadow: var(--engrave-red) }
-.s-stat strong.a { color: var(--gold); text-shadow: var(--engrave-sm) }
+.s-divider { color: var(--text-3); font-size: 12px; }
+.s-stat {
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px; font-weight: 700; color: var(--text-2); letter-spacing: 0.5px;
+}
+.s-stat strong { font-weight: 800; }
+.s-stat strong.g { color: var(--emerald2); text-shadow: var(--text-emerald); }
+.s-stat strong.r { color: var(--ruby2); text-shadow: var(--text-ruby); }
+.s-stat strong.a { color: var(--gold); text-shadow: var(--text-engrave-sm); }
 
-.s-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap }
+.s-actions { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
 .s-btn {
-  font-size: 9px; font-weight: 600; letter-spacing: 3px;
-  text-transform: uppercase; padding: 7px 14px;
-  background: var(--z3); border: 1px solid rgba(200,168,75,0.2);
+  font-family: 'Cinzel', serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; padding: 9px 18px;
+  background: var(--bg3); border: 1px solid rgba(212,160,23,0.25);
   color: var(--gold-mid); cursor: pointer;
   transition: all 0.2s;
-  box-shadow: var(--lift-sm);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    0 4px 14px rgba(0,0,0,0.5);
   position: relative; overflow: hidden;
 }
 .s-btn::before {
   content: '';
-  position: absolute; inset:0; pointer-events: none;
+  position: absolute; inset:0;
   background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%);
 }
 .s-btn:hover {
-  background: var(--z4);
-  border-color: rgba(200,168,75,0.45);
+  background: var(--bg4);
+  border-color: rgba(212,160,23,0.55);
   color: var(--gold-hi);
-  box-shadow: var(--lift-md), 0 0 14px rgba(200,168,75,0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.6),
+    0 8px 24px rgba(0,0,0,0.6),
+    0 0 18px rgba(212,160,23,0.15);
 }
-.s-btn:active { transform: translateY(1px); box-shadow: var(--lift-sm) }
-.s-btn.notif-ok { border-color: rgba(61,153,112,0.4); color: var(--emerald2); }
+.s-btn:active { transform: translateY(1px); }
+.s-btn.notif-ok { border-color: rgba(20,168,112,0.45); color: var(--emerald2); }
 
-/* ═══ STATS ROW ═══ */
+/* ═══════════════ STATS ROW ═══════════════ */
 .stats-row {
-  display: grid; grid-template-columns: repeat(5,1fr); gap: 2px;
-  margin-bottom: 20px;
-  background: rgba(200,168,75,0.06);
-  box-shadow: var(--lift-sm);
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 3px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-deep);
 }
 .stat {
-  background: var(--z2); padding: 16px 14px; text-align: center;
+  background: var(--bg2); padding: 20px 16px; text-align: center;
   position: relative; overflow: hidden;
   transition: background 0.2s;
 }
 .stat::before {
   content: '';
-  position: absolute; inset:0; pointer-events: none;
+  position: absolute; inset:0;
   background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%);
 }
 .stat::after {
   content: '';
   position: absolute; top:0; left:0; right:0; height: 1px;
-  background: linear-gradient(to right, transparent, rgba(200,168,75,0.2), transparent);
+  background: linear-gradient(to right, transparent, rgba(212,160,23,0.25), transparent);
 }
-.stat:hover { background: var(--z3) }
+.stat:hover { background: var(--bg3); }
 .stat-n {
-  font-family: 'DM Serif Display', serif;
-  font-size: 26px; line-height: 1; margin-bottom: 5px;
-  color: var(--gold); text-shadow: var(--engrave);
+  font-family: 'Playfair Display', serif;
+  font-size: 32px; font-weight: 900;
+  line-height: 1; margin-bottom: 6px;
+  color: var(--gold); text-shadow: var(--text-engrave);
 }
-.stat-n.g { color: var(--emerald2); text-shadow: var(--engrave-green) }
-.stat-n.r { color: var(--crimson2); text-shadow: var(--engrave-red) }
+.stat-n.g { color: var(--emerald2); text-shadow: var(--text-emerald); }
+.stat-n.r { color: var(--ruby2); text-shadow: var(--text-ruby); }
 .stat-l {
-  font-size: 9px; font-weight: 600; letter-spacing: 3px;
+  font-family: 'Cinzel', serif;
+  font-size: 8px; font-weight: 700; letter-spacing: 3px;
   text-transform: uppercase; color: var(--text-3);
 }
 
-/* ═══ FILTER BAR ═══ */
+/* ═══════════════ FILTER BAR ═══════════════ */
 .filter-bar {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 .filter-label {
-  font-size: 9px; font-weight: 600; letter-spacing: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 5px;
   text-transform: uppercase; color: var(--text-3);
 }
 .filter-btn {
-  font-size: 9px; font-weight: 500; letter-spacing: 2px;
-  text-transform: uppercase; padding: 6px 14px;
-  background: transparent; border: 1px solid rgba(255,255,255,0.07);
-  color: var(--text-3); cursor: pointer; transition: all 0.18s;
+  font-family: 'Cinzel', serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; padding: 8px 18px;
+  background: transparent; border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-3); cursor: pointer; transition: all 0.2s;
 }
 .filter-btn:hover, .filter-btn.on {
-  background: var(--z2); border-color: rgba(200,168,75,0.3);
-  color: var(--gold); box-shadow: var(--lift-sm);
+  background: var(--bg2); border-color: rgba(212,160,23,0.35);
+  color: var(--gold);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 4px 12px rgba(0,0,0,0.5);
 }
 .search-box {
   margin-left: auto;
-  background: var(--z2); border: 1px solid rgba(255,255,255,0.07);
-  color: var(--text-1); padding: 7px 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 400; letter-spacing: 0.5px;
-  outline: none; width: 200px;
-  box-shadow: var(--lift-sm);
+  background: var(--bg2); border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-1); padding: 9px 16px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.8px;
+  outline: none; width: 220px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
   transition: border-color 0.2s, box-shadow 0.2s;
-  -webkit-user-select: text; -moz-user-select: text; user-select: text;
+  -webkit-user-select: text; user-select: text;
 }
 .search-box:focus {
-  border-color: rgba(200,168,75,0.4);
-  box-shadow: var(--lift-sm), 0 0 12px rgba(200,168,75,0.1);
+  border-color: rgba(212,160,23,0.45);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.4), 0 0 14px rgba(212,160,23,0.1);
 }
-.search-box::placeholder { color: var(--text-3) }
+.search-box::placeholder { color: var(--text-3); }
 
-/* ═══ CARD GRID ═══ */
+/* ═══════════════ CARD GRID ═══════════════ */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
-  gap: 2px;
-  background: rgba(200,168,75,0.06);
+  grid-template-columns: repeat(auto-fill, minmax(278px, 1fr));
+  gap: 3px;
+  background: rgba(212,160,23,0.06);
 }
 
-/* ═══ CARD ═══ */
+/* ═══════════════ CARD ═══════════════ */
 .card {
-  background: var(--z2);
-  padding: 18px 20px;
+  background: var(--bg2);
+  padding: 20px 22px;
   position: relative; overflow: hidden;
-  transition: background 0.2s, box-shadow 0.25s, transform 0.25s;
+  transition: background 0.2s, box-shadow 0.3s, transform 0.3s;
   cursor: default;
 }
 .card::before {
   content: '';
   position: absolute; inset:0; pointer-events: none;
   background: linear-gradient(135deg,
-    rgba(255,255,255,0.055) 0%,
-    rgba(255,255,255,0.01) 30%,
+    rgba(255,255,255,0.06) 0%,
+    rgba(255,255,255,0.015) 30%,
     transparent 55%,
-    rgba(0,0,0,0.12) 100%
+    rgba(0,0,0,0.15) 100%
   );
 }
 .card::after {
   content: '';
   position: absolute; top:0; left:0; right:0; height:1px;
-  background: linear-gradient(to right, var(--gold-mid), transparent 60%);
-  opacity: 0.4;
+  background: linear-gradient(to right, var(--gold-mid), rgba(212,160,23,0.1), transparent);
+  opacity: 0.45;
 }
 .card:hover {
-  background: var(--z3);
-  box-shadow: var(--lift-md);
-  transform: translateY(-2px);
+  background: var(--bg3);
+  box-shadow: var(--shadow-deep);
+  transform: translateY(-3px);
   z-index: 1;
 }
-.card:hover::after { opacity: 0.8 }
-.card.closed { background: #100c0d; }
-.card.closed::after {
-  background: linear-gradient(to right, var(--crimson), transparent 60%);
-  opacity: 0.4;
-}
-.card.closed:hover {
-  background: #150e10;
-  box-shadow: var(--lift-md), 0 0 0 1px rgba(155,35,53,0.2);
-}
-.card.closed:hover::after { opacity: 0.8 }
-.card.soon { animation: soon-aura 2.5s ease-in-out infinite; }
+.card:hover::after { opacity: 1; }
+.card.closed { background: #0d0609; }
+.card.closed::after { background: linear-gradient(to right, var(--ruby), transparent 60%); opacity:0.45; }
+.card.closed:hover { background: #120810; box-shadow: var(--shadow-deep), 0 0 0 1px rgba(192,21,42,0.2); }
+.card.soon { animation: soon-aura 2.8s ease-in-out infinite; }
 @keyframes soon-aura {
   0%,100% { box-shadow: none }
-  50%      { box-shadow: 0 0 0 1px rgba(200,168,75,0.25), 0 0 20px rgba(200,168,75,0.08) }
+  50%      { box-shadow: 0 0 0 1px rgba(212,160,23,0.3), 0 0 24px rgba(212,160,23,0.10) }
 }
-.card.soon::after { opacity: 0.7 }
 
 .card-accent {
-  position: absolute; top:0; left:0; bottom:0; width:2px;
+  position: absolute; top:0; left:0; bottom:0; width:3px;
   background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
-  opacity: 0.35; transition: opacity 0.2s;
+  opacity: 0.4; transition: opacity 0.2s;
 }
-.card:hover .card-accent { opacity: 0.9 }
-.card.closed .card-accent {
-  background: linear-gradient(to bottom, transparent, var(--crimson), transparent);
-}
-.card.soon .card-accent { opacity: 0.8 }
+.card:hover .card-accent { opacity: 1; }
+.card.closed .card-accent { background: linear-gradient(to bottom, transparent, var(--ruby), transparent); }
+.card.soon .card-accent { opacity: 0.85; }
 
 .card-head {
   display: flex; align-items: flex-start;
   justify-content: space-between; gap: 10px; margin-bottom: 8px;
 }
 .card-name {
-  font-size: 13px; font-weight: 600; color: var(--text-1);
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-  letter-spacing: 0.3px; line-height: 1.3; flex:1;
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; font-weight: 800;
+  color: var(--text-1);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+  letter-spacing: 0.4px; line-height: 1.25; flex:1;
 }
-.card.closed .card-name { color: var(--crimson2) }
+.card.closed .card-name { color: var(--ruby2); text-shadow: var(--text-ruby); }
 
 .badge {
-  font-size: 8px; font-weight: 600; letter-spacing: 2px;
-  text-transform: uppercase; padding: 3px 9px;
+  font-family: 'Cinzel', serif;
+  font-size: 8px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; padding: 4px 10px;
   white-space: nowrap; flex-shrink: 0;
   position: relative; overflow: hidden;
 }
 .badge::before {
   content: '';
   position: absolute; inset:0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.09) 0%, transparent 50%);
 }
-.badge-open   { background:rgba(61,153,112,0.12); color:var(--emerald2); border:1px solid rgba(61,153,112,0.3) }
-.badge-closed { background:rgba(155,35,53,0.14); color:var(--crimson2); border:1px solid rgba(155,35,53,0.35) }
+.badge-open   { background:rgba(20,168,112,0.12); color:var(--emerald2); border:1px solid rgba(20,168,112,0.35); }
+.badge-closed { background:rgba(192,21,42,0.14); color:var(--ruby2); border:1px solid rgba(192,21,42,0.4); }
 .badge-soon   {
-  background:rgba(200,168,75,0.12); color:var(--gold); border:1px solid rgba(200,168,75,0.35);
+  background:rgba(212,160,23,0.12); color:var(--gold); border:1px solid rgba(212,160,23,0.4);
   animation: badge-flash 0.9s ease-in-out infinite;
 }
-@keyframes badge-flash { 0%,100%{opacity:1} 50%{opacity:0.45} }
+@keyframes badge-flash { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
 .card-day {
-  font-size: 10px; font-weight: 300; font-style: italic;
-  color: var(--text-3); letter-spacing: 0.3px; margin-bottom: 12px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px; font-weight: 600; font-style: italic;
+  color: var(--text-3); letter-spacing: 0.3px; margin-bottom: 14px;
 }
 
-.card-times { display: grid; grid-template-columns:1fr 1fr; gap:8px }
+.card-times { display: grid; grid-template-columns:1fr 1fr; gap:8px; }
 
 .ct {
-  padding: 10px 12px;
-  background: rgba(0,0,0,0.25);
+  padding: 11px 14px;
+  background: rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.05);
   position: relative; overflow: hidden;
 }
 .ct::before {
   content: '';
-  position: absolute; inset:0; pointer-events: none;
+  position: absolute; inset:0;
   background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
 }
-.ct-close { border-color: rgba(155,35,53,0.18) }
-.ct-open  { border-color: rgba(200,168,75,0.12) }
+.ct-close { border-color: rgba(192,21,42,0.2); }
+.ct-open  { border-color: rgba(212,160,23,0.14); }
 
 .ct-lbl {
-  font-size: 8px; font-weight: 600; letter-spacing: 3px;
-  text-transform: uppercase; margin-bottom: 5px; color: var(--text-3);
+  font-family: 'Cinzel', serif;
+  font-size: 7px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: 6px; color: var(--text-3);
 }
-.ct-close .ct-lbl { color: rgba(217,128,106,0.5) }
+.ct-close .ct-lbl { color: rgba(232,80,101,0.45); }
 
 .ct-val {
-  font-family: 'DM Serif Display', serif;
-  font-size: 17px; font-weight: 400;
-  color: var(--gold); text-shadow: var(--engrave-sm);
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 800;
+  color: var(--gold); text-shadow: var(--text-engrave-sm);
   line-height: 1;
 }
-.ct-close .ct-val { color: var(--crimson2); text-shadow: var(--engrave-red); }
+.ct-close .ct-val { color: var(--ruby2); text-shadow: var(--text-ruby); }
 .ct-wib {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 9px; font-weight: 300; color: var(--text-3);
+  font-family: 'Raleway', sans-serif;
+  font-size: 9px; font-weight: 700; color: var(--text-3);
 }
 
 .card-cd {
-  margin-top: 9px;
-  font-size: 10px; font-weight: 300; font-style: italic;
+  margin-top: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px; font-weight: 600; font-style: italic;
   color: var(--gold-mid);
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 7px;
 }
-.card-cd::before { content: '·'; font-size: 16px; line-height: 1 }
+.card-cd::before { content: '◆'; font-size: 7px; line-height: 1; }
 
 .hoki-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px; margin-top: 4px;
-  background: rgba(200,168,75,0.05);
-  border: 1px solid rgba(200,168,75,0.12);
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; margin-top: 4px;
+  background: rgba(212,160,23,0.05);
+  border: 1px solid rgba(212,160,23,0.15);
   position: relative; overflow: hidden;
 }
 .hoki-row::before {
@@ -641,155 +641,160 @@ body {
   background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 50%);
 }
 .hoki-dot {
-  width: 6px; height: 6px; border-radius: 50%;
+  width: 7px; height: 7px; border-radius: 50%;
   background: var(--gold); flex-shrink: 0;
-  animation: hoki-glow 1s ease-in-out infinite alternate;
-  box-shadow: 0 0 6px var(--gold);
+  animation: hoki-glow 1.1s ease-in-out infinite alternate;
+  box-shadow: 0 0 8px var(--gold);
 }
 @keyframes hoki-glow {
-  from { box-shadow: 0 0 4px var(--gold-mid) }
-  to   { box-shadow: 0 0 12px var(--gold-hi), 0 0 20px rgba(200,168,75,0.4) }
+  from { box-shadow: 0 0 5px var(--gold-mid); }
+  to   { box-shadow: 0 0 16px var(--gold-hi), 0 0 28px rgba(212,160,23,0.5); }
 }
 .hoki-txt {
-  font-size: 10px; font-weight: 500; letter-spacing: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
   text-transform: uppercase; color: var(--gold-mid);
 }
 
-/* ═══ ALARM MODAL ═══ */
+/* ═══════════════ ALARM MODAL ═══════════════ */
 #overlay {
   position: fixed; inset:0; z-index: 9999;
-  background: rgba(5,6,8,0.92);
-  backdrop-filter: blur(14px) saturate(0.8);
+  background: rgba(3,2,8,0.94);
+  backdrop-filter: blur(18px) saturate(0.7);
   display: none; align-items: center; justify-content: center;
 }
-#overlay.on { display: flex }
+#overlay.on { display: flex; }
 
 .modal {
-  width: 92%; max-width: 420px;
-  background: var(--z2);
+  width: 92%; max-width: 440px;
+  background: var(--bg2);
   position: relative; overflow: hidden;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.09),
     inset 1px 0 0 rgba(255,255,255,0.04),
-    inset 0 -2px 0 rgba(0,0,0,0.7),
-    inset -1px 0 0 rgba(0,0,0,0.5),
-    0 32px 80px rgba(0,0,0,0.9),
-    0 8px 24px rgba(0,0,0,0.8),
-    0 0 0 1px rgba(0,0,0,0.6),
-    0 0 30px rgba(155,35,53,0.18);
-  animation: modal-pop 0.35s cubic-bezier(0.22,1,0.36,1);
+    inset 0 -2px 0 rgba(0,0,0,0.8),
+    0 40px 100px rgba(0,0,0,0.97),
+    0 0 0 1px rgba(192,21,42,0.2),
+    0 0 40px rgba(192,21,42,0.12);
+  animation: modal-pop 0.4s cubic-bezier(0.22,1,0.36,1);
 }
 @keyframes modal-pop {
-  from { opacity:0; transform:scale(0.94) translateY(16px) }
-  to   { opacity:1; transform:scale(1)    translateY(0) }
+  from { opacity:0; transform:scale(0.92) translateY(20px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
 }
 .modal::before {
   content: '';
   position: absolute; inset:0; pointer-events: none;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.055) 0%, transparent 40%);
 }
 
 .modal-alarm-line {
-  position: absolute; top:0; left:0; right:0; height:2px;
-  background: linear-gradient(to right, transparent, var(--crimson), var(--crimson2), var(--crimson), transparent);
-  animation: alarm-line 1.4s ease-in-out infinite;
+  position: absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(to right, transparent, var(--ruby), var(--ruby2), var(--ruby), transparent);
+  animation: alarm-line 1.3s ease-in-out infinite;
 }
 @keyframes alarm-line {
-  0%,100% { opacity:0.6 }
-  50%      { opacity:1; box-shadow: 0 0 12px rgba(155,35,53,0.6) }
+  0%,100% { opacity:0.7; }
+  50%      { opacity:1; box-shadow: 0 0 16px rgba(192,21,42,0.7); }
 }
 
 .modal-head {
-  padding: 18px 22px 14px;
+  padding: 22px 26px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
   display: flex; justify-content: space-between; align-items: center;
 }
 .mh-tag {
-  font-size: 9px; font-weight: 600; letter-spacing: 5px;
-  text-transform: uppercase; color: rgba(217,128,106,0.6); margin-bottom: 3px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 5px;
+  text-transform: uppercase; color: rgba(232,80,101,0.65); margin-bottom: 4px;
 }
 .mh-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 20px; color: var(--crimson2);
-  text-shadow: var(--engrave-red); letter-spacing: 0.5px;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 900;
+  color: var(--ruby2);
+  text-shadow: var(--text-ruby); letter-spacing: 0.5px;
 }
 .mh-clock {
-  font-family: 'DM Serif Display', serif;
-  font-size: 17px; color: var(--gold);
-  text-shadow: var(--engrave-sm);
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 800;
+  color: var(--gold);
+  text-shadow: var(--text-engrave-sm);
 }
 
-.modal-body { padding: 26px 22px; text-align: center }
+.modal-body { padding: 28px 26px; text-align: center; }
 
 .m-name {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(18px,3.5vw,26px);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px,4vw,30px); font-weight: 900;
   color: var(--text-1);
-  text-shadow: var(--engrave);
-  margin-bottom: 10px; letter-spacing: 0.5px;
+  text-shadow: var(--text-engrave);
+  margin-bottom: 12px; letter-spacing: 0.5px;
   animation: m-glow 1.2s ease-in-out infinite alternate;
 }
 @keyframes m-glow {
-  from { color: var(--text-1); text-shadow: var(--engrave) }
-  to   { color: var(--gold-hi); text-shadow: 0 1px 0 rgba(240,208,128,0.5), 0 -1px 0 rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.8), 0 0 28px rgba(200,168,75,0.6) }
+  from { color: var(--text-1); text-shadow: var(--text-engrave); }
+  to   { color: var(--gold-hi); text-shadow: 0 1px 0 rgba(253,230,138,0.6), 0 -1px 0 rgba(0,0,0,1), 0 2px 10px rgba(0,0,0,0.9), 0 0 32px rgba(212,160,23,0.7); }
 }
 
 .m-alert {
-  font-family: 'DM Serif Display', serif;
-  font-style: italic;
-  font-size: 42px; color: var(--crimson2);
-  text-shadow: var(--engrave-red);
-  letter-spacing: 2px; line-height: 1;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 700;
+  font-size: 52px; color: var(--ruby2);
+  text-shadow: var(--text-ruby);
+  letter-spacing: 3px; line-height: 1;
   animation: m-pulse 1s ease-in-out infinite;
 }
-@keyframes m-pulse { 0%,100%{opacity:1} 50%{opacity:0.55} }
+@keyframes m-pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
 .m-sub {
-  font-size: 11px; font-weight: 300; font-style: italic;
-  color: var(--text-3); letter-spacing: 2px; margin: 8px 0 22px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px; font-weight: 600; font-style: italic;
+  color: var(--text-3); letter-spacing: 2px; margin: 10px 0 24px;
 }
 
 .m-times {
-  display: grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:24px;
+  display: grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:26px;
 }
 .m-time-cell {
-  padding: 12px 14px;
-  background: rgba(0,0,0,0.3); border: 1px solid rgba(155,35,53,0.18);
+  padding: 14px 16px;
+  background: rgba(0,0,0,0.35); border: 1px solid rgba(192,21,42,0.2);
   position: relative; overflow: hidden;
 }
 .m-time-cell::before {
   content: '';
-  position: absolute; inset:0; pointer-events: none;
+  position: absolute; inset:0;
   background: linear-gradient(135deg, rgba(255,255,255,0.025) 0%, transparent 50%);
 }
 .m-time-cell::after {
   content: '';
   position: absolute; top:0; left:0; right:0; height:1px;
-  background: linear-gradient(to right, transparent, rgba(155,35,53,0.4), transparent);
+  background: linear-gradient(to right, transparent, rgba(192,21,42,0.45), transparent);
 }
 .m-time-lbl {
-  font-size: 8px; font-weight: 600; letter-spacing: 3px;
-  text-transform: uppercase; color: rgba(217,128,106,0.45); margin-bottom:5px;
+  font-family: 'Cinzel', serif;
+  font-size: 8px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(232,80,101,0.45); margin-bottom:6px;
 }
 .m-time-val {
-  font-family: 'DM Serif Display', serif;
-  font-size: 20px; color: var(--gold); text-shadow: var(--engrave-sm);
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; font-weight: 900;
+  color: var(--gold); text-shadow: var(--text-engrave-sm);
 }
 
 .m-btn {
-  width: 100%; padding: 14px 20px;
-  background: rgba(155,35,53,0.1);
-  border: 1px solid rgba(155,35,53,0.35);
-  color: var(--crimson2);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px; font-weight: 600; letter-spacing: 5px;
+  width: 100%; padding: 16px 24px;
+  background: rgba(192,21,42,0.1);
+  border: 1px solid rgba(192,21,42,0.4);
+  color: var(--ruby2);
+  font-family: 'Cinzel', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 5px;
   text-transform: uppercase; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
   transition: all 0.2s; position: relative; overflow: hidden;
-  text-shadow: var(--engrave-red);
+  text-shadow: var(--text-ruby);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.04),
-    inset 0 -1px 0 rgba(0,0,0,0.5);
+    inset 0 -1px 0 rgba(0,0,0,0.6);
 }
 .m-btn::before {
   content: '';
@@ -797,84 +802,80 @@ body {
   background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%);
 }
 .m-btn:hover {
-  background: rgba(155,35,53,0.22);
-  border-color: rgba(155,35,53,0.6);
+  background: rgba(192,21,42,0.22);
+  border-color: rgba(192,21,42,0.7);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.06),
-    inset 0 -1px 0 rgba(0,0,0,0.6),
-    0 0 20px rgba(155,35,53,0.2);
+    inset 0 -1px 0 rgba(0,0,0,0.7),
+    0 0 24px rgba(192,21,42,0.25);
 }
-.m-btn:active { transform: translateY(1px) }
+.m-btn:active { transform: translateY(1px); }
 
 .m-pulse {
   position: absolute; inset:-1px;
-  border: 1px solid rgba(155,35,53,0.5);
-  animation: pulse-out 1.3s ease-out infinite;
+  border: 1px solid rgba(192,21,42,0.55);
+  animation: pulse-out 1.4s ease-out infinite;
   pointer-events: none;
 }
 @keyframes pulse-out {
-  0%   { opacity:0.8; transform:scale(1) }
-  100% { opacity:0;   transform:scale(1.05) }
+  0%   { opacity:0.9; transform:scale(1); }
+  100% { opacity:0;   transform:scale(1.06); }
 }
 
-.bell-shake {
-  font-size: 15px;
-  animation: bell 0.45s ease-in-out infinite alternate;
-}
-@keyframes bell {
-  from { transform:rotate(-14deg) }
-  to   { transform:rotate(14deg) }
-}
+.bell-shake { font-size: 16px; animation: bell 0.45s ease-in-out infinite alternate; }
+@keyframes bell { from{transform:rotate(-15deg)} to{transform:rotate(15deg)} }
 
-/* ═══ QUEUE BADGE ═══ */
+/* ═══════════════ QUEUE BADGE ═══════════════ */
 #q-badge {
-  position: fixed; top:16px; right:16px; z-index:200;
-  background: var(--z3); border: 1px solid rgba(200,168,75,0.3);
-  padding: 6px 14px;
-  font-size: 10px; font-weight: 500; letter-spacing: 3px;
+  position: fixed; top:18px; right:18px; z-index:200;
+  background: var(--bg3); border: 1px solid rgba(212,160,23,0.35);
+  padding: 8px 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
   text-transform: uppercase; color: var(--gold);
-  box-shadow: var(--lift-sm);
-  display: none; text-shadow: var(--engrave-sm);
+  box-shadow: var(--shadow-deep);
+  display: none; text-shadow: var(--text-engrave-sm);
 }
 
-/* ═══ FOOTER ═══ */
+/* ═══════════════ FOOTER ═══════════════ */
 .footer {
-  text-align: center; padding: 32px 0 20px; margin-top: 24px;
-  border-top: 1px solid rgba(200,168,75,0.1); position: relative;
+  text-align: center; padding: 36px 0 24px; margin-top: 28px;
+  border-top: 1px solid rgba(212,160,23,0.1); position: relative;
 }
 .footer::before {
   content: '';
   position: absolute; top:0; left:50%; transform:translateX(-50%);
-  width: 120px; height:1px;
+  width: 140px; height:1px;
   background: linear-gradient(to right, transparent, var(--gold-mid), transparent);
 }
 .footer-name {
-  font-family: 'DM Serif Display', serif; font-style: italic;
-  font-size: 18px; color: var(--gold);
-  text-shadow: var(--engrave-sm);
-  letter-spacing: 2px; margin-bottom: 6px;
+  font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700;
+  font-size: 22px; color: var(--gold);
+  text-shadow: var(--text-engrave-sm);
+  letter-spacing: 3px; margin-bottom: 8px;
 }
 .footer-copy {
-  font-size: 9px; font-weight: 300; letter-spacing: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 5px;
   text-transform: uppercase; color: var(--text-3);
 }
 
-/* ═══ SCROLLBAR ═══ */
-::-webkit-scrollbar { width:4px }
-::-webkit-scrollbar-track { background:var(--z0) }
-::-webkit-scrollbar-thumb { background:var(--gold-shd) }
-::-webkit-scrollbar-thumb:hover { background:var(--gold-mid) }
+/* ═══════════════ SCROLLBAR ═══════════════ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg0); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-mid); }
 
-/* ═══ RESPONSIVE ═══ */
+/* ═══════════════ RESPONSIVE ═══════════════ */
 @media(max-width:640px) {
-  .clock-panel { grid-template-columns:1fr }
-  .grid { grid-template-columns:1fr 1fr }
-  .stats-row { grid-template-columns:repeat(3,1fr) }
-  .search-box { width:100%; margin-left:0 }
-  .hdr { flex-direction:column; align-items:flex-start }
-  .hdr-right { text-align:left }
+  .clock-panel { grid-template-columns:1fr; }
+  .grid { grid-template-columns:1fr 1fr; }
+  .stats-row { grid-template-columns:repeat(3,1fr); }
+  .search-box { width:100%; margin-left:0; }
+  .hdr { flex-direction:column; align-items:flex-start; }
+  .hdr-right { text-align:left; }
 }
-@media(max-width:380px) { .grid { grid-template-columns:1fr } }
+@media(max-width:380px) { .grid { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -882,19 +883,26 @@ body {
 <!-- ═══ WELCOME ═══ -->
 <div id="welcome">
   <div class="wlc">
-    <div class="wlc-pip"></div>
+    <div class="wlc-ornament">
+      <div class="wlc-orn-line"></div>
+      <div class="wlc-orn-center">
+        <div class="wlc-diamond sm"></div>
+        <div class="wlc-diamond"></div>
+        <div class="wlc-diamond sm"></div>
+      </div>
+      <div class="wlc-orn-line r"></div>
+    </div>
     <div class="wlc-tag">Selamat Datang</div>
     <div class="wlc-h1">Alarm Jadwal Result</div>
     <div class="wlc-h2">Togel Lubis</div>
-    <div class="wlc-rule">
-      <div class="wlc-rule-line"></div>
-      <div class="wlc-rule-gem"></div>
-      <div class="wlc-rule-line r"></div>
+    <div class="wlc-divider">
+      <div class="wlc-div-line"></div>
+      <div class="wlc-div-gem"></div>
+      <div class="wlc-div-line r"></div>
     </div>
     <div class="wlc-sub">Real-Time Bet Close Monitoring</div>
     <div class="wlc-loader"><div class="wlc-loader-bar"></div></div>
     <div class="wlc-status" id="wlcStatus">Memuat sistem...</div>
-    <div class="wlc-pip-bot"></div>
   </div>
 </div>
 
@@ -939,6 +947,10 @@ body {
 
   <div class="hdr">
     <div class="hdr-left">
+      <div class="hdr-ornament">
+        <div class="hdr-orn-line"></div>
+        <div class="hdr-orn-dot"></div>
+      </div>
       <div class="hdr-tag">Sistem Monitoring</div>
       <div class="hdr-h1">Alarm Jadwal Result</div>
       <div class="hdr-h2">Togel Lubis</div>
@@ -974,7 +986,7 @@ body {
     <span class="s-stat">Alarm <strong class="a" id="sA">0</strong></span>
     <div class="s-actions">
       <button class="s-btn" id="notifBtn" onclick="doNotif()">🔔 Notifikasi</button>
-      <button class="s-btn" onclick="testSuara(false)">🔊 Test</button>
+      <button class="s-btn" onclick="testSuara(false)">🔊 Test Bell</button>
       <button class="s-btn" onclick="testSuara(true)">✦ Hoki</button>
     </div>
   </div>
@@ -1061,25 +1073,27 @@ const DATA = [
 
 /* ══ WELCOME ══ */
 (function(){
-  const msgs = ['Memuat sistem...','Menghubungkan server...','Mempersiapkan alarm...','Siap.'];
+  const msgs = ['Memuat sistem...','Menghubungkan server...','Mempersiapkan alarm...','Sistem siap.'];
   let i = 0;
   const el = document.getElementById('wlcStatus');
-  const iv = setInterval(()=>{ i++; if(i<msgs.length) el.textContent=msgs[i]; else clearInterval(iv); }, 780);
+  const iv = setInterval(()=>{ i++; if(i<msgs.length) el.textContent=msgs[i]; else clearInterval(iv); }, 850);
   setTimeout(()=>{
     document.getElementById('welcome').classList.add('hide');
     document.getElementById('app').classList.add('on');
-  }, 3900);
+  }, 4200);
 })();
 
-/* ══════════════════════════════════════════
-   PREMIUM AUDIO ENGINE v2
-   — Elegant luxury sound design —
-   1. crystalHarp   : delicate harp pluck (open / hoki)
-   2. grandBell     : deep resonant gong (alarm close)
-   3. Reverb via ConvolverNode (impulse response)
-   4. Stereo width  via StereoPannerNode
-   5. Compressor + EQ mastering chain
-══════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   LUXURY BELL AUDIO ENGINE v3
+   — Premium Westminster Cathedral Bell Design —
+   
+   ALARM: Deep grand church bell (Westminster chime)
+           + resonant overtone series + hall reverb
+   
+   HOKI: Golden ascending harp glissando
+          + sparkling crystal harmonics
+          + warm string pad swell
+══════════════════════════════════════════════════ */
 let AC = null, reverbBuf = null, audioUnlocked = false;
 
 function getAC(){
@@ -1091,324 +1105,379 @@ function getAC(){
 function unlockAudio(){
   if(audioUnlocked) return;
   try{
-    const ac=getAC();
-    // build reverb impulse response once
+    const ac = getAC();
     buildReverb(ac);
-    const buf=ac.createBuffer(1,1,22050), src=ac.createBufferSource();
-    src.buffer=buf; src.connect(ac.destination); src.start(0);
-    audioUnlocked=true;
+    const buf = ac.createBuffer(1,1,22050), src = ac.createBufferSource();
+    src.buffer = buf; src.connect(ac.destination); src.start(0);
+    audioUnlocked = true;
   }catch(e){}
 }
 document.addEventListener('click', unlockAudio);
 document.addEventListener('touchstart', unlockAudio);
 
-/* ── Build synthetic reverb IR (large hall) ── */
+/* ── Cathedral Reverb (4.5s tail) ── */
 function buildReverb(ac){
   if(reverbBuf) return;
-  const sr = ac.sampleRate, len = sr * 3.2;
+  const sr = ac.sampleRate, len = Math.floor(sr * 4.5);
   reverbBuf = ac.createBuffer(2, len, sr);
   for(let ch=0; ch<2; ch++){
     const d = reverbBuf.getChannelData(ch);
     for(let i=0; i<len; i++){
       const t = i/sr;
-      d[i] = (Math.random()*2-1) * Math.exp(-t*2.8);
-      if(i < sr*.005) d[i] *= (i/(sr*.005)); // fade in
+      // Early reflections (first 80ms)
+      let v = (Math.random()*2-1) * Math.exp(-t * 1.8);
+      // Late diffuse tail
+      v += (Math.random()*2-1) * Math.exp(-t * 0.7) * 0.3;
+      // Fade in to avoid click
+      if(i < sr * 0.008) v *= (i / (sr * 0.008));
+      d[i] = v;
     }
   }
 }
 
-/* ── Master bus: EQ + Compress + Limit ── */
+/* ── Master Bus: High-shelf boost + warm compress ── */
 function masterBus(ac){
   const hpf = ac.createBiquadFilter();
-  hpf.type='highpass'; hpf.frequency.value=60; hpf.Q.value=0.7;
-  const shelf = ac.createBiquadFilter();
-  shelf.type='highshelf'; shelf.frequency.value=5000; shelf.gain.value=2.5;
+  hpf.type='highpass'; hpf.frequency.value=55; hpf.Q.value=0.6;
+
+  const loMid = ac.createBiquadFilter();
+  loMid.type='peaking'; loMid.frequency.value=280; loMid.Q.value=0.8; loMid.gain.value=-1.5;
+
   const presence = ac.createBiquadFilter();
-  presence.type='peaking'; presence.frequency.value=2800; presence.Q.value=1.2; presence.gain.value=1.8;
+  presence.type='peaking'; presence.frequency.value=3500; presence.Q.value=1.0; presence.gain.value=2.5;
+
+  const air = ac.createBiquadFilter();
+  air.type='highshelf'; air.frequency.value=8000; air.gain.value=3.0;
+
   const comp = ac.createDynamicsCompressor();
-  comp.threshold.value=-14; comp.knee.value=6;
-  comp.ratio.value=3.5; comp.attack.value=0.003; comp.release.value=0.18;
+  comp.threshold.value=-16; comp.knee.value=8;
+  comp.ratio.value=3.0; comp.attack.value=0.005; comp.release.value=0.25;
+
   const limiter = ac.createDynamicsCompressor();
-  limiter.threshold.value=-1; limiter.knee.value=0;
-  limiter.ratio.value=20; limiter.attack.value=0.001; limiter.release.value=0.06;
-  const out = ac.createGain(); out.gain.value=0.88;
-  hpf.connect(shelf); shelf.connect(presence);
-  presence.connect(comp); comp.connect(limiter); limiter.connect(out);
+  limiter.threshold.value=-0.5; limiter.knee.value=0;
+  limiter.ratio.value=20; limiter.attack.value=0.001; limiter.release.value=0.05;
+
+  const out = ac.createGain(); out.gain.value=0.82;
+
+  hpf.connect(loMid); loMid.connect(presence); presence.connect(air);
+  air.connect(comp); comp.connect(limiter); limiter.connect(out);
   out.connect(ac.destination);
-  return hpf; // input node
+  return hpf;
 }
 
-/* ── Reverb send ── */
-function makeReverb(ac, wet=0.28){
+/* ── Wet/Dry Reverb Send ── */
+function makeReverb(ac, wetLevel){
   if(!reverbBuf) buildReverb(ac);
   const conv = ac.createConvolver();
   conv.buffer = reverbBuf;
-  const send = ac.createGain(); send.gain.value=wet;
-  const dry  = ac.createGain(); dry.gain.value=1-wet;
-  // returns {input, output}
-  // signal → dry → master  AND  signal → send → conv → master
-  return { conv, send, dry };
+  const wetG = ac.createGain(); wetG.gain.value = wetLevel;
+  const dryG = ac.createGain(); dryG.gain.value = 1 - wetLevel * 0.5;
+  return { conv, wetG, dryG };
 }
 
-/* ── Single partial with pan ── */
-function partial(ac, freq, type, vol, pan, t, attack, decay){
+/* ── Single bell partial oscillator ── */
+function bellPartial(ac, freq, type, amp, pan, t, attack, release){
   const osc = ac.createOscillator();
-  const gEnv= ac.createGain();
+  const env = ac.createGain();
   const pnr = ac.createStereoPanner ? ac.createStereoPanner() : null;
-  osc.type = type; osc.frequency.value = freq;
-  gEnv.gain.setValueAtTime(0, t);
-  gEnv.gain.linearRampToValueAtTime(vol, t+attack);
-  gEnv.gain.exponentialRampToValueAtTime(vol*0.55, t+attack+decay*.18);
-  gEnv.gain.exponentialRampToValueAtTime(0.0001, t+attack+decay);
-  osc.connect(gEnv);
-  if(pnr){ pnr.pan.value=pan; gEnv.connect(pnr); }
-  osc.start(t); osc.stop(t+attack+decay+0.1);
-  return pnr || gEnv;
+
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, t);
+  // Slight pitch drop for realistic bell strike
+  osc.frequency.exponentialRampToValueAtTime(freq * 0.998, t + 0.1);
+
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(amp, t + attack);
+  env.gain.exponentialRampToValueAtTime(amp * 0.6, t + attack + release * 0.15);
+  env.gain.exponentialRampToValueAtTime(0.0001, t + attack + release);
+
+  osc.connect(env);
+  if(pnr){ pnr.pan.value = pan; env.connect(pnr); }
+  osc.start(t); osc.stop(t + attack + release + 0.3);
+  return pnr || env;
 }
 
-/* ══════════════════
-   🎵 ALARM SOUND
-   Deep ceremonial gong + warm pads
-   Sequence: gong → pad swell → chime cascade
-══════════════════ */
+/* ══════════════════════════════════════
+   🔔 ALARM: Westminster Cathedral Bell
+   
+   Real church bell uses inharmonic partials:
+   Strike tone, Hum, Prime, Tierce, Quint, Nominal
+   
+   Pattern: E – C – D – G (Westminster sequence)
+══════════════════════════════════════ */
 function playAlarm(){
   try{
     const ac = getAC();
     buildReverb(ac);
     const mb = masterBus(ac);
-    const rv = makeReverb(ac, 0.35);
-    rv.conv.connect(mb); rv.dry.connect(mb);
+    const rv = makeReverb(ac, 0.45);
+    rv.conv.connect(mb);
+    rv.wetG.connect(rv.conv);
 
-    function send(node){ node.connect(rv.send); node.connect(rv.dry); }
-
-    const t0 = ac.currentTime + 0.06;
-
-    /* — Layer 1: Deep gong strike — */
-    const gongFreqs = [
-      {f:82.4, m:[1, 2.76, 5.40, 8.93], v:0.18, pan:0},
-      {f:110,  m:[1, 2.76, 5.40],       v:0.12, pan:-0.2},
-    ];
-    gongFreqs.forEach(({f,m,v,pan})=>{
-      m.forEach((mult,i)=>{
-        const p = partial(ac, f*mult, 'sine', v/(i+1)*0.9, pan, t0, 0.004, 4.5-i*0.4);
-        send(p);
-      });
-    });
-
-    /* — Layer 2: Mid warning tone with tremolo — */
-    const tremFreq = 220;
-    [0, 0.08, 0.16].forEach((off, idx)=>{
-      const osc = ac.createOscillator();
-      const lfo = ac.createOscillator();
-      const lfoG= ac.createGain();
-      const env = ac.createGain();
-      osc.type='triangle'; osc.frequency.value = tremFreq * [1, 1.5, 2][idx];
-      lfo.type='sine'; lfo.frequency.value = 5.5 + idx;
-      lfoG.gain.value = 18;
-      lfo.connect(lfoG); lfoG.connect(osc.frequency);
-      env.gain.setValueAtTime(0, t0+off);
-      env.gain.linearRampToValueAtTime(0.055-idx*0.012, t0+off+0.18);
-      env.gain.exponentialRampToValueAtTime(0.025, t0+off+0.9);
-      env.gain.exponentialRampToValueAtTime(0.0001, t0+off+2.2);
-      const pan = ac.createStereoPanner ? ac.createStereoPanner() : null;
-      if(pan){ pan.pan.value=(idx-1)*0.3; osc.connect(env); env.connect(pan); send(pan); }
-      else   { osc.connect(env); send(env); }
-      osc.start(t0+off); lfo.start(t0+off);
-      osc.stop(t0+off+2.5); lfo.stop(t0+off+2.5);
-    });
-
-    /* — Layer 3: Descending crystal chimes — */
-    const chimes = [880, 784, 698, 622, 523, 440, 392];
-    chimes.forEach((f, i)=>{
-      const tt = t0 + 0.55 + i*0.11;
-      const p = partial(ac, f, 'sine', 0.07, (i/6-0.5)*0.5, tt, 0.005, 2.4-i*0.1);
-      send(p);
-      // add 2nd harmonic shimmer
-      const p2= partial(ac, f*2.007, 'sine', 0.025, -(i/6-0.5)*0.5, tt+0.002, 0.004, 1.8);
-      send(p2);
-    });
-
-    /* — Layer 4: Sub bass pulse — */
-    const sub = ac.createOscillator();
-    const subG= ac.createGain();
-    sub.type='sine'; sub.frequency.value=41.2;
-    subG.gain.setValueAtTime(0,t0);
-    subG.gain.linearRampToValueAtTime(0.22,t0+0.02);
-    subG.gain.exponentialRampToValueAtTime(0.0001,t0+0.9);
-    sub.connect(subG); subG.connect(mb);
-    sub.start(t0); sub.stop(t0+1.2);
-
-    lfo_sync: {
-      rv.send.connect(rv.conv);
+    function send(node){
+      node.connect(rv.wetG);
+      node.connect(rv.dryG);
+      rv.dryG.connect(mb);
     }
+
+    const t0 = ac.currentTime + 0.08;
+
+    // Westminster quarter chime: E4 C4 D4 G3
+    const westminster = [
+      { note: 329.63, t: 0.00 },   // E4
+      { note: 261.63, t: 0.55 },   // C4
+      { note: 293.66, t: 1.10 },   // D4
+      { note: 196.00, t: 1.65 },   // G3
+    ];
+
+    westminster.forEach(({note, t}, idx) => {
+      const tt = t0 + t;
+      const decay = 3.8 - idx * 0.2;
+
+      // ── Hum tone (fundamental, -2 octaves) ──
+      const p0 = bellPartial(ac, note * 0.5,   'sine',     0.08,  0,    tt, 0.004, decay * 1.4);
+      send(p0);
+
+      // ── Prime (fundamental) ──
+      const p1 = bellPartial(ac, note,          'sine',     0.15,  0,    tt, 0.003, decay);
+      send(p1);
+
+      // ── Minor third (tierce) ──
+      const p2 = bellPartial(ac, note * 1.2,    'sine',     0.12, -0.2,  tt, 0.003, decay * 0.85);
+      send(p2);
+
+      // ── Perfect fifth (quint) ──
+      const p3 = bellPartial(ac, note * 1.5,    'sine',     0.09,  0.2,  tt, 0.003, decay * 0.75);
+      send(p3);
+
+      // ── Octave (nominal) ──
+      const p4 = bellPartial(ac, note * 2.0,    'sine',     0.07, -0.3,  tt, 0.002, decay * 0.6);
+      send(p4);
+
+      // ── Superoctave + shimmer ──
+      const p5 = bellPartial(ac, note * 3.0,    'sine',     0.04,  0.3,  tt, 0.002, decay * 0.45);
+      send(p5);
+      const p6 = bellPartial(ac, note * 4.0,    'sine',     0.025, 0,    tt, 0.002, decay * 0.35);
+      send(p6);
+
+      // ── Strike noise transient (physical mallet impact) ──
+      const noiseLen = Math.floor(ac.sampleRate * 0.06);
+      const noiseBuf = ac.createBuffer(1, noiseLen, ac.sampleRate);
+      const nd = noiseBuf.getChannelData(0);
+      for(let i=0; i<noiseLen; i++) nd[i] = (Math.random()*2-1) * Math.exp(-i/(noiseLen*0.15));
+
+      const nSrc = ac.createBufferSource();
+      const nBpf = ac.createBiquadFilter();
+      const nEnv = ac.createGain();
+      nSrc.buffer = noiseBuf;
+      nBpf.type = 'bandpass'; nBpf.frequency.value = note * 3.2; nBpf.Q.value = 2.5;
+      nEnv.gain.setValueAtTime(0.18, tt); nEnv.gain.exponentialRampToValueAtTime(0.0001, tt + 0.07);
+      nSrc.connect(nBpf); nBpf.connect(nEnv); nEnv.connect(rv.wetG); nEnv.connect(rv.dryG);
+      nSrc.start(tt); nSrc.stop(tt + 0.12);
+    });
+
+    // ── Sub bass resonance on the final G ──
+    const sub = ac.createOscillator();
+    const subE = ac.createGain();
+    sub.type = 'sine'; sub.frequency.value = 98.0; // G2
+    subE.gain.setValueAtTime(0, t0 + 1.65);
+    subE.gain.linearRampToValueAtTime(0.18, t0 + 1.67);
+    subE.gain.exponentialRampToValueAtTime(0.0001, t0 + 4.5);
+    sub.connect(subE); subE.connect(mb);
+    sub.start(t0 + 1.65); sub.stop(t0 + 5);
 
   }catch(e){ console.warn('Audio err', e); }
 }
 
-/* ══════════════════
-   🌟 HOKI SOUND
-   Ascending pentatonic harp glissando
-   + golden shimmer + warm choir pad
-══════════════════ */
+/* ══════════════════════════════════════
+   ✨ HOKI: Golden Crystal Harp
+   
+   Ascending pentatonic glissando
+   + Crystal overtone sparkle
+   + Warm string choir swell
+   + Final triumphant chord
+══════════════════════════════════════ */
 function playHoki(){
   try{
     const ac = getAC();
     buildReverb(ac);
     const mb = masterBus(ac);
-    const rv = makeReverb(ac, 0.42);
-    rv.conv.connect(mb); rv.dry.connect(mb);
+    const rv = makeReverb(ac, 0.50);
+    rv.conv.connect(mb);
+    rv.wetG.connect(rv.conv);
 
-    function send(node){ node.connect(rv.send); node.connect(rv.dry); }
+    function send(node){
+      node.connect(rv.wetG);
+      node.connect(rv.dryG);
+      rv.dryG.connect(mb);
+    }
 
     const t0 = ac.currentTime + 0.06;
 
-    /* — Pentatonic scale: C D E G A (2 octaves up) — */
-    const penta = [261.6,293.7,329.6,392.0,440.0, 523.3,587.3,659.3,784.0,880.0, 1046.5,1174.7,1318.5];
-    penta.forEach((f,i)=>{
-      const tt = t0 + i*0.072;
-      const vol = 0.08 + (i>6 ? 0.015 : 0);
-      const decay = 3.2 - i*0.08;
-      const pan = (i/12-0.5)*0.7;
-      const p = partial(ac, f,  'sine', vol,    pan,  tt, 0.004, decay);
-      const p2= partial(ac, f*2,'sine', vol*.22, -pan, tt+0.003, 0.004, decay*0.7);
-      send(p); send(p2);
+    // G major pentatonic: G A B D E (2.5 octaves)
+    const penta = [
+      196.0, 220.0, 246.9, 293.7, 329.6,
+      392.0, 440.0, 493.9, 587.3, 659.3,
+      784.0, 880.0, 987.8
+    ];
+
+    penta.forEach((f, i) => {
+      const tt = t0 + i * 0.068;
+      const amp = 0.075 + (i > 7 ? 0.01 : 0) - (i < 3 ? 0.01 : 0);
+      const decay = 3.5 - i * 0.08;
+      const pan = (i / 12 - 0.5) * 0.8;
+
+      // Main harp tone
+      const p = bellPartial(ac, f, 'sine', amp, pan, tt, 0.004, decay);
+      send(p);
+
+      // Octave harmonic shimmer
+      const p2 = bellPartial(ac, f * 2, 'sine', amp * 0.25, -pan, tt + 0.003, 0.003, decay * 0.65);
+      send(p2);
+
+      // Sub-harmonic warmth
+      if(i < 6){
+        const p3 = bellPartial(ac, f * 0.5, 'sine', amp * 0.12, 0, tt, 0.005, decay * 1.1);
+        send(p3);
+      }
     });
 
-    /* — Golden shimmer: high partials — */
-    [2093,2349,2637,3136].forEach((f,i)=>{
-      const tt = t0 + 0.6 + i*0.08;
-      const p = partial(ac, f, 'sine', 0.025, (i%2===0?.4:-.4), tt, 0.003, 2.8);
+    // ── Crystal sparkle high partials ──
+    [2093, 2349, 2637, 3136, 3520].forEach((f, i) => {
+      const tt = t0 + 0.55 + i * 0.075;
+      const p = bellPartial(ac, f, 'sine', 0.028, (i % 2 === 0 ? 0.5 : -0.5), tt, 0.003, 2.2);
       send(p);
     });
 
-    /* — Warm choir pad swell — */
-    const padFreqs = [130.8, 164.8, 196.0, 261.6, 329.6];
-    padFreqs.forEach((f,i)=>{
-      const osc  = ac.createOscillator();
+    // ── Warm string choir swell ──
+    const chordFreqs = [98.0, 123.5, 147.0, 196.0, 246.9, 329.6];
+    chordFreqs.forEach((f, i) => {
+      const osc1 = ac.createOscillator();
       const osc2 = ac.createOscillator();
       const env  = ac.createGain();
-      osc.type='triangle';  osc.frequency.value = f;
-      osc2.type='sawtooth'; osc2.frequency.value = f * 1.003; // slight detune
-      env.gain.setValueAtTime(0,t0+0.2);
-      env.gain.linearRampToValueAtTime(0.028-i*0.002, t0+0.8+i*0.1);
-      env.gain.setValueAtTime(0.028-i*0.002, t0+1.8);
-      env.gain.exponentialRampToValueAtTime(0.0001, t0+4.5);
-      const pan = ac.createStereoPanner ? ac.createStereoPanner() : null;
-      if(pan){ pan.pan.value=(i%2===0?.2:-.2)*0.5; osc.connect(env); osc2.connect(env); env.connect(pan); send(pan); }
-      else   { osc.connect(env); osc2.connect(env); send(env); }
-      osc.start(t0+0.2); osc2.start(t0+0.2);
-      osc.stop(t0+5); osc2.stop(t0+5);
+      osc1.type = 'triangle'; osc1.frequency.value = f;
+      osc2.type = 'sawtooth'; osc2.frequency.value = f * 1.0035;
+      env.gain.setValueAtTime(0, t0 + 0.3);
+      env.gain.linearRampToValueAtTime(0.022 - i * 0.002, t0 + 1.0 + i * 0.08);
+      env.gain.setValueAtTime(0.022 - i * 0.002, t0 + 2.2);
+      env.gain.exponentialRampToValueAtTime(0.0001, t0 + 5.5);
+      const pnr = ac.createStereoPanner ? ac.createStereoPanner() : null;
+      if(pnr){ pnr.pan.value = (i % 2 === 0 ? 0.25 : -0.25); osc1.connect(env); osc2.connect(env); env.connect(pnr); send(pnr); }
+      else   { osc1.connect(env); osc2.connect(env); send(env); }
+      osc1.start(t0 + 0.3); osc2.start(t0 + 0.3);
+      osc1.stop(t0 + 6); osc2.stop(t0 + 6);
     });
 
-    /* — Final crown: high bell chord — */
-    [1046.5,1318.5,1568.0].forEach((f,i)=>{
-      const tt = t0 + 1.1 + i*0.05;
-      const p = partial(ac, f, 'sine', 0.06, (i-1)*0.35, tt, 0.004, 3.5);
+    // ── Final triumphant bell chord: G major ──
+    [784.0, 987.8, 1174.7].forEach((f, i) => {
+      const tt = t0 + 1.2 + i * 0.055;
+      const p = bellPartial(ac, f, 'sine', 0.065, (i - 1) * 0.4, tt, 0.004, 4.0);
       send(p);
+      const p2 = bellPartial(ac, f * 2.003, 'sine', 0.022, -(i - 1) * 0.4, tt + 0.003, 0.003, 2.8);
+      send(p2);
     });
-
-    rv.send.connect(rv.conv);
 
   }catch(e){ console.warn('Audio err', e); }
 }
 
-/* ── Alarm loop ── */
+/* ── Alarm loop control ── */
 let loopTimer=null, looping=false, loopIsHoki=false;
 function startLoop(isHoki){
   stopLoop();
   looping=true; loopIsHoki=isHoki;
   unlockAudio();
-  (isHoki?playHoki:playAlarm)();
-  loopTimer=setInterval(()=>{
+  (isHoki ? playHoki : playAlarm)();
+  const interval = isHoki ? 6200 : 5800;
+  loopTimer = setInterval(()=>{
     if(!looping) return;
-    if(AC&&AC.state==='suspended') AC.resume().then(()=>(loopIsHoki?playHoki:playAlarm)());
-    else (loopIsHoki?playHoki:playAlarm)();
-  }, isHoki?5800:5400);
+    if(AC && AC.state==='suspended') AC.resume().then(()=>(loopIsHoki?playHoki:playAlarm)());
+    else (loopIsHoki ? playHoki : playAlarm)();
+  }, interval);
 }
 function stopLoop(){
   looping=false;
-  if(loopTimer){clearInterval(loopTimer);loopTimer=null;}
+  if(loopTimer){ clearInterval(loopTimer); loopTimer=null; }
 }
 document.addEventListener('visibilitychange',()=>{
-  if(!document.hidden&&looping&&AC&&AC.state==='suspended')
+  if(!document.hidden && looping && AC && AC.state==='suspended')
     AC.resume().then(()=>(loopIsHoki?playHoki:playAlarm)());
 });
-function testSuara(h){ unlockAudio(); setTimeout(()=>h?playHoki():playAlarm(),60); }
+function testSuara(h){ unlockAudio(); setTimeout(()=> h ? playHoki() : playAlarm(), 60); }
 
 /* ══ NOTIFIKASI ══ */
 let notifOk=false;
 function doNotif(){
-  if(!('Notification' in window)){alert('Browser tidak mendukung notifikasi.');return;}
+  if(!('Notification' in window)){ alert('Browser tidak mendukung notifikasi.'); return; }
   Notification.requestPermission().then(p=>{
-    notifOk=p==='granted';
-    const b=document.getElementById('notifBtn');
-    if(notifOk){b.textContent='✅ Notifikasi Aktif';b.classList.add('notif-ok');}
+    notifOk = p==='granted';
+    const b = document.getElementById('notifBtn');
+    if(notifOk){ b.textContent='✅ Notifikasi Aktif'; b.classList.add('notif-ok'); }
     else b.textContent='❌ Ditolak';
   });
 }
 function sendNotif(name,t,b){
-  if(!notifOk)return;
+  if(!notifOk) return;
   try{
-    const n=new Notification('⚠ Bet Close — Togel Lubis',{
+    const n = new Notification('⚠ Bet Close — Togel Lubis',{
       body:`${name}\nTutup: ${t} WIB  ·  Buka: ${b} WIB`,
-      requireInteraction:true,tag:name+t
+      requireInteraction:true, tag:name+t
     });
-    n.onclick=()=>{window.focus();n.close();};
+    n.onclick = ()=>{ window.focus(); n.close(); };
   }catch(e){}
 }
-if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
+if(typeof Notification!=='undefined' && Notification.permission==='granted'){
   notifOk=true;
   window.addEventListener('load',()=>{
     const b=document.getElementById('notifBtn');
-    if(b){b.textContent='✅ Notifikasi Aktif';b.classList.add('notif-ok');}
+    if(b){ b.textContent='✅ Notifikasi Aktif'; b.classList.add('notif-ok'); }
   });
 }
 
 /* ══ HELPERS ══ */
-const pad  = n=>String(n).padStart(2,'0');
-const toM  = s=>{const[h,m]=s.split(':').map(Number);return h*60+m;};
-const nowM = ()=>{const d=new Date();return d.getHours()*60+d.getMinutes();};
-const nowS = ()=>{const d=new Date();return d.getHours()*3600+d.getMinutes()*60+d.getSeconds();};
-const fmtCd= s=>{if(s<0)s+=86400;return`${pad(~~(s/3600))}:${pad(~~(s%3600/60))}:${pad(s%60)}`;};
+const pad  = n => String(n).padStart(2,'0');
+const toM  = s => { const[h,m]=s.split(':').map(Number); return h*60+m; };
+const nowM = () => { const d=new Date(); return d.getHours()*60+d.getMinutes(); };
+const nowS = () => { const d=new Date(); return d.getHours()*3600+d.getMinutes()*60+d.getSeconds(); };
+const fmtCd= s => { if(s<0)s+=86400; return`${pad(~~(s/3600))}:${pad(~~(s%3600/60))}:${pad(s%60)}`; };
 const DAYS = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 const MON  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
 
 function getStatus(p){
-  if(p.hoki)return 'open';
-  const nm=nowM(),tm=toM(p.t),bm=toM(p.b),diff=tm-nm;
-  if(diff>15)return 'open';
-  if(diff>0) return 'soon';
-  if(nm-bm>=0&&nm-bm<120)return 'open';
+  if(p.hoki) return 'open';
+  const nm=nowM(), tm=toM(p.t), bm=toM(p.b), diff=tm-nm;
+  if(diff>15) return 'open';
+  if(diff>0)  return 'soon';
+  if(nm-bm>=0 && nm-bm<120) return 'open';
   return 'closed';
 }
 function cdTxt(p){
-  if(p.hoki||!p.t)return '';
-  const d=toM(p.t)-nowM();
-  if(d>0&&d<=60)  return`Tutup dalam ${d} menit`;
-  if(d<=0&&d>-30) return`Tutup ${Math.abs(d)} menit lalu`;
+  if(p.hoki||!p.t) return '';
+  const d = toM(p.t)-nowM();
+  if(d>0&&d<=60)  return `Tutup dalam ${d} menit`;
+  if(d<=0&&d>-30) return `Tutup ${Math.abs(d)} menit lalu`;
   return '';
 }
 
 /* ══ RENDER ══ */
 let curFilter='all';
 function renderCards(){
-  const grid=document.getElementById('grid');
-  const q=(document.getElementById('srch').value||'').toUpperCase().trim();
-  grid.innerHTML='';
-  let nO=0,nC=0,nS=0;
+  const grid = document.getElementById('grid');
+  const q = (document.getElementById('srch').value||'').toUpperCase().trim();
+  grid.innerHTML = '';
+  let nO=0, nC=0, nS=0;
   DATA.forEach(p=>{
-    const st=getStatus(p);
-    if(st==='open')nO++;else if(st==='closed')nC++;else if(st==='soon')nS++;
-    if(curFilter!=='all'&&st!==curFilter)return;
-    if(q&&!p.n.includes(q))return;
-    const lbl  =st==='open'?'Buka':st==='soon'?'Segera':'Tutup';
-    const bcls =st==='open'?'badge-open':st==='soon'?'badge-soon':'badge-closed';
-    const cd   =cdTxt(p);
-    let body='';
+    const st = getStatus(p);
+    if(st==='open') nO++; else if(st==='closed') nC++; else if(st==='soon') nS++;
+    if(curFilter!=='all' && st!==curFilter) return;
+    if(q && !p.n.includes(q)) return;
+    const lbl   = st==='open'?'Buka':st==='soon'?'Segera':'Tutup';
+    const bcls  = st==='open'?'badge-open':st==='soon'?'badge-soon':'badge-closed';
+    const cd    = cdTxt(p);
+    let body = '';
     if(p.hoki){
-      body=`<div class="hoki-row"><div class="hoki-dot"></div><div class="hoki-txt">Setiap Jam · 24× Sehari</div></div>`;
-    }else{
-      body=`<div class="card-times">
+      body = `<div class="hoki-row"><div class="hoki-dot"></div><div class="hoki-txt">Setiap Jam · 24× Sehari</div></div>`;
+    } else {
+      body = `<div class="card-times">
         <div class="ct ct-close">
           <div class="ct-lbl">Bet Close</div>
           <div class="ct-val">${p.t} <span class="ct-wib">WIB</span></div>
@@ -1419,9 +1488,9 @@ function renderCards(){
         </div>
       </div>`;
     }
-    const div=document.createElement('div');
-    div.className=`card ${st==='closed'?'closed':st==='soon'?'soon':''}`;
-    div.innerHTML=`
+    const div = document.createElement('div');
+    div.className = `card ${st==='closed'?'closed':st==='soon'?'soon':''}`;
+    div.innerHTML = `
       <div class="card-accent"></div>
       <div class="card-head">
         <div class="card-name">${p.n}</div>
@@ -1429,19 +1498,19 @@ function renderCards(){
       </div>
       <div class="card-day">${p.d}</div>
       ${body}
-      ${cd?`<div class="card-cd">${cd}</div>`:''}
+      ${cd ? `<div class="card-cd">${cd}</div>` : ''}
     `;
     grid.appendChild(div);
   });
-  document.getElementById('sO').textContent=nO;
-  document.getElementById('sC').textContent=nC;
-  document.getElementById('stT').textContent=DATA.length;
-  document.getElementById('stO').textContent=nO;
-  document.getElementById('stC').textContent=nC;
-  document.getElementById('stS').textContent=nS;
+  document.getElementById('sO').textContent = nO;
+  document.getElementById('sC').textContent = nC;
+  document.getElementById('stT').textContent = DATA.length;
+  document.getElementById('stO').textContent = nO;
+  document.getElementById('stC').textContent = nC;
+  document.getElementById('stS').textContent = nS;
 }
 function setFilter(f,btn){
-  curFilter=f;
+  curFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   renderCards();
@@ -1449,50 +1518,50 @@ function setFilter(f,btn){
 
 /* ══ CLOCK ══ */
 function tickClock(){
-  const n=new Date();
-  document.getElementById('clkM').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
-  document.getElementById('clkD').textContent=`${DAYS[n.getDay()]}, ${n.getDate()} ${MON[n.getMonth()]} ${n.getFullYear()}`;
-  document.getElementById('aTime').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  const n = new Date();
+  document.getElementById('clkM').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  document.getElementById('clkD').textContent = `${DAYS[n.getDay()]}, ${n.getDate()} ${MON[n.getMonth()]} ${n.getFullYear()}`;
+  document.getElementById('aTime').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
 }
 function tickNext(){
-  const ns=nowS(),nm=~~(ns/60);
-  let best=Infinity,bn='',bt='';
+  const ns=nowS(), nm=~~(ns/60);
+  let best=Infinity, bn='', bt='';
   DATA.forEach(p=>{
     if(p.hoki){
-      const nxt=((~~(ns/3600)+1)*3600)-ns;
-      if(nxt<best){best=nxt;bn='Hokidraw 5D';bt=`${pad((~~(ns/3600)+1)%24)}:00`;}
+      const nxt = ((~~(ns/3600)+1)*3600)-ns;
+      if(nxt<best){ best=nxt; bn='Hokidraw 5D'; bt=`${pad((~~(ns/3600)+1)%24)}:00`; }
       return;
     }
-    if(!p.t)return;
-    let dm=toM(p.t)-nm;if(dm<=0)dm+=1440;
-    const ds=dm*60-(ns%60);
-    if(ds>0&&ds<best){best=ds;bn=p.n;bt=p.t;}
+    if(!p.t) return;
+    let dm = toM(p.t)-nm; if(dm<=0) dm+=1440;
+    const ds = dm*60-(ns%60);
+    if(ds>0 && ds<best){ best=ds; bn=p.n; bt=p.t; }
   });
-  document.getElementById('clkN').textContent =best<Infinity?fmtCd(best):'--:--:--';
-  document.getElementById('clkNI').textContent=bn?`${bn}  ·  ${bt} WIB`:'';
+  document.getElementById('clkN').textContent  = best<Infinity ? fmtCd(best) : '--:--:--';
+  document.getElementById('clkNI').textContent = bn ? `${bn}  ·  ${bt} WIB` : '';
 }
 
 /* ══ ALARM QUEUE ══ */
-let queue=[],showing=false,fired=new Set(),alarmCnt=0,titleTmr=null;
-const dayKey=()=>{const d=new Date();return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;};
-const aKey=(n,t)=>`${dayKey()}-${n}-${t}`;
+let queue=[], showing=false, fired=new Set(), alarmCnt=0, titleTmr=null;
+const dayKey = () => { const d=new Date(); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; };
+const aKey   = (n,t) => `${dayKey()}-${n}-${t}`;
 
 function enqueue(name,t,b){
-  const k=aKey(name,t);
-  if(fired.has(k))return;
-  fired.add(k);alarmCnt++;
-  document.getElementById('sA').textContent=alarmCnt;
-  document.getElementById('stA').textContent=alarmCnt;
-  queue.push({name,t,b});updateQ();sendNotif(name,t,b);
-  if(!showing)showNext();
+  const k = aKey(name,t);
+  if(fired.has(k)) return;
+  fired.add(k); alarmCnt++;
+  document.getElementById('sA').textContent  = alarmCnt;
+  document.getElementById('stA').textContent = alarmCnt;
+  queue.push({name,t,b}); updateQ(); sendNotif(name,t,b);
+  if(!showing) showNext();
 }
 function showNext(){
-  if(!queue.length){showing=false;return;}
-  showing=true;
-  const a=queue[0];
-  document.getElementById('aMkt').textContent  =a.name;
-  document.getElementById('aTutup').textContent=a.t+' WIB';
-  document.getElementById('aBuka').textContent =a.b+' WIB';
+  if(!queue.length){ showing=false; return; }
+  showing = true;
+  const a = queue[0];
+  document.getElementById('aMkt').textContent   = a.name;
+  document.getElementById('aTutup').textContent = a.t+' WIB';
+  document.getElementById('aBuka').textContent  = a.b+' WIB';
   document.getElementById('overlay').classList.add('on');
   updateQ();
   startLoop(a.name==='HOKIDRAW 5D');
@@ -1501,53 +1570,53 @@ function showNext(){
 function dismissAlarm(){
   queue.shift();
   document.getElementById('overlay').classList.remove('on');
-  stopLoop();stopFlash();updateQ();renderCards();
-  if(queue.length)setTimeout(showNext,350);
-  else showing=false;
+  stopLoop(); stopFlash(); updateQ(); renderCards();
+  if(queue.length) setTimeout(showNext, 380);
+  else showing = false;
 }
 function updateQ(){
-  const n=queue.length;
-  document.getElementById('qnum').textContent=n;
-  document.getElementById('q-badge').style.display=n>1?'block':'none';
+  const n = queue.length;
+  document.getElementById('qnum').textContent = n;
+  document.getElementById('q-badge').style.display = n>1 ? 'block' : 'none';
 }
 function flashTitle(name){
   let on=true;
-  titleTmr=setInterval(()=>{
-    document.title=on?`⚠ Bet Close: ${name}`:'Togel Lubis';
-    on=!on;
-  },700);
+  titleTmr = setInterval(()=>{
+    document.title = on ? `⚠ Bet Close: ${name}` : 'Togel Lubis';
+    on = !on;
+  }, 700);
 }
 function stopFlash(){
-  if(titleTmr){clearInterval(titleTmr);titleTmr=null;}
-  document.title='Togel Lubis · Alarm Jadwal';
+  if(titleTmr){ clearInterval(titleTmr); titleTmr=null; }
+  document.title = 'Togel Lubis · Alarm Jadwal';
 }
 function checkAlarms(){
-  const n=new Date(),s=n.getSeconds();
-  if(s>2)return;
-  const nm=nowM();
+  const n=new Date(), s=n.getSeconds();
+  if(s>2) return;
+  const nm = nowM();
   DATA.forEach(p=>{
     if(p.hoki){
       if(n.getMinutes()===0){
-        const k=aKey('HOKIDRAW 5D',`${pad(n.getHours())}:00`);
+        const k = aKey('HOKIDRAW 5D',`${pad(n.getHours())}:00`);
         if(!fired.has(k))
           enqueue('HOKIDRAW 5D',`${pad(n.getHours())}:00`,`${pad((n.getHours()+1)%24)}:00`);
       }
       return;
     }
-    if(!p.t)return;
-    if(toM(p.t)===nm)enqueue(p.n,p.t,p.b);
+    if(!p.t) return;
+    if(toM(p.t)===nm) enqueue(p.n, p.t, p.b);
   });
 }
 
 /* ══ MAIN LOOP ══ */
 let lastMin=-1;
 function loop(){
-  tickClock();tickNext();checkAlarms();
-  const m=new Date().getMinutes();
-  if(m!==lastMin){lastMin=m;renderCards();}
+  tickClock(); tickNext(); checkAlarms();
+  const m = new Date().getMinutes();
+  if(m!==lastMin){ lastMin=m; renderCards(); }
 }
 renderCards();
-setInterval(loop,1000);
+setInterval(loop, 1000);
 loop();
 </script>
 </body>
