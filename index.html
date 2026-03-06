@@ -3,1336 +3,1060 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOTTERY ALARM DASHBOARD</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Playfair+Display:wght@400;700;900&family=Raleway:wght@100;200;300;400&display=swap" rel="stylesheet">
+<title>🎰 ALARM TOGEL DASHBOARD</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Raleway:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #FFD700;
-    --gold-light: #FFF0A0;
-    --gold-dark: #B8960C;
-    --neon-pink: #FF2D78;
-    --neon-cyan: #00F5FF;
-    --neon-green: #39FF14;
-    --neon-purple: #BF00FF;
-    --neon-orange: #FF6600;
-    --neon-yellow: #FFE600;
-    --bg-dark: #050510;
-    --bg-card: rgba(10,10,30,0.85);
-    --text-main: #F0E8D0;
-    --closed-color: #FF3333;
-    --holiday-color: #FF8800;
-    --open-color: #39FF14;
-    --active-color: #FFD700;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg-dark);
-    font-family: 'Cormorant Garamond', serif;
-    color: var(--text-main);
-    min-height: 100vh;
-    overflow-x: hidden;
-    background-image:
-      radial-gradient(ellipse at 20% 20%, rgba(191,0,255,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(0,245,255,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(255,215,0,0.04) 0%, transparent 70%);
-  }
-
-  /* NEON PARTICLES */
-  .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
-  .particle {
-    position: absolute;
-    width: 2px; height: 2px;
-    border-radius: 50%;
-    animation: float-particle linear infinite;
-    opacity: 0;
-  }
-
-  @keyframes float-particle {
-    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(-10px) translateX(var(--drift)); opacity: 0; }
-  }
-
-  /* ===== HEADER ===== */
-  header {
-    position: sticky; top: 0; z-index: 100;
-    padding: 0 20px;
-    background: linear-gradient(180deg, rgba(5,5,16,0.98) 0%, rgba(5,5,16,0.92) 100%);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,215,0,0.15);
-    box-shadow: 0 4px 40px rgba(0,0,0,0.6);
-  }
-
-  .header-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    gap: 16px;
-  }
-
-  .logo-zone {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .logo-title {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: clamp(14px, 2.5vw, 26px);
-    font-weight: 900;
-    letter-spacing: 4px;
-    background: linear-gradient(90deg, #FFD700, #FFF0A0, #FFD700, #B8960C);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gold-shimmer 3s linear infinite;
-    text-shadow: none;
-    filter: drop-shadow(0 0 8px rgba(255,215,0,0.5));
-    white-space: nowrap;
-  }
-
-  @keyframes gold-shimmer {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
-  }
-
-  .logo-sub {
-    font-family: 'Raleway', sans-serif;
-    font-size: 9px;
-    font-weight: 200;
-    letter-spacing: 6px;
-    color: rgba(255,215,0,0.5);
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  /* NEON LIGHTS STRIP */
-  .neon-strip {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 0 20px;
-    overflow: hidden;
-  }
-
-  .neon-bulb {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    animation: neon-pulse 1.5s ease-in-out infinite;
-    box-shadow: 0 0 6px currentColor, 0 0 12px currentColor, 0 0 20px currentColor;
-  }
-
-  .neon-bulb:nth-child(1) { color: var(--neon-pink); background: var(--neon-pink); animation-delay: 0s; }
-  .neon-bulb:nth-child(2) { color: var(--neon-cyan); background: var(--neon-cyan); animation-delay: 0.15s; }
-  .neon-bulb:nth-child(3) { color: var(--neon-green); background: var(--neon-green); animation-delay: 0.3s; }
-  .neon-bulb:nth-child(4) { color: var(--neon-purple); background: var(--neon-purple); animation-delay: 0.45s; }
-  .neon-bulb:nth-child(5) { color: var(--neon-orange); background: var(--neon-orange); animation-delay: 0.6s; }
-  .neon-bulb:nth-child(6) { color: var(--neon-yellow); background: var(--neon-yellow); animation-delay: 0.75s; }
-  .neon-bulb:nth-child(7) { color: var(--neon-pink); background: var(--neon-pink); animation-delay: 0.9s; }
-  .neon-bulb:nth-child(8) { color: var(--neon-cyan); background: var(--neon-cyan); animation-delay: 1.05s; }
-  .neon-bulb:nth-child(9) { color: var(--neon-green); background: var(--neon-green); animation-delay: 1.2s; }
-  .neon-bulb:nth-child(10) { color: var(--neon-purple); background: var(--neon-purple); animation-delay: 1.35s; }
-  .neon-bulb:nth-child(11) { color: var(--neon-orange); background: var(--neon-orange); animation-delay: 0.2s; }
-  .neon-bulb:nth-child(12) { color: var(--neon-yellow); background: var(--neon-yellow); animation-delay: 0.5s; }
-
-  /* neon text marquee in the strip */
-  .neon-text-marquee {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: 11px;
-    letter-spacing: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    max-width: 300px;
-  }
-  .neon-text-marquee span {
-    display: inline-block;
-    animation: marquee-neon 6s linear infinite;
-  }
-  .neon-text-marquee span i {
-    font-style: normal;
-    animation: color-cycle 2s linear infinite;
-  }
-  .neon-text-marquee span i:nth-child(1) { color: var(--neon-pink); }
-  .neon-text-marquee span i:nth-child(2) { color: var(--neon-cyan); }
-  .neon-text-marquee span i:nth-child(3) { color: var(--neon-green); }
-  .neon-text-marquee span i:nth-child(4) { color: var(--neon-purple); }
-  .neon-text-marquee span i:nth-child(5) { color: var(--neon-orange); }
-  .neon-text-marquee span i:nth-child(6) { color: var(--neon-yellow); }
-
-  @keyframes neon-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(0.7); }
-  }
-
-  /* CLOCK */
-  .clock-zone {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-    flex-shrink: 0;
-  }
-
-  #live-clock {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: clamp(16px, 2.5vw, 28px);
-    font-weight: 700;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), 0 0 40px rgba(0,245,255,0.4);
-    letter-spacing: 3px;
-    animation: clock-flicker 8s linear infinite;
-  }
-
-  @keyframes clock-flicker {
-    0%,96%,100% { opacity: 1; }
-    97% { opacity: 0.7; }
-    98% { opacity: 1; }
-    99% { opacity: 0.5; }
-  }
-
-  #live-date {
-    font-family: 'Raleway', sans-serif;
-    font-size: 10px;
-    font-weight: 300;
-    letter-spacing: 3px;
-    color: rgba(255,215,0,0.6);
-    text-transform: uppercase;
-    text-align: right;
-  }
-
-  .alarm-toggle-btn {
-    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,215,0,0.05));
-    border: 1px solid rgba(255,215,0,0.3);
-    border-radius: 6px;
-    color: var(--gold);
-    font-family: 'Raleway', sans-serif;
-    font-size: 10px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    padding: 5px 12px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-  .alarm-toggle-btn:hover {
-    background: rgba(255,215,0,0.2);
-    box-shadow: 0 0 10px rgba(255,215,0,0.3);
-  }
-  .alarm-toggle-btn.active {
-    background: rgba(57,255,20,0.15);
-    border-color: var(--neon-green);
-    color: var(--neon-green);
-    box-shadow: 0 0 10px rgba(57,255,20,0.3);
-  }
-
-  /* ===== MAIN ===== */
-  main {
-    position: relative; z-index: 1;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px 16px;
-  }
-
-  /* STATS BAR */
-  .stats-bar {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .stat-chip {
-    background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 50px;
-    padding: 8px 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Raleway', sans-serif;
-    font-size: 11px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    backdrop-filter: blur(10px);
-  }
-
-  .stat-chip .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .stat-chip.open-stat { border-color: rgba(57,255,20,0.3); color: var(--neon-green); }
-  .stat-chip.open-stat .dot { background: var(--neon-green); box-shadow: 0 0 6px var(--neon-green); animation: blink 1s infinite; }
-  .stat-chip.closed-stat { border-color: rgba(255,51,51,0.3); color: var(--closed-color); }
-  .stat-chip.closed-stat .dot { background: var(--closed-color); }
-  .stat-chip.holiday-stat { border-color: rgba(255,136,0,0.3); color: var(--holiday-color); }
-  .stat-chip.holiday-stat .dot { background: var(--holiday-color); }
-  .stat-chip.total-stat { border-color: rgba(255,215,0,0.3); color: var(--gold); }
-  .stat-chip.total-stat .dot { background: var(--gold); box-shadow: 0 0 6px var(--gold); }
-  .stat-chip.upcoming-stat { border-color: rgba(0,245,255,0.3); color: var(--neon-cyan); }
-  .stat-chip.upcoming-stat .dot { background: var(--neon-cyan); box-shadow: 0 0 6px var(--neon-cyan); animation: blink 1s infinite 0.5s; }
-
-  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
-  /* SECTION TITLE */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(13px, 1.5vw, 16px);
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold);
-    filter: drop-shadow(0 0 6px rgba(255,215,0,0.4));
-  }
-
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(255,215,0,0.4), transparent);
-  }
-
-  /* ALARM NOTIFICATION */
-  #alarm-banner {
-    display: none;
-    position: fixed;
-    top: 80px; left: 50%; transform: translateX(-50%);
-    z-index: 999;
-    background: linear-gradient(135deg, rgba(10,5,30,0.98), rgba(20,10,50,0.98));
-    border: 1px solid var(--gold);
-    border-radius: 12px;
-    padding: 20px 32px;
-    min-width: 320px;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(255,215,0,0.4), 0 0 80px rgba(255,215,0,0.2);
-    animation: alarm-entrance 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  }
-
-  @keyframes alarm-entrance {
-    from { opacity:0; transform:translateX(-50%) scale(0.8) translateY(-20px); }
-    to { opacity:1; transform:translateX(-50%) scale(1) translateY(0); }
-  }
-
-  .alarm-banner-title {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: 10px;
-    letter-spacing: 5px;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    opacity: 0.7;
-  }
-
-  .alarm-banner-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 900;
-    color: white;
-    margin-bottom: 6px;
-    text-shadow: 0 0 20px rgba(255,215,0,0.5);
-  }
-
-  .alarm-banner-time {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: 28px;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 15px var(--neon-cyan);
-    letter-spacing: 4px;
-    margin-bottom: 12px;
-  }
-
-  .alarm-banner-type {
-    display: inline-block;
-    font-family: 'Raleway', sans-serif;
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 4px 14px;
-    border-radius: 50px;
-    margin-bottom: 14px;
-  }
-
-  .alarm-banner-type.tutup { background: rgba(255,51,51,0.2); color: var(--closed-color); border: 1px solid var(--closed-color); }
-  .alarm-banner-type.buka { background: rgba(57,255,20,0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
-
-  .alarm-dismiss-btn {
-    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.1));
-    border: 1px solid rgba(255,215,0,0.4);
-    color: var(--gold);
-    font-family: 'Raleway', sans-serif;
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 8px 24px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .alarm-dismiss-btn:hover {
-    background: rgba(255,215,0,0.3);
-    box-shadow: 0 0 15px rgba(255,215,0,0.3);
-  }
-
-  /* GRID */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-
-  /* CARD */
-  .market-card {
-    position: relative;
-    background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 12px;
-    padding: 16px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-    overflow: hidden;
-    cursor: default;
-  }
-
-  .market-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--card-accent, rgba(255,215,0,0.3));
-    opacity: 0.7;
-  }
-
-  .market-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(255,215,0,0.2);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(255,215,0,0.05);
-  }
-
-  /* STATUS VARIANTS */
-  .market-card.status-buka { --card-accent: var(--neon-green); }
-  .market-card.status-tutup { --card-accent: var(--closed-color); }
-  .market-card.status-libur { --card-accent: var(--holiday-color); }
-  .market-card.status-active {
-    --card-accent: var(--neon-cyan);
-    border-color: rgba(0,245,255,0.25);
-    box-shadow: 0 0 20px rgba(0,245,255,0.08);
-    animation: active-pulse 2s ease-in-out infinite;
-  }
-  .market-card.status-upcoming {
-    --card-accent: var(--gold);
-    border-color: rgba(255,215,0,0.2);
-  }
-
-  @keyframes active-pulse {
-    0%,100% { box-shadow: 0 0 20px rgba(0,245,255,0.08); }
-    50% { box-shadow: 0 0 35px rgba(0,245,255,0.18); }
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 12px;
-  }
-
-  .market-name {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(13px, 1.5vw, 15px);
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.2;
-    letter-spacing: 0.5px;
-  }
-
-  .market-days {
-    font-family: 'Raleway', sans-serif;
-    font-size: 9px;
-    font-weight: 300;
-    letter-spacing: 1.5px;
-    color: rgba(255,255,255,0.4);
-    text-transform: uppercase;
-    margin-top: 3px;
-  }
-
-  .status-badge {
-    font-family: 'Raleway', sans-serif;
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 50px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .status-badge::before {
-    content: '';
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-
-  .status-badge.buka { background: rgba(57,255,20,0.12); color: var(--neon-green); border: 1px solid rgba(57,255,20,0.3); }
-  .status-badge.tutup { background: rgba(255,51,51,0.12); color: var(--closed-color); border: 1px solid rgba(255,51,51,0.3); }
-  .status-badge.libur { background: rgba(255,136,0,0.12); color: var(--holiday-color); border: 1px solid rgba(255,136,0,0.3); }
-  .status-badge.active { background: rgba(0,245,255,0.12); color: var(--neon-cyan); border: 1px solid rgba(0,245,255,0.3); animation: blink 1s infinite; }
-  .status-badge.upcoming { background: rgba(255,215,0,0.12); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); }
-
-  .times-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-
-  .time-block {
-    flex: 1;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 8px;
-    padding: 8px;
-    text-align: center;
-  }
-
-  .time-label {
-    font-family: 'Raleway', sans-serif;
-    font-size: 8px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-    margin-bottom: 4px;
-  }
-
-  .time-value {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: clamp(12px, 1.5vw, 14px);
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-
-  .time-block.tutup-time .time-value { color: var(--closed-color); text-shadow: 0 0 8px rgba(255,51,51,0.4); }
-  .time-block.buka-time .time-value { color: var(--neon-green); text-shadow: 0 0 8px rgba(57,255,20,0.4); }
-
-  .countdown-bar {
-    position: relative;
-    height: 3px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 8px;
-  }
-
-  .countdown-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 1s linear;
-  }
-
-  .countdown-text {
-    font-family: 'Raleway', sans-serif;
-    font-size: 9px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    text-align: center;
-    color: rgba(255,255,255,0.4);
-  }
-
-  .countdown-text span {
-    color: var(--gold);
-    font-weight: 400;
-  }
-
-  /* LIBUR OVERLAY */
-  .libur-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(5,5,16,0.7);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(2px);
-    pointer-events: none;
-  }
-
-  .libur-text {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    color: var(--holiday-color);
-    text-shadow: 0 0 10px rgba(255,136,0,0.5);
-    text-transform: uppercase;
-    padding: 6px 16px;
-    border: 1px solid rgba(255,136,0,0.4);
-    border-radius: 4px;
-    background: rgba(255,136,0,0.1);
-  }
-
-  /* HOKIDRAW SPECIAL */
-  .market-card.hokidraw {
-    background: linear-gradient(135deg, rgba(15,5,35,0.9), rgba(10,10,30,0.9));
-    border-color: rgba(191,0,255,0.3);
-  }
-  .market-card.hokidraw::before { background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink), var(--neon-cyan)); }
-
-  /* FILTER TABS */
-  .filter-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .filter-tab {
-    font-family: 'Raleway', sans-serif;
-    font-size: 10px;
-    font-weight: 300;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 6px 16px;
-    border-radius: 50px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: transparent;
-    color: rgba(255,255,255,0.5);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .filter-tab:hover { color: var(--gold); border-color: rgba(255,215,0,0.3); }
-  .filter-tab.active {
-    background: rgba(255,215,0,0.1);
-    border-color: rgba(255,215,0,0.4);
-    color: var(--gold);
-    box-shadow: 0 0 10px rgba(255,215,0,0.1);
-  }
-
-  /* SEARCH */
-  .search-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 50px;
-    padding: 8px 16px;
-    margin-bottom: 20px;
-    max-width: 300px;
-  }
-
-  .search-bar input {
-    flex: 1;
-    background: none;
-    border: none;
-    outline: none;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    color: var(--text-main);
-    letter-spacing: 1px;
-  }
-
-  .search-bar input::placeholder { color: rgba(255,255,255,0.25); }
-  .search-icon { color: rgba(255,215,0,0.4); font-size: 14px; }
-
-  /* TOP ROW */
-  .top-controls {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-  ::-webkit-scrollbar-thumb { background: rgba(255,215,0,0.2); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(255,215,0,0.35); }
-
-  /* FOOTER */
-  footer {
-    text-align: center;
-    padding: 24px;
-    font-family: 'Raleway', sans-serif;
-    font-size: 9px;
-    font-weight: 200;
-    letter-spacing: 4px;
-    color: rgba(255,255,255,0.15);
-    text-transform: uppercase;
-    border-top: 1px solid rgba(255,255,255,0.04);
-  }
-
-  /* NEXT ALARM PREVIEW */
-  .next-alarm-strip {
-    background: linear-gradient(135deg, rgba(255,215,0,0.06), rgba(255,215,0,0.02));
-    border: 1px solid rgba(255,215,0,0.15);
-    border-radius: 10px;
-    padding: 12px 20px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .next-alarm-label {
-    font-family: 'Raleway', sans-serif;
-    font-size: 9px;
-    font-weight: 200;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: rgba(255,215,0,0.5);
-    white-space: nowrap;
-  }
-
-  #next-alarm-info {
-    font-family: 'Playfair Display', serif;
-    font-size: 14px;
-    color: var(--gold);
-    filter: drop-shadow(0 0 5px rgba(255,215,0,0.3));
-  }
-
-  #next-alarm-countdown {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: 12px;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 8px var(--neon-cyan);
-    letter-spacing: 2px;
-    margin-left: auto;
-  }
-
-  @media(max-width:640px) {
-    .neon-text-marquee { display: none; }
-    .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-    .market-card { padding: 12px; }
-    .top-controls { flex-direction: column; align-items: flex-start; }
-  }
-
-  @media(max-width:400px) {
-    .cards-grid { grid-template-columns: 1fr; }
-  }
+/* ═══════════════════════════════════════════════════
+   ROOT VARIABLES
+═══════════════════════════════════════════════════ */
+:root{
+  --gold:#FFD700; --gold-l:#FFF5B0; --gold-d:#C8940A; --gold-dd:#8B6500;
+  --np:#FF2D78; --nc:#00F5FF; --ng:#39FF14; --npu:#BF00FF; --no:#FF6600; --ny:#FFE600;
+  --red:#FF3333; --red-d:#CC0000; --orange:#FF8800; --orange-d:#CC6600;
+  --bg:#030310; --card-bg:rgba(7,7,22,0.94); --txt:#F8F0DC;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg); font-family:'Raleway',sans-serif; color:var(--txt);
+  min-height:100vh; overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 10% 10%, rgba(191,0,255,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 90%, rgba(0,245,255,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,215,0,.05) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 80% 20%, rgba(255,45,120,.06) 0%, transparent 50%);
+}
+
+/* PARTICLES */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.pt{position:absolute;border-radius:50%;animation:ptrise linear infinite;opacity:0;}
+@keyframes ptrise{
+  0%{transform:translateY(105vh) translateX(0);opacity:0;}
+  8%{opacity:1;} 92%{opacity:1;}
+  100%{transform:translateY(-20px) translateX(var(--dx));opacity:0;}
+}
+
+/* ═══════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════ */
+header{
+  position:sticky;top:0;z-index:300;
+  background:linear-gradient(180deg,rgba(3,3,16,.99) 0%,rgba(3,3,16,.95) 100%);
+  backdrop-filter:blur(30px);
+  border-bottom:1px solid rgba(255,215,0,.2);
+  box-shadow:0 0 60px rgba(0,0,0,.8), 0 1px 0 rgba(255,215,0,.08);
+}
+.hdr{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;gap:14px;}
+
+/* LOGO */
+.logo{display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
+.logo-main{
+  font-family:'Cinzel Decorative',cursive; font-size:clamp(15px,2.4vw,28px);
+  font-weight:900; letter-spacing:4px; white-space:nowrap;
+  background:linear-gradient(90deg,#7A5000,#C8940A,#FFD700,#FFF5B0,#FFD700,#C8940A,#7A5000);
+  background-size:400% auto;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  animation:gshine 5s linear infinite;
+  filter:drop-shadow(0 0 15px rgba(255,215,0,.7));
+}
+@keyframes gshine{0%{background-position:0%}100%{background-position:400%}}
+.logo-sub{
+  font-family:'Cinzel',serif; font-size:8px; font-weight:600;
+  letter-spacing:7px; color:rgba(255,215,0,.4); text-transform:uppercase;
+}
+
+/* NEON STRIP */
+.neon-strip{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;overflow:hidden;position:relative;}
+.nb{width:12px;height:12px;border-radius:50%;flex-shrink:0;animation:nblink 1.8s ease-in-out infinite;}
+.nb:nth-child(7n+1){background:var(--np);box-shadow:0 0 10px var(--np),0 0 22px var(--np),0 0 40px rgba(255,45,120,.3);animation-delay:0s;}
+.nb:nth-child(7n+2){background:var(--nc);box-shadow:0 0 10px var(--nc),0 0 22px var(--nc),0 0 40px rgba(0,245,255,.3);animation-delay:.18s;}
+.nb:nth-child(7n+3){background:var(--ng);box-shadow:0 0 10px var(--ng),0 0 22px var(--ng),0 0 40px rgba(57,255,20,.3);animation-delay:.36s;}
+.nb:nth-child(7n+4){background:var(--npu);box-shadow:0 0 10px var(--npu),0 0 22px var(--npu),0 0 40px rgba(191,0,255,.3);animation-delay:.54s;}
+.nb:nth-child(7n+5){background:var(--no);box-shadow:0 0 10px var(--no),0 0 22px var(--no),0 0 40px rgba(255,102,0,.3);animation-delay:.72s;}
+.nb:nth-child(7n+6){background:var(--ny);box-shadow:0 0 10px var(--ny),0 0 22px var(--ny),0 0 40px rgba(255,230,0,.3);animation-delay:.9s;}
+.nb:nth-child(7n+7){background:var(--gold);box-shadow:0 0 10px var(--gold),0 0 22px var(--gold),0 0 40px rgba(255,215,0,.3);animation-delay:1.08s;}
+@keyframes nblink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.15;transform:scale(.55);}}
+
+.mq-wrap{overflow:hidden;width:200px;margin:0 10px;flex-shrink:0;}
+.mq-inner{display:flex;gap:12px;white-space:nowrap;animation:mqs 16s linear infinite;}
+@keyframes mqs{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.mw{font-family:'Cinzel Decorative',cursive;font-size:10px;font-weight:700;letter-spacing:3px;}
+.mw:nth-child(1){color:var(--np);text-shadow:0 0 10px var(--np);}
+.mw:nth-child(2){color:var(--nc);text-shadow:0 0 10px var(--nc);}
+.mw:nth-child(3){color:var(--ng);text-shadow:0 0 10px var(--ng);}
+.mw:nth-child(4){color:var(--gold);text-shadow:0 0 10px var(--gold);}
+.mw:nth-child(5){color:var(--npu);text-shadow:0 0 10px var(--npu);}
+
+/* CLOCK */
+.clk-zone{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;}
+#clk{
+  font-family:'Bebas Neue',cursive; font-size:clamp(26px,3.5vw,44px);
+  font-weight:400; letter-spacing:5px; line-height:1; color:var(--nc);
+  text-shadow:0 0 15px var(--nc),0 0 35px var(--nc),0 0 70px rgba(0,245,255,.3);
+  animation:flicker 11s linear infinite;
+}
+@keyframes flicker{0%,93%,100%{opacity:1;}94%{opacity:.5;}95.5%{opacity:1;}97%{opacity:.3;}98%{opacity:1;}}
+#clk-date{
+  font-family:'Cinzel',serif; font-size:9px; font-weight:700;
+  letter-spacing:4px; color:rgba(255,215,0,.6); text-transform:uppercase; text-align:right;
+}
+.btn-alarm{
+  font-family:'Cinzel',serif; font-size:10px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase;
+  padding:6px 16px; border-radius:8px; cursor:pointer;
+  transition:all .3s; margin-top:4px;
+}
+.btn-alarm.on{
+  border:1.5px solid var(--ng); background:rgba(57,255,20,.1); color:var(--ng);
+  box-shadow:0 0 15px rgba(57,255,20,.25), inset 0 0 10px rgba(57,255,20,.05);
+}
+.btn-alarm.off{border:1.5px solid var(--red);background:rgba(255,51,51,.1);color:var(--red);}
+
+/* ═══════════════════════════════════════════════════
+   ALARM OVERLAY
+═══════════════════════════════════════════════════ */
+#notif-overlay{
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,.85); backdrop-filter:blur(14px);
+  align-items:center; justify-content:center;
+}
+#notif-overlay.show{display:flex;}
+
+.notif-box{
+  position:relative;
+  background:linear-gradient(145deg,rgba(6,3,18,.99),rgba(12,6,35,.99));
+  border-radius:26px; padding:44px 56px; min-width:380px; max-width:94vw;
+  text-align:center; overflow:hidden;
+  animation:nin .5s cubic-bezier(.34,1.56,.64,1);
+}
+/* Animated rainbow border */
+.notif-box::before{
+  content:'';position:absolute;inset:-2px;border-radius:28px;z-index:-1;
+  background:conic-gradient(from var(--angle,0deg),var(--nc),var(--gold),var(--np),var(--npu),var(--ng),var(--gold),var(--nc));
+  animation:spin-border 2.5s linear infinite;
+}
+@property --angle{syntax:'<angle>';initial-value:0deg;inherits:false;}
+@keyframes spin-border{to{--angle:360deg;}}
+
+.notif-box.type-tutup{
+  box-shadow:0 0 80px rgba(255,51,51,.6),0 0 160px rgba(255,51,51,.25),0 30px 80px rgba(0,0,0,.8);
+}
+.notif-box.type-buka{
+  box-shadow:0 0 80px rgba(57,255,20,.6),0 0 160px rgba(57,255,20,.25),0 30px 80px rgba(0,0,0,.8);
+}
+@keyframes nin{from{opacity:0;transform:scale(.65) translateY(-40px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+.n-eyebrow{
+  font-family:'Cinzel',serif; font-size:10px; font-weight:900;
+  letter-spacing:7px; text-transform:uppercase; color:rgba(255,215,0,.7); margin-bottom:12px;
+}
+.n-icon{font-size:52px;display:block;margin-bottom:10px;animation:ibounce .6s ease-in-out infinite alternate;}
+@keyframes ibounce{from{transform:scale(1);}to{transform:scale(1.2) rotate(-8deg);}}
+.n-name{
+  font-family:'Playfair Display',serif; font-size:clamp(22px,4.5vw,34px);
+  font-weight:900; color:#fff; letter-spacing:1.5px; margin-bottom:8px;
+  text-shadow:0 2px 20px rgba(255,255,255,.35);
+}
+.n-time{
+  font-family:'Bebas Neue',cursive; font-size:clamp(58px,10vw,84px);
+  letter-spacing:10px; line-height:1; margin-bottom:12px;
+}
+.n-time.tutup{color:var(--red);text-shadow:0 0 25px var(--red),0 0 60px rgba(255,51,51,.6),0 0 100px rgba(255,51,51,.2);}
+.n-time.buka{color:var(--ng);text-shadow:0 0 25px var(--ng),0 0 60px rgba(57,255,20,.6),0 0 100px rgba(57,255,20,.2);}
+.n-badge{
+  display:inline-block; font-family:'Cinzel',serif;
+  font-size:13px; font-weight:900; letter-spacing:5px; text-transform:uppercase;
+  padding:7px 24px; border-radius:50px; margin-bottom:18px;
+}
+.n-badge.tutup{background:rgba(255,51,51,.22);color:var(--red);border:2px solid var(--red);text-shadow:0 0 8px var(--red);}
+.n-badge.buka{background:rgba(57,255,20,.22);color:var(--ng);border:2px solid var(--ng);text-shadow:0 0 8px var(--ng);}
+.n-days{font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.45);margin-bottom:24px;text-transform:uppercase;}
+.n-dismiss{
+  font-family:'Cinzel',serif; font-size:12px; font-weight:700; letter-spacing:4px; text-transform:uppercase;
+  padding:12px 36px; border-radius:50px; cursor:pointer;
+  background:linear-gradient(135deg,rgba(255,215,0,.18),rgba(255,215,0,.06));
+  border:2px solid rgba(255,215,0,.5); color:var(--gold); transition:all .3s;
+}
+.n-dismiss:hover{background:rgba(255,215,0,.3);box-shadow:0 0 25px rgba(255,215,0,.45);}
+
+/* EDGE FLASH */
+#sflash{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0;}
+#sflash.red{animation:ef-r 2.5s ease-out forwards;}
+#sflash.grn{animation:ef-g 2.5s ease-out forwards;}
+@keyframes ef-r{0%{opacity:1;box-shadow:inset 0 0 100px rgba(255,51,51,.6),inset 0 0 200px rgba(255,51,51,.25);}100%{opacity:0;box-shadow:none;}}
+@keyframes ef-g{0%{opacity:1;box-shadow:inset 0 0 100px rgba(57,255,20,.6),inset 0 0 200px rgba(57,255,20,.25);}100%{opacity:0;box-shadow:none;}}
+
+/* ═══════════════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════════════ */
+main{position:relative;z-index:1;max-width:1600px;margin:0 auto;padding:28px 20px;}
+
+/* PERMISSION BANNER */
+#perm-banner{
+  background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(255,215,0,.04));
+  border:1.5px solid rgba(255,215,0,.35); border-radius:14px;
+  padding:14px 20px; margin-bottom:18px;
+  display:flex; align-items:center; gap:12px;
+  font-family:'Cinzel',serif; font-size:11px; font-weight:700;
+  letter-spacing:2px; color:var(--gold);
+  box-shadow:0 0 20px rgba(255,215,0,.08);
+}
+#perm-banner button{
+  margin-left:auto; font-family:'Cinzel',serif; font-size:10px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase; padding:7px 18px;
+  border-radius:50px; border:1.5px solid rgba(255,215,0,.55);
+  background:rgba(255,215,0,.18); color:var(--gold); cursor:pointer; transition:all .25s; flex-shrink:0;
+}
+#perm-banner button:hover{background:rgba(255,215,0,.32);box-shadow:0 0 20px rgba(255,215,0,.35);}
+
+/* STATS */
+.stats-row{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+.sc{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 20px; border-radius:50px;
+  font-family:'Cinzel',serif; font-size:10px; font-weight:700;
+  letter-spacing:2.5px; text-transform:uppercase;
+  backdrop-filter:blur(12px); border:1.5px solid; transition:all .3s;
+}
+.sc:hover{transform:translateY(-2px);}
+.sc .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.sc.sb{border-color:rgba(57,255,20,.4);color:var(--ng);background:rgba(57,255,20,.08);box-shadow:0 0 12px rgba(57,255,20,.08);}
+.sc.sb .dot{background:var(--ng);box-shadow:0 0 8px var(--ng);animation:bdot 1s infinite;}
+.sc.su{border-color:rgba(0,245,255,.4);color:var(--nc);background:rgba(0,245,255,.08);}
+.sc.su .dot{background:var(--nc);box-shadow:0 0 8px var(--nc);animation:bdot 1s infinite .3s;}
+.sc.st{border-color:rgba(255,51,51,.4);color:var(--red);background:rgba(255,51,51,.08);}
+.sc.st .dot{background:var(--red);box-shadow:0 0 8px rgba(255,51,51,.5);}
+.sc.sl{border-color:rgba(255,136,0,.4);color:var(--orange);background:rgba(255,136,0,.08);box-shadow:0 0 12px rgba(255,136,0,.1);}
+.sc.sl .dot{background:var(--orange);box-shadow:0 0 8px var(--orange);}
+.sc.sg{border-color:rgba(255,215,0,.4);color:var(--gold);background:rgba(255,215,0,.08);}
+.sc.sg .dot{background:var(--gold);box-shadow:0 0 8px var(--gold);}
+@keyframes bdot{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+/* NEXT ALARM BAR */
+.next-bar{
+  background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,215,0,.02));
+  border:1.5px solid rgba(255,215,0,.22); border-radius:16px;
+  padding:16px 24px; margin-bottom:22px;
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  box-shadow:0 4px 30px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,215,0,.08);
+}
+.next-lbl{
+  font-family:'Cinzel',serif; font-size:9px; font-weight:700;
+  letter-spacing:5px; color:rgba(255,215,0,.55); text-transform:uppercase; white-space:nowrap;
+}
+#next-info{
+  font-family:'Playfair Display',serif; font-size:15px; font-weight:900;
+  color:var(--gold); filter:drop-shadow(0 0 6px rgba(255,215,0,.4));
+}
+#next-cd{
+  font-family:'Bebas Neue',cursive; font-size:26px; color:var(--nc);
+  text-shadow:0 0 12px var(--nc), 0 0 30px rgba(0,245,255,.4);
+  letter-spacing:4px; margin-left:auto;
+}
+
+/* CONTROLS */
+.ctrl-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap;}
+.srch-wrap{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.04); border:1.5px solid rgba(255,255,255,.1);
+  border-radius:50px; padding:9px 18px; min-width:220px;
+  transition:border-color .3s;
+}
+.srch-wrap:focus-within{border-color:rgba(255,215,0,.4);box-shadow:0 0 15px rgba(255,215,0,.1);}
+.srch-wrap input{flex:1;background:none;border:none;outline:none;font-family:'Raleway',sans-serif;font-size:14px;font-weight:800;color:var(--txt);letter-spacing:.5px;}
+.srch-wrap input::placeholder{color:rgba(255,255,255,.22);}
+.si{color:rgba(255,215,0,.55);font-size:16px;}
+.ftabs{display:flex;gap:8px;flex-wrap:wrap;}
+.ft{
+  font-family:'Cinzel',serif; font-size:9px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase;
+  padding:7px 16px; border-radius:50px;
+  border:1.5px solid rgba(255,255,255,.1); background:transparent;
+  color:rgba(255,255,255,.4); cursor:pointer; transition:all .25s;
+}
+.ft:hover{color:var(--gold);border-color:rgba(255,215,0,.35);}
+.ft.act{
+  background:rgba(255,215,0,.12); border-color:rgba(255,215,0,.45);
+  color:var(--gold); box-shadow:0 0 14px rgba(255,215,0,.15);
+}
+
+/* SECTION */
+.sec-hdr{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.sec-title{
+  font-family:'Cinzel Decorative',cursive; font-size:clamp(12px,1.5vw,16px);
+  font-weight:900; letter-spacing:5px; text-transform:uppercase;
+  color:var(--gold); filter:drop-shadow(0 0 8px rgba(255,215,0,.5)); white-space:nowrap;
+}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(255,215,0,.5),transparent);}
+#show-cnt{font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(255,215,0,.45);white-space:nowrap;}
+
+/* ═══════════════════════════════════════════════════
+   CARDS GRID
+═══════════════════════════════════════════════════ */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:14px;margin-bottom:36px;}
+
+/* BASE CARD */
+.card{
+  position:relative;
+  background:var(--card-bg);
+  border-radius:var(--radius);
+  padding:20px;
+  backdrop-filter:blur(16px);
+  transition:transform .32s cubic-bezier(.4,0,.2,1),box-shadow .32s,border-color .32s;
+  overflow:hidden;
+  border:1.5px solid rgba(255,255,255,.07);
+}
+/* TOP COLOR BAR */
+.card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3.5px;
+  background:var(--ct,rgba(255,215,0,.35));border-radius:var(--radius) var(--radius) 0 0;
+}
+.card:hover:not(.c-libur){transform:translateY(-5px);box-shadow:0 16px 50px rgba(0,0,0,.5),0 0 30px rgba(255,215,0,.07);}
+
+/* STATUS VARIANTS */
+.c-buka{--ct:var(--ng);border-color:rgba(57,255,20,.1);}
+.c-tutup{--ct:var(--red);border-color:rgba(255,51,51,.12);}
+.c-upcoming{--ct:var(--gold);border-color:rgba(255,215,0,.2)!important;}
+.c-hokidraw{
+  --ct:linear-gradient(90deg,var(--npu),var(--np),var(--nc));
+  border-color:rgba(191,0,255,.28)!important;
+  background:linear-gradient(145deg,rgba(10,3,28,.96),rgba(6,6,22,.96))!important;
+}
+
+/* ═══════════════════════════════════════════════════
+   HOLIDAY CARD — FULL LUXURY TREATMENT
+═══════════════════════════════════════════════════ */
+.c-libur{
+  --ct:var(--orange);
+  border:2px solid rgba(255,136,0,.45)!important;
+  background:linear-gradient(145deg,rgba(25,10,0,.96),rgba(15,8,3,.96))!important;
+  box-shadow:0 0 25px rgba(255,136,0,.12),inset 0 0 40px rgba(255,136,0,.04)!important;
+}
+
+/* Animated diagonal stripe overlay on holiday card */
+.c-libur::before{
+  content:'';position:absolute;inset:0;border-radius:var(--radius);
+  background:repeating-linear-gradient(
+    -45deg,
+    transparent, transparent 18px,
+    rgba(255,136,0,.03) 18px, rgba(255,136,0,.03) 36px
+  );pointer-events:none;z-index:0;
+}
+.c-libur > *{position:relative;z-index:1;}
+
+/* LIBUR OVERLAY BANNER — full width at bottom */
+.lv{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(135deg,rgba(30,12,0,.97),rgba(20,8,0,.97));
+  border-top:2px solid rgba(255,136,0,.7);
+  border-radius:0 0 var(--radius) var(--radius);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:12px 16px; gap:5px;
+  box-shadow:0 -4px 20px rgba(255,136,0,.2);
+}
+.lv-icon{font-size:22px;animation:lv-pulse 1.5s ease-in-out infinite alternate;}
+@keyframes lv-pulse{from{transform:scale(1);filter:brightness(1);}to{transform:scale(1.15);filter:brightness(1.3);}}
+.lv-title{
+  font-family:'Cinzel Decorative',cursive; font-size:12px; font-weight:900;
+  letter-spacing:4px; text-transform:uppercase; color:var(--orange);
+  text-shadow:0 0 15px rgba(255,136,0,.8), 0 0 30px rgba(255,136,0,.4);
+}
+.lv-note{
+  font-family:'Cinzel',serif; font-size:10px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase; color:rgba(255,136,0,.65);
+}
+
+/* Holiday card content gets dimmed slightly */
+.c-libur .ch, .c-libur .trow, .c-libur .pbar, .c-libur .pct{opacity:.55;}
+
+/* CARD INNER ELEMENTS */
+.ch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:8px;}
+.cm{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(15px,1.6vw,19px);
+  font-weight:900; color:#fff; line-height:1.2; letter-spacing:.5px;
+  text-shadow:0 0 10px rgba(255,255,255,.15);
+}
+.cd{
+  font-family:'Cinzel',serif; font-size:9px; font-weight:700;
+  letter-spacing:2px; color:rgba(255,255,255,.38); text-transform:uppercase; margin-top:5px;
+}
+
+/* STATUS BADGE */
+.badge{
+  font-family:'Cinzel',serif; font-size:9px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  padding:5px 12px; border-radius:50px; flex-shrink:0;
+  display:flex; align-items:center; gap:5px; white-space:nowrap;
+  border:1.5px solid;
+}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.bk{background:rgba(57,255,20,.12);color:var(--ng);border-color:rgba(57,255,20,.4);}
+.tt{background:rgba(255,51,51,.12);color:var(--red);border-color:rgba(255,51,51,.4);}
+.lb{background:rgba(255,136,0,.15);color:var(--orange);border-color:rgba(255,136,0,.5);font-weight:900;}
+.up{background:rgba(255,215,0,.12);color:var(--gold);border-color:rgba(255,215,0,.4);}
+
+/* TIME ROW */
+.trow{display:flex;gap:10px;margin-bottom:12px;}
+.tblk{
+  flex:1; border-radius:12px; padding:11px 8px; text-align:center;
+  transition:background .3s;
+}
+.tt-t{background:rgba(255,51,51,.07);border:1.5px solid rgba(255,51,51,.18);}
+.tt-b{background:rgba(57,255,20,.07);border:1.5px solid rgba(57,255,20,.18);}
+.tt-t:hover{background:rgba(255,51,51,.12);}
+.tt-b:hover{background:rgba(57,255,20,.12);}
+.tlbl{
+  font-family:'Cinzel',serif; font-size:8px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase; margin-bottom:6px;
+}
+.tt-t .tlbl{color:rgba(255,100,100,.7);}
+.tt-b .tlbl{color:rgba(57,255,20,.6);}
+.tval{
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(22px,2.5vw,28px);
+  letter-spacing:3px; line-height:1;
+}
+.tt-t .tval{color:var(--red);text-shadow:0 0 12px rgba(255,51,51,.6),0 0 25px rgba(255,51,51,.25);}
+.tt-b .tval{color:var(--ng);text-shadow:0 0 12px rgba(57,255,20,.6),0 0 25px rgba(57,255,20,.25);}
+
+/* PROGRESS */
+.pbar{position:relative;height:5px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin-bottom:9px;}
+.pfill{height:100%;border-radius:4px;transition:width 1s linear;}
+.pct{
+  font-family:'Raleway',sans-serif; font-size:10px; font-weight:800;
+  letter-spacing:2px; text-align:center; color:rgba(255,255,255,.35);
+}
+.pct span{color:var(--gold);font-weight:900;}
+
+/* HOKIDRAW SPECIAL CARD */
+.hokidraw-inner{
+  font-family:'Cinzel',serif; font-size:11px; font-weight:900;
+  letter-spacing:3px; color:rgba(191,0,255,.9); text-align:center;
+  padding:14px; background:rgba(191,0,255,.07); border-radius:10px;
+  border:1.5px solid rgba(191,0,255,.2);
+  text-shadow:0 0 10px rgba(191,0,255,.5);
+}
+
+/* CARD FLASH */
+.card.bc-flash{animation:bcf .4s ease-in-out 7;}
+@keyframes bcf{0%,100%{border-color:rgba(255,51,51,.12);}50%{border-color:var(--red);box-shadow:0 0 40px rgba(255,51,51,.6);}}
+
+/* FOOTER */
+footer{
+  text-align:center; padding:24px;
+  border-top:1px solid rgba(255,255,255,.05);
+  font-family:'Cinzel',serif; font-size:9px; font-weight:700;
+  letter-spacing:5px; color:rgba(255,255,255,.13); text-transform:uppercase;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:rgba(255,255,255,.02);}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--gold-d),var(--gold));border-radius:3px;}
+
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .card{padding:14px;}
+  .mq-wrap{display:none;}
+  .ctrl-row{flex-direction:column;align-items:flex-start;}
+  .notif-box{padding:30px 24px;min-width:0;}
+}
+@media(max-width:400px){.grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<div class="particles" id="particles"></div>
+<div id="particles"></div>
+<div id="sflash"></div>
 
-<!-- ALARM BANNER -->
-<div id="alarm-banner">
-  <div class="alarm-banner-title">⚡ Alarm Aktif ⚡</div>
-  <div class="alarm-banner-name" id="alarm-name">—</div>
-  <div class="alarm-banner-time" id="alarm-time">00:00</div>
-  <div class="alarm-banner-type" id="alarm-type">Tutup</div>
-  <button class="alarm-dismiss-btn" onclick="dismissAlarm()">✕ &nbsp; Tutup</button>
+<!-- ═══ ALARM OVERLAY ═══ -->
+<div id="notif-overlay">
+  <div class="notif-box" id="notif-box">
+    <div class="n-eyebrow" id="n-eyebrow">⚡ ALARM AKTIF ⚡</div>
+    <span class="n-icon" id="n-icon">🔔</span>
+    <div class="n-name" id="n-name">—</div>
+    <div class="n-time" id="n-time">00:00</div>
+    <div class="n-badge" id="n-badge">BETCLOSE</div>
+    <div class="n-days" id="n-days">Senin – Minggu</div>
+    <button class="n-dismiss" onclick="dismissAlarm()">✕ &nbsp; DISMISS</button>
+  </div>
 </div>
 
-<!-- HEADER -->
+<!-- ═══ HEADER ═══ -->
 <header>
-  <div class="header-inner">
-    <div class="logo-zone">
-      <div class="logo-title">⬡ LOTTERY ALARM</div>
-      <div class="logo-sub">Premium Schedule Dashboard</div>
+  <div class="hdr">
+    <div class="logo">
+      <div class="logo-main">⬡ALARM TOGEL⬡</div>
+      <div class="logo-sub">Alarm Togel Lubis</div>
     </div>
     <div class="neon-strip">
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-text-marquee">
-        <span>
-          <i>✦</i>&nbsp;
-          <i>L</i><i>I</i><i>V</i><i>E</i>&nbsp;
-          <i>✦</i>&nbsp;
-          <i>R</i><i>E</i><i>S</i><i>U</i><i>L</i><i>T</i>&nbsp;
-          <i>✦</i>&nbsp;
-          <i>A</i><i>L</i><i>A</i><i>R</i><i>M</i>&nbsp;
-          <i>✦</i>
-        </span>
+      <div id="bulbs1" style="display:flex;gap:6px;align-items:center;"></div>
+      <div class="mq-wrap">
+        <div class="mq-inner">
+          <span class="mw">✦ LIVE</span><span class="mw">RESULT ✦</span>
+          <span class="mw">BETCLOSE</span><span class="mw">✦ ALARM</span><span class="mw">DASHBOARD ✦</span>
+        </div>
       </div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
-      <div class="neon-bulb"></div>
+      <div id="bulbs2" style="display:flex;gap:6px;align-items:center;"></div>
     </div>
-    <div class="clock-zone">
-      <div id="live-clock">00:00:00</div>
-      <div id="live-date">—</div>
-      <button class="alarm-toggle-btn" id="alarm-btn" onclick="toggleAlarm()">🔔 Alarm ON</button>
+    <div class="clk-zone">
+      <div id="clk">00:00:00</div>
+      <div id="clk-date">—</div>
+      <button class="btn-alarm on" id="alarm-btn" onclick="toggleAlarm()">🔔 &nbsp;ALARM ON</button>
     </div>
   </div>
 </header>
 
+<!-- ═══ MAIN ═══ -->
 <main>
+
+  <div id="perm-banner">
+    <span>🔔 &nbsp; Aktifkan notifikasi browser agar alarm tampil saat tab tidak aktif!</span>
+    <button onclick="reqPerm()">Izinkan Notifikasi</button>
+  </div>
+
   <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-chip open-stat"><div class="dot"></div><span id="stat-open">0 Open</span></div>
-    <div class="stat-chip upcoming-stat"><div class="dot"></div><span id="stat-upcoming">0 Upcoming</span></div>
-    <div class="stat-chip closed-stat"><div class="dot"></div><span id="stat-closed">0 Closed</span></div>
-    <div class="stat-chip holiday-stat"><div class="dot"></div><span id="stat-holiday">0 Libur</span></div>
-    <div class="stat-chip total-stat"><div class="dot"></div><span id="stat-total">0 Total</span></div>
+  <div class="stats-row">
+    <div class="sc sb"><div class="dot"></div><span id="s-op">0 Buka</span></div>
+    <div class="sc su"><div class="dot"></div><span id="s-up">0 Segera</span></div>
+    <div class="sc st"><div class="dot"></div><span id="s-cl">0 Betclose</span></div>
+    <div class="sc sl"><div class="dot"></div><span id="s-hl">0 Libur</span></div>
+    <div class="sc sg"><div class="dot"></div><span id="s-tt">0 Total</span></div>
   </div>
 
   <!-- NEXT ALARM -->
-  <div class="next-alarm-strip">
-    <div class="next-alarm-label">⏰ &nbsp; Alarm Berikutnya</div>
-    <div id="next-alarm-info">Menghitung...</div>
-    <div id="next-alarm-countdown">--:--:--</div>
+  <div class="next-bar">
+    <div class="next-lbl">⏰ &nbsp; Alarm Berikutnya</div>
+    <div id="next-info">Menghitung...</div>
+    <div id="next-cd">--:--:--</div>
   </div>
 
   <!-- CONTROLS -->
-  <div class="top-controls">
-    <div class="search-bar">
-      <span class="search-icon">◎</span>
-      <input type="text" id="search-input" placeholder="Cari pasaran..." oninput="filterCards()">
+  <div class="ctrl-row">
+    <div class="srch-wrap">
+      <span class="si">◎</span>
+      <input type="text" id="srch" placeholder="Cari pasaran..." oninput="doFilter()">
     </div>
-    <div class="filter-tabs">
-      <button class="filter-tab active" onclick="setFilter('all',this)">Semua</button>
-      <button class="filter-tab" onclick="setFilter('open',this)">Buka</button>
-      <button class="filter-tab" onclick="setFilter('upcoming',this)">Segera</button>
-      <button class="filter-tab" onclick="setFilter('closed',this)">Tutup</button>
-      <button class="filter-tab" onclick="setFilter('holiday',this)">Libur</button>
+    <div class="ftabs">
+      <button class="ft act" onclick="setF('all',this)">Semua</button>
+      <button class="ft" onclick="setF('open',this)">Buka</button>
+      <button class="ft" onclick="setF('upcoming',this)">Segera</button>
+      <button class="ft" onclick="setF('tutup',this)">Betclose</button>
+      <button class="ft" onclick="setF('holiday',this)">🚫 Libur</button>
     </div>
   </div>
 
   <!-- SECTION HEADER -->
-  <div class="section-header">
-    <div class="section-title">Jadwal Pasaran</div>
-    <div class="section-line"></div>
-    <div style="font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(255,215,0,0.4);white-space:nowrap;" id="showing-count">Menampilkan semua</div>
+  <div class="sec-hdr">
+    <div class="sec-title">✦ Jadwal Pasaran</div>
+    <div class="sec-line"></div>
+    <div id="show-cnt">...</div>
   </div>
 
   <!-- CARDS -->
-  <div class="cards-grid" id="cards-grid"></div>
+  <div class="grid" id="grid"></div>
 
 </main>
 
-<footer>⬡ &nbsp; Lottery Alarm Dashboard &nbsp; · &nbsp; WIB (UTC+7) &nbsp; · &nbsp; Auto-Refresh Every Second &nbsp; ⬡</footer>
+<footer>⬡ &nbsp; Lottery Alarm Dashboard &nbsp; · &nbsp; WIB (UTC+7) &nbsp; · &nbsp; Auto Refresh Every Second &nbsp; ⬡</footer>
 
 <script>
-// ===== DATA =====
-const markets = [
-  { name: "HOKIDRAW 5D", days: "Senin – Minggu", tutup: null, buka: null, special: "24x/hari · 1 jam sekali", holiday: false, hokidraw: true },
-  { name: "TOTOMACAU PAGI", days: "Senin – Minggu", tutup: "00:00", buka: "00:15", holiday: false },
-  { name: "KENTUCKY MIDDAY", days: "Senin – Minggu", tutup: "01:05", buka: "01:20", holiday: false },
-  { name: "FLORIDA MIDDAY", days: "Senin – Minggu", tutup: "01:20", buka: "01:30", holiday: false },
-  { name: "HUAHIN 0100", days: "Senin – Minggu", tutup: "00:45", buka: "01:00", holiday: false },
-  { name: "BANGKOK 0130", days: "Senin – Minggu", tutup: "01:15", buka: "01:30", holiday: false },
-  { name: "NEWYORK MIDDAY", days: "Senin – Minggu", tutup: "02:15", buka: "02:25", holiday: false },
-  { name: "CAROLINA DAY", days: "Senin – Minggu", tutup: "02:45", buka: "03:00", holiday: false },
-  { name: "BRUNEI 02", days: "Senin – Minggu", tutup: "02:30", buka: "02:45", holiday: false },
-  { name: "OREGON 03", days: "Senin – Minggu", tutup: "03:50", buka: "04:00", holiday: false },
-  { name: "OREGON 06", days: "Senin – Minggu", tutup: "06:50", buka: "07:00", holiday: false },
-  { name: "CALIFORNIA", days: "Senin – Minggu", tutup: "09:25", buka: "09:30", holiday: false },
-  { name: "FLORIDA EVENING", days: "Senin – Minggu", tutup: "09:35", buka: "09:45", holiday: false },
-  { name: "OREGON 09", days: "Senin – Minggu", tutup: "09:50", buka: "10:00", holiday: false },
-  { name: "BANGKOK 0930", days: "Senin – Minggu", tutup: "09:15", buka: "09:30", holiday: false },
-  { name: "NEWYORK EVENING", days: "Senin – Minggu", tutup: "10:25", buka: "10:35", holiday: false },
-  { name: "KENTUCKY EVENING", days: "Senin – Minggu", tutup: "10:45", buka: "11:00", holiday: false },
-  { name: "CAROLINA EVENING", days: "Senin – Minggu", tutup: "11:17", buka: "11:22", holiday: false },
-  { name: "TOTO CAMBODIA LIVE", days: "Senin – Minggu", tutup: "10:45", buka: "11:00", holiday: false },
-  { name: "CHELSEA 11", days: "Senin – Minggu", tutup: "11:00", buka: "11:15", holiday: false },
-  { name: "OREGON 12", days: "Senin – Minggu", tutup: "12:50", buka: "13:00", holiday: false },
-  { name: "BULLSEYE", days: "Senin – Minggu", tutup: "12:00", buka: "12:15", holiday: false },
-  { name: "POIPET 12", days: "Senin – Minggu", tutup: "12:15", buka: "12:30", holiday: false },
-  { name: "TOTOMACAU SIANG", days: "Senin – Minggu", tutup: "13:00", buka: "13:15", holiday: false },
-  { name: "SYDNEY LOTTO", days: "Senin – Minggu", tutup: "13:49", buka: "14:05", holiday: false },
-  { name: "BRUNEI 14", days: "Senin – Minggu", tutup: "14:30", buka: "14:45", holiday: false },
-  { name: "CHELSEA 15", days: "Senin – Minggu", tutup: "15:00", buka: "15:15", holiday: false },
-  { name: "POIPET 15", days: "Senin – Minggu", tutup: "15:15", buka: "15:30", holiday: false },
-  { name: "TOTOMALI 1530", days: "Senin – Minggu", tutup: "15:15", buka: "15:30", holiday: false },
-  { name: "TOTOMACAU SORE", days: "Senin – Minggu", tutup: "16:00", buka: "16:15", holiday: false },
-  { name: "HUAHIN 1630", days: "Senin – Minggu", tutup: "16:15", buka: "16:30", holiday: false },
-  { name: "KINGKONG 4D SORE", days: "Senin – Minggu", tutup: "17:00", buka: "17:15", holiday: false },
-  { name: "SINGAPORE", days: "Selasa & Jumat Libur", tutup: "17:30", buka: "17:45", holiday: true, holidayNote: "Libur Selasa & Jumat" },
-  { name: "MAGNUM4D", days: "Rabu, Sabtu & Minggu", tutup: "18:10", buka: "18:40", holiday: true, holidayNote: "Rabu · Sabtu · Minggu" },
-  { name: "TOTOMACAU MALAM I", days: "Senin – Minggu", tutup: "19:00", buka: "19:15", holiday: false },
-  { name: "CHELSEA 19", days: "Senin – Minggu", tutup: "19:00", buka: "19:15", holiday: false },
-  { name: "POIPET 19", days: "Senin – Minggu", tutup: "19:30", buka: "19:45", holiday: false },
-  { name: "PCSO", days: "Minggu Libur", tutup: "19:50", buka: "20:10", holiday: true, holidayNote: "Libur Minggu" },
-  { name: "TOTOMALI 2030", days: "Senin – Minggu", tutup: "20:15", buka: "20:30", holiday: false },
-  { name: "HUAHIN 2100", days: "Senin – Minggu", tutup: "20:45", buka: "21:00", holiday: false },
-  { name: "CHELSEA 21", days: "Senin – Minggu", tutup: "21:00", buka: "21:15", holiday: false },
-  { name: "NEVADA", days: "Senin – Minggu", tutup: "21:15", buka: "21:30", holiday: false },
-  { name: "BRUNEI 21", days: "Senin – Minggu", tutup: "21:30", buka: "21:45", holiday: false },
-  { name: "TOTOMACAU MALAM II", days: "Senin – Minggu", tutup: "22:00", buka: "22:15", holiday: false },
-  { name: "POIPET 22", days: "Senin – Minggu", tutup: "22:30", buka: "22:45", holiday: false },
-  { name: "HONGKONG LOTTO", days: "Senin – Minggu", tutup: "22:59", buka: "23:15", holiday: false },
-  { name: "TOTOMACAU MALAM III", days: "Senin – Minggu", tutup: "23:00", buka: "23:15", holiday: false },
-  { name: "TOTOMALI 2330", days: "Senin – Minggu", tutup: "23:15", buka: "23:30", holiday: false },
-  { name: "KINGKONG 4D MALAM", days: "Senin – Minggu", tutup: "23:30", buka: "23:45", holiday: false },
+/* ════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════ */
+const M=[
+  {n:"HOKIDRAW 5D",         d:"Senin – Minggu",       tu:null,   bk:null,   hoki:1,hol:0},
+  {n:"TOTOMACAU PAGI",      d:"Senin – Minggu",       tu:"00:00",bk:"00:15",hoki:0,hol:0},
+  {n:"HUAHIN 0100",         d:"Senin – Minggu",       tu:"00:45",bk:"01:00",hoki:0,hol:0},
+  {n:"KENTUCKY MIDDAY",     d:"Senin – Minggu",       tu:"01:05",bk:"01:20",hoki:0,hol:0},
+  {n:"FLORIDA MIDDAY",      d:"Senin – Minggu",       tu:"01:20",bk:"01:30",hoki:0,hol:0},
+  {n:"BANGKOK 0130",        d:"Senin – Minggu",       tu:"01:15",bk:"01:30",hoki:0,hol:0},
+  {n:"NEWYORK MIDDAY",      d:"Senin – Minggu",       tu:"02:15",bk:"02:25",hoki:0,hol:0},
+  {n:"BRUNEI 02",           d:"Senin – Minggu",       tu:"02:30",bk:"02:45",hoki:0,hol:0},
+  {n:"CAROLINA DAY",        d:"Senin – Minggu",       tu:"02:45",bk:"03:00",hoki:0,hol:0},
+  {n:"OREGON 03",           d:"Senin – Minggu",       tu:"03:50",bk:"04:00",hoki:0,hol:0},
+  {n:"OREGON 06",           d:"Senin – Minggu",       tu:"06:50",bk:"07:00",hoki:0,hol:0},
+  {n:"BANGKOK 0930",        d:"Senin – Minggu",       tu:"09:15",bk:"09:30",hoki:0,hol:0},
+  {n:"CALIFORNIA",          d:"Senin – Minggu",       tu:"09:25",bk:"09:30",hoki:0,hol:0},
+  {n:"FLORIDA EVENING",     d:"Senin – Minggu",       tu:"09:35",bk:"09:45",hoki:0,hol:0},
+  {n:"OREGON 09",           d:"Senin – Minggu",       tu:"09:50",bk:"10:00",hoki:0,hol:0},
+  {n:"NEWYORK EVENING",     d:"Senin – Minggu",       tu:"10:25",bk:"10:35",hoki:0,hol:0},
+  {n:"KENTUCKY EVENING",    d:"Senin – Minggu",       tu:"10:45",bk:"11:00",hoki:0,hol:0},
+  {n:"TOTO CAMBODIA LIVE",  d:"Senin – Minggu",       tu:"10:45",bk:"11:00",hoki:0,hol:0},
+  {n:"CAROLINA EVENING",    d:"Senin – Minggu",       tu:"11:17",bk:"11:22",hoki:0,hol:0},
+  {n:"CHELSEA 11",          d:"Senin – Minggu",       tu:"11:00",bk:"11:15",hoki:0,hol:0},
+  {n:"BULLSEYE",            d:"Senin – Minggu",       tu:"12:00",bk:"12:15",hoki:0,hol:0},
+  {n:"POIPET 12",           d:"Senin – Minggu",       tu:"12:15",bk:"12:30",hoki:0,hol:0},
+  {n:"OREGON 12",           d:"Senin – Minggu",       tu:"12:50",bk:"13:00",hoki:0,hol:0},
+  {n:"TOTOMACAU SIANG",     d:"Senin – Minggu",       tu:"13:00",bk:"13:15",hoki:0,hol:0},
+  {n:"SYDNEY LOTTO",        d:"Senin – Minggu",       tu:"13:49",bk:"14:05",hoki:0,hol:0},
+  {n:"BRUNEI 14",           d:"Senin – Minggu",       tu:"14:30",bk:"14:45",hoki:0,hol:0},
+  {n:"CHELSEA 15",          d:"Senin – Minggu",       tu:"15:00",bk:"15:15",hoki:0,hol:0},
+  {n:"POIPET 15",           d:"Senin – Minggu",       tu:"15:15",bk:"15:30",hoki:0,hol:0},
+  {n:"TOTOMALI 1530",       d:"Senin – Minggu",       tu:"15:15",bk:"15:30",hoki:0,hol:0},
+  {n:"TOTOMACAU SORE",      d:"Senin – Minggu",       tu:"16:00",bk:"16:15",hoki:0,hol:0},
+  {n:"HUAHIN 1630",         d:"Senin – Minggu",       tu:"16:15",bk:"16:30",hoki:0,hol:0},
+  {n:"KINGKONG 4D SORE",    d:"Senin – Minggu",       tu:"17:00",bk:"17:15",hoki:0,hol:0},
+  {n:"SINGAPORE",           d:"Selasa & Jumat Libur", tu:"17:30",bk:"17:45",hoki:0,hol:1,hn:"Libur: Selasa & Jumat"},
+  {n:"MAGNUM4D",            d:"Rabu · Sabtu · Minggu",tu:"18:10",bk:"18:40",hoki:0,hol:1,hn:"Buka: Rabu · Sabtu · Minggu"},
+  {n:"TOTOMACAU MALAM I",   d:"Senin – Minggu",       tu:"19:00",bk:"19:15",hoki:0,hol:0},
+  {n:"CHELSEA 19",          d:"Senin – Minggu",       tu:"19:00",bk:"19:15",hoki:0,hol:0},
+  {n:"POIPET 19",           d:"Senin – Minggu",       tu:"19:30",bk:"19:45",hoki:0,hol:0},
+  {n:"PCSO",                d:"Minggu Libur",         tu:"19:50",bk:"20:10",hoki:0,hol:1,hn:"Libur: Hari Minggu"},
+  {n:"TOTOMALI 2030",       d:"Senin – Minggu",       tu:"20:15",bk:"20:30",hoki:0,hol:0},
+  {n:"HUAHIN 2100",         d:"Senin – Minggu",       tu:"20:45",bk:"21:00",hoki:0,hol:0},
+  {n:"CHELSEA 21",          d:"Senin – Minggu",       tu:"21:00",bk:"21:15",hoki:0,hol:0},
+  {n:"NEVADA",              d:"Senin – Minggu",       tu:"21:15",bk:"21:30",hoki:0,hol:0},
+  {n:"BRUNEI 21",           d:"Senin – Minggu",       tu:"21:30",bk:"21:45",hoki:0,hol:0},
+  {n:"TOTOMACAU MALAM II",  d:"Senin – Minggu",       tu:"22:00",bk:"22:15",hoki:0,hol:0},
+  {n:"POIPET 22",           d:"Senin – Minggu",       tu:"22:30",bk:"22:45",hoki:0,hol:0},
+  {n:"HONGKONG LOTTO",      d:"Senin – Minggu",       tu:"22:59",bk:"23:15",hoki:0,hol:0},
+  {n:"TOTOMACAU MALAM III", d:"Senin – Minggu",       tu:"23:00",bk:"23:15",hoki:0,hol:0},
+  {n:"TOTOMALI 2330",       d:"Senin – Minggu",       tu:"23:15",bk:"23:30",hoki:0,hol:0},
+  {n:"KINGKONG 4D MALAM",   d:"Senin – Minggu",       tu:"23:30",bk:"23:45",hoki:0,hol:0},
 ];
 
-// ===== STATE =====
-let alarmEnabled = true;
-let currentFilter = 'all';
-let searchText = '';
-let firedAlarms = new Set();
-let activeAlarmAudio = null;
+/* ════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════ */
+let alarmON=true, curF='all', srch='', fired=new Set();
+let audioCtx=null, autoT=null, titleT=null;
+const ORIG_TITLE='🎰 LOTTERY ALARM DASHBOARD';
 
-// ===== PARTICLES =====
-(function spawnParticles() {
-  const container = document.getElementById('particles');
-  const colors = ['#FF2D78','#00F5FF','#39FF14','#BF00FF','#FF6600','#FFE600','#FFD700'];
-  for(let i = 0; i < 40; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + 'vw';
-    p.style.background = colors[Math.floor(Math.random()*colors.length)];
-    p.style.boxShadow = `0 0 4px currentColor`;
-    p.style.width = p.style.height = (1 + Math.random()*2) + 'px';
-    p.style.setProperty('--drift', (Math.random()*200-100) + 'px');
-    p.style.animationDuration = (8 + Math.random()*15) + 's';
-    p.style.animationDelay = (-Math.random()*20) + 's';
-    container.appendChild(p);
+/* ════════════════════════════════════════════
+   PARTICLES
+════════════════════════════════════════════ */
+(()=>{
+  const el=document.getElementById('particles');
+  const cols=['#FF2D78','#00F5FF','#39FF14','#BF00FF','#FF6600','#FFE600','#FFD700','#FF8800'];
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div'); p.className='pt';
+    const c=cols[i%cols.length], sz=1+Math.random()*2.8;
+    p.style.cssText=`left:${Math.random()*100}vw;background:${c};
+      width:${sz}px;height:${sz}px;box-shadow:0 0 ${sz*3}px ${c};
+      --dx:${(Math.random()*250-125)}px;
+      animation-duration:${10+Math.random()*20}s;
+      animation-delay:${-Math.random()*28}s;`;
+    el.appendChild(p);
   }
 })();
 
-// ===== AUDIO ENGINE =====
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let audioCtx = null;
+/* ════════════════════════════════════════════
+   NEON BULBS
+════════════════════════════════════════════ */
+['bulbs1','bulbs2'].forEach(id=>{
+  const el=document.getElementById(id);
+  for(let i=0;i<20;i++){const d=document.createElement('div');d.className='nb';el.appendChild(d);}
+});
 
-function ensureAudioCtx() {
-  if (!audioCtx) audioCtx = new AudioCtx();
+/* ════════════════════════════════════════════
+   AUDIO — Luxury Alarm Engine
+════════════════════════════════════════════ */
+function getCtx(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
   return audioCtx;
 }
 
-function playLuxuryAlarm(type) {
-  const ctx = ensureAudioCtx();
-  if (ctx.state === 'suspended') ctx.resume();
+function playAlarm(type){
+  try{
+    const ctx=getCtx(), now=ctx.currentTime;
+    const isTu=(type==='tutup');
 
-  const now = ctx.currentTime;
-  const master = ctx.createGain();
-  master.gain.setValueAtTime(0, now);
-  master.gain.linearRampToValueAtTime(0.4, now + 0.05);
-  master.gain.exponentialRampToValueAtTime(0.001, now + 4);
-  master.connect(ctx.destination);
+    // Master chain
+    const master=ctx.createGain();
+    const comp=ctx.createDynamicsCompressor();
+    comp.threshold.value=-6; comp.ratio.value=5; comp.knee.value=6;
+    comp.connect(master); master.connect(ctx.destination);
+    master.gain.setValueAtTime(0,now);
+    master.gain.linearRampToValueAtTime(.65,now+.07);
+    master.gain.exponentialRampToValueAtTime(.001,now+7);
 
-  // Reverb via convolver trick: use multiple delayed oscillators
-  const freqs = type === 'tutup'
-    ? [220, 277.18, 329.63, 440] // Am chord descending
-    : [261.63, 329.63, 392, 523.25]; // C major ascending
+    // Reverb approximation — short echo
+    const echoDly=ctx.createDelay(.6), echoFb=ctx.createGain();
+    echoDly.delayTime.value=.22; echoFb.gain.value=.28;
+    echoDly.connect(echoFb); echoFb.connect(echoDly); echoDly.connect(comp);
 
-  freqs.forEach((freq, i) => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const delay = ctx.createDelay(0.5);
-    const feedback = ctx.createGain();
-    
-    delay.delayTime.value = 0.25;
-    feedback.gain.value = 0.3;
-    delay.connect(feedback);
-    feedback.connect(delay);
-    delay.connect(master);
+    // CHORD — betclose = dramatic descending Am, buka = triumphant C major
+    const chords=isTu
+      ? [{f:110,t:0,tp:'sawtooth'},{f:146.83,t:.13,tp:'sawtooth'},{f:164.81,t:.26,tp:'triangle'},
+         {f:220,t:.40,tp:'sawtooth'},{f:261.63,t:.54,tp:'triangle'}]
+      : [{f:261.63,t:0,tp:'triangle'},{f:329.63,t:.13,tp:'sine'},{f:392,t:.26,tp:'triangle'},
+         {f:523.25,t:.40,tp:'sine'},{f:659.25,t:.54,tp:'sine'}];
 
-    osc.type = i % 2 === 0 ? 'sine' : 'triangle';
-    osc.frequency.setValueAtTime(freq, now);
+    chords.forEach(({f,t,tp})=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.type=tp;
+      o.frequency.setValueAtTime(f, now+t);
+      if(isTu) o.frequency.exponentialRampToValueAtTime(f*.62, now+t+4);
+      const st=now+t;
+      g.gain.setValueAtTime(0,st); g.gain.linearRampToValueAtTime(.38,st+.07);
+      g.gain.exponentialRampToValueAtTime(.001,st+4.5);
+      o.connect(g); g.connect(echoDly); g.connect(comp);
+      o.start(st); o.stop(st+5);
+    });
 
-    const t = now + i * 0.18;
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.3, t + 0.08);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 2.5);
+    // BELLS — shimmer layer
+    const bells=isTu ? [880,1100,660,440] : [1046.5,1318.5,1568,2093];
+    bells.forEach((f,i)=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      const st=now+i*.2+.06;
+      o.type='sine'; o.frequency.setValueAtTime(f,st);
+      o.frequency.exponentialRampToValueAtTime(f*(isTu?.38:.62),st+3.5);
+      g.gain.setValueAtTime(0,st); g.gain.linearRampToValueAtTime(.2,st+.02);
+      g.gain.exponentialRampToValueAtTime(.001,st+3.8);
+      o.connect(g); g.connect(master);
+      o.start(st); o.stop(st+4);
+    });
 
-    osc.connect(gain);
-    gain.connect(delay);
-    gain.connect(master);
-    osc.start(t);
-    osc.stop(t + 3);
+    // SUB BASS PUNCH for betclose
+    if(isTu){
+      const s=ctx.createOscillator(), sg=ctx.createGain();
+      s.type='sine'; s.frequency.setValueAtTime(65,now);
+      s.frequency.exponentialRampToValueAtTime(28,now+.5);
+      sg.gain.setValueAtTime(0,now); sg.gain.linearRampToValueAtTime(.7,now+.03);
+      sg.gain.exponentialRampToValueAtTime(.001,now+.65);
+      s.connect(sg); sg.connect(master); s.start(now); s.stop(now+.7);
+      // Second punch
+      const s2=ctx.createOscillator(), sg2=ctx.createGain();
+      s2.type='sine'; s2.frequency.setValueAtTime(55,now+.4);
+      s2.frequency.exponentialRampToValueAtTime(22,now+.9);
+      sg2.gain.setValueAtTime(0,now+.4); sg2.gain.linearRampToValueAtTime(.5,now+.43);
+      sg2.gain.exponentialRampToValueAtTime(.001,now+1.0);
+      s2.connect(sg2); sg2.connect(master); s2.start(now+.4); s2.stop(now+1.1);
+    }
+  }catch(e){console.warn('Audio err:',e);}
+}
+
+/* ════════════════════════════════════════════
+   BROWSER NOTIFICATION
+════════════════════════════════════════════ */
+let notifPerm=Notification.permission;
+if(notifPerm==='granted') document.getElementById('perm-banner').style.display='none';
+
+function reqPerm(){
+  Notification.requestPermission().then(p=>{
+    notifPerm=p;
+    if(p==='granted'){
+      document.getElementById('perm-banner').style.display='none';
+      new Notification('✅ Lottery Alarm Aktif!',{body:'Notifikasi betclose akan tampil otomatis.',icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎰</text></svg>'});
+    }
+  });
+  getCtx();
+}
+
+function sendBrowserNotif(name,time,type){
+  if(notifPerm!=='granted') return;
+  const isTu=(type==='tutup');
+  try{
+    const n=new Notification(
+      isTu ? `⛔ BETCLOSE: ${name}` : `✅ BUKA: ${name}`,
+      {
+        body: isTu ? `🔴 Bet DITUTUP pukul ${time} WIB — segera pasang!` : `🟢 Pasaran BUKA pukul ${time} WIB`,
+        icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎰</text></svg>',
+        tag:name+type, requireInteraction:true, renotify:true
+      }
+    );
+    n.onclick=()=>{window.focus();dismissAlarm();n.close();};
+    setTimeout(()=>n.close(),25000);
+  }catch(e){console.warn(e);}
+}
+
+/* ════════════════════════════════════════════
+   TITLE BLINK (visible in taskbar)
+════════════════════════════════════════════ */
+function startBlink(name,type){
+  if(titleT) return;
+  const msgs=[type==='tutup'?`⛔ BETCLOSE: ${name}`:`✅ BUKA: ${name}`,'🔔 LOTTERY ALARM'];
+  let i=0; titleT=setInterval(()=>{ document.title=msgs[i++%msgs.length]; },800);
+}
+function stopBlink(){
+  if(titleT){clearInterval(titleT);titleT=null;}
+  document.title=ORIG_TITLE;
+}
+
+/* ════════════════════════════════════════════
+   TRIGGER ALARM
+════════════════════════════════════════════ */
+function triggerAlarm(m,type){
+  if(!alarmON) return;
+  const isTu=(type==='tutup'), time=m[type==='tutup'?'tu':'bk'];
+
+  // Update overlay
+  document.getElementById('n-eyebrow').textContent = isTu ? '⛔  BETCLOSE — BET DITUTUP  ⛔' : '✅  PASARAN BUKA  ✅';
+  document.getElementById('n-icon').textContent    = isTu ? '🚨' : '🎉';
+  document.getElementById('n-name').textContent    = m.n;
+  const nt=document.getElementById('n-time');
+  nt.textContent=time; nt.className='n-time '+(isTu?'tutup':'buka');
+  const nb=document.getElementById('n-badge');
+  nb.textContent=isTu?'⛔  BETCLOSE / TUTUP':'✅  BUKA'; nb.className='n-badge '+(isTu?'tutup':'buka');
+  document.getElementById('n-days').textContent=m.d;
+  document.getElementById('notif-box').className='notif-box type-'+(isTu?'tutup':'buka');
+  document.getElementById('notif-overlay').classList.add('show');
+
+  // Screen edge flash
+  const sf=document.getElementById('sflash');
+  sf.className=''; requestAnimationFrame(()=>{ sf.className=isTu?'red':'grn'; });
+  setTimeout(()=>sf.className='',2600);
+
+  // Audio
+  playAlarm(type);
+
+  // Browser notification (tab hidden)
+  sendBrowserNotif(m.n,time,type);
+
+  // Title blink
+  startBlink(m.n,type);
+
+  // Flash the card
+  document.querySelectorAll('.card').forEach(c=>{
+    if(c.dataset.name===m.n){
+      c.classList.add('bc-flash');
+      setTimeout(()=>c.classList.remove('bc-flash'),3800);
+    }
   });
 
-  // Bell shimmer
-  const shimFreqs = type === 'tutup' ? [880, 1100] : [1046, 1318];
-  shimFreqs.forEach((freq, i) => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const t = now + i * 0.3 + 0.1;
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, t);
-    osc.frequency.exponentialRampToValueAtTime(freq * 0.5, t + 1.5);
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.15, t + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 2);
-    osc.connect(gain);
-    gain.connect(master);
-    osc.start(t);
-    osc.stop(t + 2.5);
-  });
+  // Auto-dismiss after 14s
+  if(autoT) clearTimeout(autoT);
+  autoT=setTimeout(dismissAlarm,14000);
 }
 
-// ===== CLOCK =====
-const dayNames = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-const monthNames = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-
-function getNow() {
-  const now = new Date();
-  return {
-    h: now.getHours(), m: now.getMinutes(), s: now.getSeconds(),
-    hhmm: String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0'),
-    dayIdx: now.getDay(),
-    full: now
-  };
+function dismissAlarm(){
+  document.getElementById('notif-overlay').classList.remove('show');
+  stopBlink();
+  if(autoT){clearTimeout(autoT);autoT=null;}
 }
 
-function pad(n){ return String(n).padStart(2,'0'); }
-
-function updateClock() {
-  const t = getNow();
-  document.getElementById('live-clock').textContent = `${pad(t.h)}:${pad(t.m)}:${pad(t.s)}`;
-  document.getElementById('live-date').textContent =
-    `${dayNames[t.dayIdx]}, ${t.full.getDate()} ${monthNames[t.full.getMonth()]} ${t.full.getFullYear()}`;
+/* ════════════════════════════════════════════
+   CLOCK & TIME UTILS
+════════════════════════════════════════════ */
+const DY=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const MN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+const p2=n=>String(n).padStart(2,'0');
+function getNow(){const d=new Date();return{h:d.getHours(),m:d.getMinutes(),s:d.getSeconds(),wd:d.getDay(),date:d};}
+function toMin(s){if(!s)return-1;const[h,m]=s.split(':').map(Number);return h*60+m;}
+function secStr(s){
+  if(s<0)return'—';
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;
+  return h>0?`${p2(h)}:${p2(m)}:${p2(ss)}`:`${p2(m)}:${p2(ss)}`;
+}
+function updateClock(){
+  const t=getNow();
+  document.getElementById('clk').textContent=`${p2(t.h)}:${p2(t.m)}:${p2(t.s)}`;
+  document.getElementById('clk-date').textContent=`${DY[t.wd]}, ${t.date.getDate()} ${MN[t.date.getMonth()]} ${t.date.getFullYear()}`;
 }
 
-// ===== TIME UTILS =====
-function timeToMinutes(str) {
-  if (!str) return -1;
-  const [h, m] = str.split(':').map(Number);
-  return h * 60 + m;
-}
-
-function minutesToHHMM(mins) {
-  const h = Math.floor(mins / 60) % 24;
-  const m = mins % 60;
-  return `${pad(h)}:${pad(m)}`;
-}
-
-function secondsToCountdown(secs) {
-  if (secs < 0) return '—';
-  const h = Math.floor(secs / 3600);
-  const m = Math.floor((secs % 3600) / 60);
-  const s = secs % 60;
-  return h > 0 ? `${pad(h)}h ${pad(m)}m ${pad(s)}s` : `${pad(m)}m ${pad(s)}s`;
-}
-
-function getMarketStatus(m, nowMins, nowSec) {
-  if (m.hokidraw) return 'hokidraw';
-  const tutupMins = timeToMinutes(m.tutup);
-  const bukaMins = timeToMinutes(m.buka);
-  const delta = nowSec / 60; // fractional minutes
-
-  const nowFrac = nowMins + delta;
-
-  if (nowFrac >= tutupMins && nowFrac < bukaMins) return 'tutup'; // closed window
-  if (nowFrac >= bukaMins && nowFrac < bukaMins + 60) return 'buka'; // open window (60min)
-  if (tutupMins > nowFrac && tutupMins - nowFrac <= 15) return 'upcoming'; // 15 min warning
-  if (bukaMins > nowFrac && bukaMins - nowFrac <= 10) return 'upcoming';
-  // if past midnight wrap, treat open phase as default
-  return nowFrac > bukaMins ? 'buka' : 'upcoming';
-}
-
-// ===== ALARM CHECK =====
-function checkAlarms() {
-  if (!alarmEnabled) return;
-  const t = getNow();
-  const nowHHMM = `${pad(t.h)}:${pad(t.m)}`;
-
-  markets.forEach(m => {
-    if (m.hokidraw) return;
-
-    ['tutup','buka'].forEach(type => {
-      if (!m[type]) return;
-      const key = `${m.name}-${type}-${nowHHMM}`;
-      if (m[type] === nowHHMM && t.s === 0 && !firedAlarms.has(key)) {
-        firedAlarms.add(key);
-        triggerAlarm(m.name, m[type], type);
+/* ════════════════════════════════════════════
+   ALARM CHECK (fires at second 0)
+════════════════════════════════════════════ */
+function checkAlarms(){
+  if(!alarmON) return;
+  const t=getNow(); if(t.s!==0) return;
+  const hhmm=`${p2(t.h)}:${p2(t.m)}`;
+  M.forEach(m=>{
+    if(m.hoki) return;
+    [{k:'tu',tp:'tutup'},{k:'bk',tp:'buka'}].forEach(({k,tp})=>{
+      if(!m[k]) return;
+      if(m[k]===hhmm){
+        const key=`${m.n}|${k}|${hhmm}`;
+        if(!fired.has(key)){
+          fired.add(key);
+          triggerAlarm(m,tp);
+          setTimeout(()=>fired.delete(key),180000);
+        }
       }
     });
   });
-
-  // Clean old fired alarms (older than 2 min)
-  if (t.s === 0 && t.m % 5 === 0) firedAlarms.clear();
 }
 
-function triggerAlarm(name, time, type) {
-  document.getElementById('alarm-name').textContent = name;
-  document.getElementById('alarm-time').textContent = time;
-  const badge = document.getElementById('alarm-type');
-  badge.textContent = type === 'tutup' ? '⚑ TUTUP' : '✓ BUKA';
-  badge.className = 'alarm-banner-type ' + type;
-  document.getElementById('alarm-banner').style.display = 'block';
-  playLuxuryAlarm(type);
-  // Auto dismiss after 8s
-  setTimeout(dismissAlarm, 8000);
-}
-
-function dismissAlarm() {
-  document.getElementById('alarm-banner').style.display = 'none';
-}
-
-// ===== NEXT ALARM =====
-function findNextAlarm() {
-  const t = getNow();
-  const nowMins = t.h * 60 + t.m;
-  const nowSec = t.s;
-  const nowFrac = nowMins + nowSec/60;
-
-  let best = null, bestMins = Infinity;
-
-  markets.forEach(m => {
-    if (m.hokidraw) return;
-    ['tutup','buka'].forEach(type => {
-      if (!m[type]) return;
-      let mins = timeToMinutes(m[type]);
-      if (mins <= nowFrac) mins += 1440; // next day
-      const diff = mins - nowFrac;
-      if (diff < bestMins) { bestMins = diff; best = { name: m.name, time: m[type], type }; }
+/* ════════════════════════════════════════════
+   NEXT ALARM
+════════════════════════════════════════════ */
+function findNext(){
+  const t=getNow(), nowF=t.h*60+t.m+t.s/60;
+  let best=null, bestD=Infinity;
+  M.forEach(m=>{
+    if(m.hoki) return;
+    [{k:'tu',tp:'tutup'},{k:'bk',tp:'buka'}].forEach(({k,tp})=>{
+      if(!m[k]) return;
+      let d=toMin(m[k])-nowF; if(d<=0) d+=1440;
+      if(d<bestD){bestD=d;best={m,type:tp,time:m[k],secs:Math.round(d*60)};}
     });
   });
-
-  return best ? { ...best, secsLeft: Math.round(bestMins * 60) } : null;
+  return best;
+}
+function updateNext(){
+  const nx=findNext(); if(!nx) return;
+  const isTu=(nx.type==='tutup');
+  document.getElementById('next-info').textContent=
+    `${isTu?'⛔':'✅'} ${nx.m.n} — ${isTu?'BETCLOSE':'BUKA'} ${nx.time} WIB`;
+  document.getElementById('next-cd').textContent=secStr(nx.secs);
 }
 
-function updateNextAlarm() {
-  const next = findNextAlarm();
-  if (!next) return;
-  document.getElementById('next-alarm-info').textContent =
-    `${next.name} — ${next.type === 'tutup' ? 'TUTUP' : 'BUKA'} ${next.time}`;
-  document.getElementById('next-alarm-countdown').textContent = secondsToCountdown(next.secsLeft);
+/* ════════════════════════════════════════════
+   COMPUTE STATUS
+════════════════════════════════════════════ */
+function computeSt(m,nowF){
+  if(m.hoki) return{cls:'c-hokidraw',bc:'bk',bt:'24x / Hari'};
+  const tm=toMin(m.tu), bm=toMin(m.bk);
+  if(nowF>=tm && nowF<bm)         return{cls:'c-tutup',  bc:'tt',bt:'Betclose'};
+  if(tm>nowF  && tm-nowF<=15)     return{cls:'c-upcoming',bc:'up',bt:'Segera Tutup'};
+  if(nowF>=bm && nowF<bm+60)      return{cls:'c-buka',   bc:'bk',bt:'Buka'};
+  if(bm>nowF  && bm-nowF<=10)     return{cls:'c-upcoming',bc:'up',bt:'Segera Buka'};
+  return{cls:'c-buka',bc:'bk',bt:'Buka'};
 }
 
-// ===== STATS =====
-function updateStats(cards) {
-  let open=0, closed=0, holiday=0, upcoming=0;
-  cards.forEach(c => {
-    if (c.statusClass === 'status-buka' || c.statusClass === 'status-active') open++;
-    else if (c.statusClass === 'status-tutup') closed++;
-    else if (c.statusClass === 'status-libur') holiday++;
-    else if (c.statusClass === 'status-upcoming') upcoming++;
+/* ════════════════════════════════════════════
+   STATS
+════════════════════════════════════════════ */
+function updateStats(all){
+  let op=0,up=0,cl=0,hl=0;
+  all.forEach(x=>{
+    if(x.st.cls==='c-buka')op++;
+    else if(x.st.cls==='c-tutup')cl++;
+    else if(x.st.cls==='c-upcoming')up++;
+    if(x.hol)hl++;
   });
-  document.getElementById('stat-open').textContent = `${open} Buka`;
-  document.getElementById('stat-upcoming').textContent = `${upcoming} Segera`;
-  document.getElementById('stat-closed').textContent = `${closed} Tutup`;
-  document.getElementById('stat-holiday').textContent = `${holiday} Libur`;
-  document.getElementById('stat-total').textContent = `${markets.length} Total`;
+  document.getElementById('s-op').textContent=`${op} Buka`;
+  document.getElementById('s-up').textContent=`${up} Segera`;
+  document.getElementById('s-cl').textContent=`${cl} Betclose`;
+  document.getElementById('s-hl').textContent=`${hl} Libur`;
+  document.getElementById('s-tt').textContent=`${M.length} Total`;
 }
 
-// ===== RENDER =====
-function computeCards() {
-  const t = getNow();
-  const nowMins = t.h * 60 + t.m;
-  const nowSec = t.s;
-  const nowFrac = nowMins + nowSec/60;
-
-  return markets.map(m => {
-    let statusClass, badgeClass, badgeText;
-
-    if (m.hokidraw) {
-      statusClass = 'status-buka';
-      badgeClass = 'buka';
-      badgeText = '24x / Hari';
-    } else {
-      const tutupMins = timeToMinutes(m.tutup);
-      const bukaMins = timeToMinutes(m.buka);
-
-      // Between tutup and buka → closed window
-      if (nowFrac >= tutupMins && nowFrac < bukaMins) {
-        statusClass = 'status-tutup';
-        badgeClass = 'tutup';
-        badgeText = 'Tutup';
-      }
-      // Upcoming tutup (within 15 min)
-      else if (tutupMins > nowFrac && tutupMins - nowFrac <= 15) {
-        statusClass = 'status-upcoming';
-        badgeClass = 'upcoming';
-        badgeText = 'Segera Tutup';
-      }
-      // Just opened (within 60 min after buka)
-      else if (nowFrac >= bukaMins && nowFrac < bukaMins + 60) {
-        statusClass = 'status-buka';
-        badgeClass = 'buka';
-        badgeText = 'Buka';
-      }
-      // Upcoming buka
-      else if (bukaMins > nowFrac && bukaMins - nowFrac <= 10) {
-        statusClass = 'status-upcoming';
-        badgeClass = 'upcoming';
-        badgeText = 'Segera Buka';
-      }
-      // Default: open
-      else {
-        statusClass = 'status-buka';
-        badgeClass = 'buka';
-        badgeText = 'Buka';
-      }
+/* ════════════════════════════════════════════
+   BUILD ALL CARDS
+════════════════════════════════════════════ */
+function buildAll(){
+  const t=getNow(), nowF=t.h*60+t.m+t.s/60;
+  return M.map(m=>{
+    const st=computeSt(m,nowF);
+    let cdS=0,cdT='',cdFill=100;
+    if(!m.hoki){
+      const tm=toMin(m.tu), bm=toMin(m.bk); let nM,win;
+      if(st.cls==='c-tutup'){nM=bm<=nowF?bm+1440:bm;win=bm-tm;cdT='Buka';}
+      else{nM=tm<=nowF?tm+1440:tm;win=60;cdT='Betclose';}
+      const diff=nM-nowF;
+      cdS=Math.round(diff*60);
+      cdFill=Math.min(100,Math.max(0,(1-diff/Math.max(win,1))*100));
     }
-
-    // Countdown to next event
-    let countdownSecs = 0, countdownTarget = '', countdownFill = 100;
-    if (!m.hokidraw) {
-      const tutupMins = timeToMinutes(m.tutup);
-      const bukaMins = timeToMinutes(m.buka);
-      let nextMins, totalWindow;
-
-      if (statusClass === 'status-tutup') {
-        nextMins = bukaMins <= nowFrac ? bukaMins + 1440 : bukaMins;
-        totalWindow = timeToMinutes(m.buka) - timeToMinutes(m.tutup);
-        countdownTarget = 'Buka';
-      } else {
-        nextMins = tutupMins <= nowFrac ? tutupMins + 1440 : tutupMins;
-        totalWindow = 60;
-        countdownTarget = 'Tutup';
-      }
-
-      const diff = nextMins - nowFrac;
-      countdownSecs = Math.round(diff * 60);
-      countdownFill = Math.min(100, Math.max(0, (1 - diff / Math.max(totalWindow, 1)) * 100));
-    }
-
-    return { ...m, statusClass, badgeClass, badgeText, countdownSecs, countdownTarget, countdownFill };
+    return{...m,st,cdS,cdT,cdFill};
   });
 }
 
-function renderCards(cards) {
-  const grid = document.getElementById('cards-grid');
-  const q = searchText.toLowerCase();
+/* ════════════════════════════════════════════
+   CARD HTML
+════════════════════════════════════════════ */
+function cardHTML(c){
+  if(c.hoki) return`
+    <div class="ch">
+      <div><div class="cm">${c.n}</div><div class="cd">${c.d}</div></div>
+      <div class="badge bk">${c.st.bt}</div>
+    </div>
+    <div class="hokidraw-inner">✦ RESULT 24 KALI &nbsp;·&nbsp; BUKA 1 JAM SEKALI ✦</div>`;
 
-  const filtered = cards.filter(c => {
-    const nameMatch = c.name.toLowerCase().includes(q);
-    if (!nameMatch) return false;
-    if (currentFilter === 'all') return true;
-    if (currentFilter === 'open') return c.statusClass === 'status-buka' || c.statusClass === 'status-active';
-    if (currentFilter === 'closed') return c.statusClass === 'status-tutup';
-    if (currentFilter === 'upcoming') return c.statusClass === 'status-upcoming';
-    if (currentFilter === 'holiday') return c.holiday;
+  const fc=c.st.cls==='c-tutup'?'#FF3333':c.st.cls==='c-upcoming'?'#FFD700':'#39FF14';
+  const holExtra = c.hol
+    ? `<div style="height:80px;"></div>
+       <div class="lv">
+         <span class="lv-icon">🚫</span>
+         <div class="lv-title">⚑ HARI LIBUR ⚑</div>
+         <div class="lv-note">${c.hn||c.d}</div>
+       </div>` : '';
+
+  return`
+    <div class="ch">
+      <div>
+        <div class="cm">${c.n}</div>
+        <div class="cd">${c.d}</div>
+      </div>
+      <div class="badge ${c.st.bc}${c.hol?' lb':''}">${c.hol?'🚫 Libur':c.st.bt}</div>
+    </div>
+    <div class="trow">
+      <div class="tblk tt-t">
+        <div class="tlbl">⛔ Betclose</div>
+        <div class="tval">${c.tu||'—'}</div>
+      </div>
+      <div class="tblk tt-b">
+        <div class="tlbl">✅ Buka</div>
+        <div class="tval">${c.bk||'—'}</div>
+      </div>
+    </div>
+    <div class="pbar">
+      <div class="pfill" style="width:${c.cdFill}%;background:${fc};box-shadow:0 0 10px ${fc}66;"></div>
+    </div>
+    <div class="pct">${c.cdT==='Betclose'?'⛔ Betclose':'✅ Buka'}: <span>${secStr(c.cdS)}</span></div>
+    ${holExtra}`;
+}
+
+/* ════════════════════════════════════════════
+   RENDER
+════════════════════════════════════════════ */
+function renderAll(all){
+  const grid=document.getElementById('grid');
+  const q=srch.toLowerCase();
+  const list=all.filter(c=>{
+    if(!c.n.toLowerCase().includes(q)) return false;
+    if(curF==='all') return true;
+    if(curF==='open') return c.st.cls==='c-buka';
+    if(curF==='tutup') return c.st.cls==='c-tutup';
+    if(curF==='upcoming') return c.st.cls==='c-upcoming';
+    if(curF==='holiday') return c.hol;
     return true;
   });
+  document.getElementById('show-cnt').textContent=
+    list.length===all.length?`${all.length} Pasaran`:`${list.length} dari ${all.length}`;
+  updateStats(all);
 
-  document.getElementById('showing-count').textContent =
-    filtered.length === cards.length ? `${cards.length} pasaran` : `${filtered.length} dari ${cards.length}`;
-
-  updateStats(cards);
-
-  // Render efficiently
-  const existing = grid.querySelectorAll('.market-card');
-  if (existing.length !== filtered.length) {
-    grid.innerHTML = '';
-    filtered.forEach(c => grid.appendChild(createCard(c)));
+  const ex=grid.querySelectorAll('.card');
+  if(ex.length!==list.length){
+    grid.innerHTML='';
+    list.forEach(c=>{
+      const d=document.createElement('div');
+      const holCls=c.hol?' c-libur':'';
+      d.className=`card ${c.st.cls}${c.hoki?' c-hokidraw':''}${holCls}`;
+      d.dataset.name=c.n; d.innerHTML=cardHTML(c); grid.appendChild(d);
+    });
   } else {
-    filtered.forEach((c, i) => updateCard(existing[i], c));
+    list.forEach((c,i)=>{
+      const holCls=c.hol?' c-libur':'';
+      ex[i].className=`card ${c.st.cls}${c.hoki?' c-hokidraw':''}${holCls}`;
+      ex[i].dataset.name=c.n; ex[i].innerHTML=cardHTML(c);
+    });
   }
 }
 
-function createCard(c) {
-  const div = document.createElement('div');
-  div.className = `market-card ${c.statusClass}${c.hokidraw?' hokidraw':''}`;
-  div.innerHTML = cardHTML(c);
-  return div;
+/* ════════════════════════════════════════════
+   CONTROLS
+════════════════════════════════════════════ */
+function toggleAlarm(){
+  alarmON=!alarmON;
+  const btn=document.getElementById('alarm-btn');
+  btn.textContent=alarmON?'🔔  ALARM ON':'🔕  ALARM OFF';
+  btn.className='btn-alarm '+(alarmON?'on':'off');
+  getCtx();
 }
-
-function updateCard(el, c) {
-  el.className = `market-card ${c.statusClass}${c.hokidraw?' hokidraw':''}`;
-  el.innerHTML = cardHTML(c);
+function setF(f,el){
+  curF=f;
+  document.querySelectorAll('.ft').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act'); tick();
 }
+function doFilter(){srch=document.getElementById('srch').value;tick();}
 
-function cardHTML(c) {
-  if (c.hokidraw) {
-    return `
-      <div class="card-header">
-        <div>
-          <div class="market-name">${c.name}</div>
-          <div class="market-days">${c.days}</div>
-        </div>
-        <div class="status-badge buka">${c.badgeText}</div>
-      </div>
-      <div style="font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(191,0,255,0.8);text-align:center;padding:10px;background:rgba(191,0,255,0.06);border-radius:8px;border:1px solid rgba(191,0,255,0.15);">
-        ✦ RESULT 24 KALI &nbsp;·&nbsp; BUKA 1 JAM SEKALI ✦
-      </div>`;
-  }
-
-  const fillColor = c.statusClass === 'status-tutup' ? '#FF3333' :
-                    c.statusClass === 'status-upcoming' ? '#FFD700' : '#39FF14';
-
-  return `
-    <div class="card-header">
-      <div>
-        <div class="market-name">${c.name}</div>
-        <div class="market-days">${c.days}</div>
-      </div>
-      <div class="status-badge ${c.badgeClass}">${c.badgeText}</div>
-    </div>
-    <div class="times-row">
-      <div class="time-block tutup-time">
-        <div class="time-label">Tutup</div>
-        <div class="time-value">${c.tutup || '—'}</div>
-      </div>
-      <div class="time-block buka-time">
-        <div class="time-label">Buka</div>
-        <div class="time-value">${c.buka || '—'}</div>
-      </div>
-    </div>
-    <div class="countdown-bar">
-      <div class="countdown-fill" style="width:${c.countdownFill}%;background:${fillColor};box-shadow:0 0 6px ${fillColor}40;"></div>
-    </div>
-    <div class="countdown-text">${c.countdownTarget}: <span>${secondsToCountdown(c.countdownSecs)}</span></div>
-    ${c.holiday ? `<div class="libur-overlay"><div class="libur-text">⚑ ${c.holidayNote || 'Hari Libur'}</div></div>` : ''}
-  `;
+/* ════════════════════════════════════════════
+   MAIN TICK
+════════════════════════════════════════════ */
+function tick(){
+  updateClock(); checkAlarms(); updateNext();
+  const all=buildAll(); renderAll(all);
 }
-
-// ===== CONTROLS =====
-function toggleAlarm() {
-  alarmEnabled = !alarmEnabled;
-  const btn = document.getElementById('alarm-btn');
-  btn.textContent = alarmEnabled ? '🔔 Alarm ON' : '🔕 Alarm OFF';
-  btn.className = 'alarm-toggle-btn' + (alarmEnabled ? ' active' : '');
-  ensureAudioCtx(); // unlock audio on user interaction
-}
-
-function setFilter(f, el) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  tick();
-}
-
-function filterCards() {
-  searchText = document.getElementById('search-input').value;
-  tick();
-}
-
-// ===== TICK =====
-let lastMinute = -1;
-
-function tick() {
-  const t = getNow();
-  updateClock();
-  checkAlarms();
-  updateNextAlarm();
-
-  // Re-render cards every second
-  const cards = computeCards();
-  renderCards(cards);
-}
-
-// Initial render
 tick();
-setInterval(tick, 1000);
-
-// Unlock audio context on first interaction
-document.addEventListener('click', () => { ensureAudioCtx(); }, { once: true });
+setInterval(tick,1000);
+document.addEventListener('pointerdown',()=>getCtx(),{once:true});
+document.addEventListener('keydown',()=>getCtx(),{once:true});
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) stopBlink(); });
 </script>
 </body>
 </html>
