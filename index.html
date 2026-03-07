@@ -1118,14 +1118,18 @@ document.addEventListener('keydown', e => {
 })();
 
 /* ══════════════════════════════════════════════════════════════════
-   LUXURY AUDIO ENGINE
+   KALIMBA AUDIO ENGINE
    
-   playAlarm  → Grand Cathedral Bell + Orchestral Strike
-                Suara lonceng katedral besar dengan reverb panjang,
-                diikuti low brass impact dan string swell mewah.
+   Kalimba (thumb piano) menghasilkan suara dengan karakter:
+   - Attack sangat cepat (dipetik ibu jari)
+   - Decay panjang dengan shimmer alami
+   - Inharmonic partials yang khas (bukan integer ratios)
+   - Warm metallic tone dengan body resonance kayu
    
-   playHoki   → Royal Fanfare + Cascading Harp + Choir Rise
-                Fanfare brass ascending + harp glissando + choir pad
+   playAlarm → Melodi kalimba pentatonic minor yang sendu & merdu
+               Urutan: motif turun perlahan dengan reverb ruangan
+   playHoki  → Melodi kalimba pentatonic major ascending — ceria & menenangkan
+               Arpeggio naik + echo ping-pong stereo
 ══════════════════════════════════════════════════════════════════ */
 let AC=null,rBuf=null,auUnlocked=false;
 
@@ -1149,309 +1153,286 @@ function unlockAudio(){
   document.addEventListener(ev,unlockAudio,{once:false,passive:true});
 });
 
-/* ── Luxury Hall Reverb (8 saniyeye kadar uzun kuyruk) ── */
+/* ── Room Reverb — ruangan kecil hangat, bukan hall besar ── */
 function buildRev(ac){
   if(rBuf)return;
-  const sr=ac.sampleRate, len=Math.floor(sr*8);
+  const sr=ac.sampleRate, len=Math.floor(sr*3.2);
   rBuf=ac.createBuffer(2,len,sr);
   for(let ch=0;ch<2;ch++){
     const d=rBuf.getChannelData(ch);
-    // Early reflections — grand hall
-    const er=[[.011,.82],[.023,.68],[.041,.58],[.063,.47],[.089,.38],[.112,.30],[.148,.22],[.195,.16],[.245,.11]];
+    // Early reflections — ruangan kayu kecil
+    const er=[
+      [.006,.70],[.013,.55],[.021,.45],[.034,.36],
+      [.049,.28],[.071,.20],[.098,.14],[.135,.09],[.185,.06]
+    ];
     for(let i=0;i<len;i++){
       const t=i/sr;
-      let v=(Math.random()*2-1)*Math.exp(-t*0.38)*0.32;
-      if(i<sr*.015)v*=(i/(sr*.015));
+      let v=(Math.random()*2-1)*Math.exp(-t*1.8)*0.18;
+      if(i<sr*.004) v*=(i/(sr*.004));
       d[i]=v;
     }
     er.forEach(([dt,amp])=>{
       const di=Math.floor(dt*sr);
-      if(di<len) d[di]+=(Math.random()*2-1)*amp*(ch===0?1.0:0.88);
+      if(di<len) d[di]+=(Math.random()*2-1)*amp*(ch===0?1.0:0.92);
     });
-    // Comb filter diffusion
-    const cds=[Math.floor(sr*.0293),Math.floor(sr*.0379),Math.floor(sr*.0441)];
-    cds.forEach(cd=>{ for(let i=cd;i<len;i++) d[i]+=d[i-cd]*0.14; });
+    // Comb diffusion ringan
+    const cd=Math.floor(sr*.0181);
+    for(let i=cd;i<len;i++) d[i]+=d[i-cd]*0.12;
   }
 }
 
-/* ── Master Bus: Warmth + Air + Limiting ── */
+/* ── Master Bus: warm kalimba EQ ── */
 function mBus(ac){
-  const lo=ac.createBiquadFilter(); lo.type='lowshelf'; lo.frequency.value=120; lo.gain.value=3.5;
-  const warm=ac.createBiquadFilter(); warm.type='peaking'; warm.frequency.value=280; warm.Q.value=0.8; warm.gain.value=2.8;
-  const air=ac.createBiquadFilter(); air.type='highshelf'; air.frequency.value=8000; air.gain.value=4.2;
-  const comp=ac.createDynamicsCompressor(); comp.threshold.value=-12; comp.knee.value=8; comp.ratio.value=3; comp.attack.value=.003; comp.release.value=.18;
-  const lim=ac.createDynamicsCompressor(); lim.threshold.value=-.5; lim.knee.value=0; lim.ratio.value=20; lim.attack.value=.001; lim.release.value=.05;
-  const out=ac.createGain(); out.gain.value=0.82;
-  lo.connect(warm); warm.connect(air); air.connect(comp); comp.connect(lim); lim.connect(out); out.connect(ac.destination);
+  // High-mid boost untuk shimmer metalik kalimba
+  const mid=ac.createBiquadFilter(); mid.type='peaking'; mid.frequency.value=1800; mid.Q.value=1.4; mid.gain.value=3.2;
+  // Air sparkle atas
+  const air=ac.createBiquadFilter(); air.type='highshelf'; air.frequency.value=7000; air.gain.value=3.8;
+  // Low cut — kalimba tidak punya bass berat
+  const lo=ac.createBiquadFilter(); lo.type='highpass'; lo.frequency.value=180; lo.Q.value=0.6;
+  // Soft limiter
+  const lim=ac.createDynamicsCompressor(); lim.threshold.value=-3; lim.knee.value=4; lim.ratio.value=8; lim.attack.value=.002; lim.release.value=.12;
+  const out=ac.createGain(); out.gain.value=0.78;
+  lo.connect(mid); mid.connect(air); air.connect(lim); lim.connect(out); out.connect(ac.destination);
   return lo;
 }
 
-/* ── Reverb Send ── */
+/* ── Reverb send ── */
 function mkRev(ac,wet){
   if(!rBuf)buildRev(ac);
   const cv=ac.createConvolver(); cv.buffer=rBuf;
   const wG=ac.createGain(); wG.gain.value=wet;
-  const dG=ac.createGain(); dG.gain.value=1-wet*0.35;
+  const dG=ac.createGain(); dG.gain.value=1-wet*0.3;
   return{cv,wG,dG};
 }
 
-/* ── Satu tone bell dengan karakter mewah ── */
-function luxuryBell(ac,freq,amp,pan,startT,mb,rv){
-  // Bell terdiri dari 5 parsial dengan detuning khas lonceng besar
-  const partials=[
-    {r:1.000, a:1.00, decay:9.0},
-    {r:2.756, a:0.42, decay:5.5},
-    {r:5.404, a:0.22, decay:3.8},
-    {r:8.933, a:0.10, decay:2.4},
-    {r:13.67, a:0.05, decay:1.6},
+/* ══════════════════════════════════════════════════════════════
+   KALIMBA NOTE ENGINE
+   
+   Karakter fisik kalimba:
+   - Tine (bilah logam) dipetik → attack super cepat (~2ms)
+   - Partial 1 (fundamental): decay ~4-6 detik
+   - Partial 2 (× 2.76): inharmonic, decay ~2.5 detik  
+   - Partial 3 (× 5.4): sangat cepat hilang, ~1.2 detik
+   - Body resonance kayu: tambahan warmth di frekuensi rendah
+   - Tiny metallic click saat dipetik
+══════════════════════════════════════════════════════════════ */
+function kalimbaTone(ac, freq, amp, pan, t, mb, rv){
+  const send = n => { n.connect(rv.wG); n.connect(rv.dG); rv.dG.connect(mb); };
+
+  // Inharmonic partials khas kalimba (hasil riset akustik)
+  const partials = [
+    { r:1.000,  a:1.00, dec:5.2, type:'sine'     },  // Fundamental — paling panjang
+    { r:2.033,  a:0.28, dec:2.8, type:'sine'     },  // Octave + slight sharp (khas tine)
+    { r:5.872,  a:0.10, dec:1.4, type:'sine'     },  // Upper partial — shimmer
+    { r:11.34,  a:0.04, dec:0.6, type:'sine'     },  // Sparkle
   ];
-  const send=n=>{n.connect(rv.wG); n.connect(rv.dG); rv.dG.connect(mb);};
-  partials.forEach(({r,a,decay})=>{
-    const osc=ac.createOscillator(), env=ac.createGain();
-    // Tambahan detune kecil untuk warmth
-    const detune=(Math.random()-0.5)*1.8;
-    osc.type='sine';
-    osc.frequency.setValueAtTime(freq*r+detune, startT);
-    // Bell transient — pitch drops sedikit
-    osc.frequency.exponentialRampToValueAtTime(freq*r*0.998, startT+0.08);
-    env.gain.setValueAtTime(0, startT);
-    env.gain.linearRampToValueAtTime(amp*a, startT+0.004);
-    env.gain.exponentialRampToValueAtTime(amp*a*0.6, startT+0.18);
-    env.gain.exponentialRampToValueAtTime(0.00001, startT+decay);
-    osc.connect(env);
+
+  partials.forEach(({r, a, dec, type}) => {
+    const osc = ac.createOscillator();
+    const env = ac.createGain();
+    const filt = ac.createBiquadFilter();
+
+    osc.type = type;
+    // Kalimba pitch bends sedikit ke atas setelah dipetik (tine spring back)
+    osc.frequency.setValueAtTime(freq * r * 0.9985, t);
+    osc.frequency.exponentialRampToValueAtTime(freq * r, t + 0.015);
+
+    // Envelope: attack kilat, decay eksponensial panjang
+    env.gain.setValueAtTime(0, t);
+    env.gain.linearRampToValueAtTime(amp * a, t + 0.002);
+    env.gain.exponentialRampToValueAtTime(amp * a * 0.55, t + 0.08);
+    env.gain.exponentialRampToValueAtTime(0.00001, t + dec);
+
+    // Warm bandpass untuk body resonance
+    filt.type = 'peaking'; filt.frequency.value = freq * 0.85; filt.gain.value = 1.5; filt.Q.value = 2;
+
+    osc.connect(filt); filt.connect(env);
+
     if(ac.createStereoPanner){
-      const pn=ac.createStereoPanner(); pn.pan.value=Math.max(-1,Math.min(1,pan));
+      const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-1, Math.min(1, pan));
       env.connect(pn); send(pn);
     } else send(env);
-    osc.start(startT); osc.stop(startT+decay+0.5);
+
+    osc.start(t); osc.stop(t + dec + 0.3);
   });
-  // Attack transient (metallic click untuk realisme)
-  const noise=ac.createBuffer(1,Math.floor(ac.sampleRate*0.04),ac.sampleRate);
-  const nd=noise.getChannelData(0);
-  for(let i=0;i<nd.length;i++) nd[i]=(Math.random()*2-1)*Math.exp(-i/(nd.length*0.1));
-  const ns=ac.createBufferSource(), bf=ac.createBiquadFilter(), ne=ac.createGain();
-  ns.buffer=noise; bf.type='bandpass'; bf.frequency.value=freq*3.2; bf.Q.value=3;
-  ne.gain.setValueAtTime(amp*0.18,startT); ne.gain.exponentialRampToValueAtTime(0.00001,startT+0.06);
-  ns.connect(bf); bf.connect(ne); send(ne);
-  ns.start(startT); ns.stop(startT+0.08);
+
+  // Metallic click — suara jari memetik tine (sangat singkat)
+  const clickLen = Math.floor(ac.sampleRate * 0.006);
+  const clickBuf = ac.createBuffer(1, clickLen, ac.sampleRate);
+  const cd = clickBuf.getChannelData(0);
+  for(let i = 0; i < clickLen; i++)
+    cd[i] = (Math.random()*2-1) * Math.exp(-i/(clickLen*0.08));
+  const cs = ac.createBufferSource();
+  const cf = ac.createBiquadFilter(); cf.type='bandpass'; cf.frequency.value=freq*4.5; cf.Q.value=4;
+  const ce = ac.createGain(); ce.gain.setValueAtTime(amp*0.12, t); ce.gain.exponentialRampToValueAtTime(0.00001, t+0.012);
+  cs.buffer = clickBuf; cs.connect(cf); cf.connect(ce); send(ce);
+  cs.start(t); cs.stop(t+0.02);
+
+  // Body resonance — wooden box warmth
+  const body = ac.createOscillator(); const bodyE = ac.createGain();
+  body.type = 'triangle'; body.frequency.value = freq * 0.498; // sub-octave hangat
+  bodyE.gain.setValueAtTime(0, t); bodyE.gain.linearRampToValueAtTime(amp*0.06, t+0.005);
+  bodyE.gain.exponentialRampToValueAtTime(0.00001, t+0.45);
+  body.connect(bodyE); send(bodyE);
+  body.start(t); body.stop(t+0.6);
 }
 
-/* ── Low brass impact ── */
-function brassHit(ac,freq,amp,startT,mb,rv){
-  const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
-  [1,2,3,4].forEach((r,i)=>{
-    const o=ac.createOscillator(),e=ac.createGain();
-    o.type=i<2?'sawtooth':'square';
-    o.frequency.setValueAtTime(freq*r,startT);
-    o.frequency.linearRampToValueAtTime(freq*r*1.004,startT+0.12);
-    o.frequency.exponentialRampToValueAtTime(freq*r*0.995,startT+1.2);
-    const a=amp*[0.5,0.35,0.18,0.08][i];
-    e.gain.setValueAtTime(0,startT);
-    e.gain.linearRampToValueAtTime(a,startT+0.015);
-    e.gain.exponentialRampToValueAtTime(a*0.7,startT+0.3);
-    e.gain.exponentialRampToValueAtTime(0.00001,startT+2.8);
-    const filt=ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=freq*r*3.5; filt.Q.value=1.2;
-    o.connect(filt); filt.connect(e); send(e);
-    o.start(startT); o.stop(startT+3.2);
-  });
-}
-
-/* ── String swell pad ── */
-function stringSwell(ac,chords,startT,duration,amp,mb,rv){
-  const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
-  chords.forEach((freq,ci)=>{
-    // Tiga osilator per string note (unison detune)
-    [-0.18,0,0.18].forEach((detune,di)=>{
-      const o=ac.createOscillator(),e=ac.createGain(),vib=ac.createOscillator(),vibG=ac.createGain();
-      o.type='sawtooth'; o.frequency.setValueAtTime(freq+detune,startT);
-      vib.type='sine'; vib.frequency.value=5.2; vibG.gain.value=freq*0.003;
-      vib.connect(vibG); vibG.connect(o.frequency);
-      const filt=ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=freq*6; filt.Q.value=0.7;
-      const pan=ac.createStereoPanner?ac.createStereoPanner():null;
-      if(pan) pan.pan.value=(ci/chords.length-0.5)*0.5+(di-1)*0.12;
-      e.gain.setValueAtTime(0,startT);
-      e.gain.linearRampToValueAtTime(amp*0.055,startT+duration*0.25);
-      e.gain.setValueAtTime(amp*0.055,startT+duration*0.7);
-      e.gain.exponentialRampToValueAtTime(0.00001,startT+duration);
-      o.connect(filt); filt.connect(e);
-      if(pan){e.connect(pan);send(pan);}else send(e);
-      [o,vib].forEach(x=>{x.start(startT);x.stop(startT+duration+0.3);});
-    });
-  });
-}
-
-/* ── Harp glissando ── */
-function harpGliss(ac,baseFreq,notes,startT,mb,rv){
-  const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
-  notes.forEach((semi,i)=>{
-    const freq=baseFreq*Math.pow(2,semi/12);
-    const t=startT+i*0.055;
-    const o1=ac.createOscillator(),o2=ac.createOscillator(),env=ac.createGain();
-    o1.type='sine'; o1.frequency.value=freq;
-    o2.type='triangle'; o2.frequency.value=freq*2.003;
-    const g1=ac.createGain(),g2=ac.createGain();
-    g1.gain.value=0.6; g2.gain.value=0.22;
-    env.gain.setValueAtTime(0,t);
-    env.gain.linearRampToValueAtTime(0.065,t+0.003);
-    env.gain.exponentialRampToValueAtTime(0.028,t+0.4);
-    env.gain.exponentialRampToValueAtTime(0.00001,t+3.5);
-    o1.connect(g1); o2.connect(g2); g1.connect(env); g2.connect(env); send(env);
-    [o1,o2].forEach(o=>{o.start(t);o.stop(t+4);});
-  });
-}
-
-/* ── Choir pad ── */
-function choirRise(ac,freqs,startT,duration,mb,rv){
-  const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
-  freqs.forEach((f,fi)=>{
-    const o=ac.createOscillator(),e=ac.createGain(),filt=ac.createBiquadFilter();
-    o.type='sine'; o.frequency.setValueAtTime(f*0.985,startT);
-    o.frequency.linearRampToValueAtTime(f,startT+duration*0.5);
-    filt.type='bandpass'; filt.frequency.value=f*1.6; filt.Q.value=3;
-    e.gain.setValueAtTime(0,startT);
-    e.gain.linearRampToValueAtTime(0.048,startT+duration*0.3);
-    e.gain.setValueAtTime(0.048,startT+duration*0.75);
-    e.gain.exponentialRampToValueAtTime(0.00001,startT+duration);
-    const pn=ac.createStereoPanner?ac.createStereoPanner():null;
-    if(pn)pn.pan.value=(fi/freqs.length-0.5)*0.6;
-    o.connect(filt); filt.connect(e);
-    if(pn){e.connect(pn);send(pn);}else send(e);
-    o.start(startT); o.stop(startT+duration+0.5);
-  });
+/* ── Ping-pong delay untuk efek stereo kalimba ── */
+function pingPongDelay(ac, mb, delayTime, feedback, wet){
+  const dL=ac.createDelay(1.0), dR=ac.createDelay(1.0);
+  const fL=ac.createGain(), fR=ac.createGain();
+  const pL=ac.createStereoPanner?ac.createStereoPanner():null;
+  const pR=ac.createStereoPanner?ac.createStereoPanner():null;
+  dL.delayTime.value=delayTime; dR.delayTime.value=delayTime*1.5;
+  fL.gain.value=feedback; fR.gain.value=feedback*0.8;
+  const wG=ac.createGain(); wG.gain.value=wet;
+  if(pL){pL.pan.value=-0.7; pR.pan.value=0.7;}
+  dL.connect(fL); fL.connect(dR);
+  dR.connect(fR); fR.connect(dL);
+  if(pL){dL.connect(pL);dR.connect(pR);pL.connect(wG);pR.connect(wG);}
+  else{dL.connect(wG);dR.connect(wG);}
+  wG.connect(mb);
+  return dL; // input node
 }
 
 /* ══════════════════════════════════════════════════════════════
-   PLAY ALARM — Grand Cathedral Bell Sequence
+   PLAY ALARM — Kalimba Melodi Sendu & Merdu
    
-   Urutan: Bong... Bong... Bong... Bong...
-   Lonceng besar (Eb3, C3, D3, Bb2) dengan reverb hall panjang
-   + Low brass impact di setiap pukulan
-   + String swell di akhir
+   Tangga nada: D minor pentatonic (D E F A C)
+   Motif: turun perlahan — terasa seperti pengingat lembut
+   Pola: intro note → melodi 8 nada → resolution
+   Dengan ping-pong delay & room reverb
 ══════════════════════════════════════════════════════════════ */
 function playAlarm(){
   try{
     const ac=getAC(); buildRev(ac);
-    const mb=mBus(ac), rv=mkRev(ac,0.72);
+    const mb=mBus(ac), rv=mkRev(ac,0.55);
     rv.cv.connect(mb); rv.wG.connect(rv.cv);
-    const t0=ac.currentTime+0.06;
 
-    // Urutan lonceng katedral — 4 pukulan agung
-    const bellSeq=[
-      {freq:155.56, pan:-0.3, t:0.0},    // Eb3 — dalam, berat
-      {freq:130.81, pan: 0.2, t:2.2},    // C3  — lebih dalam
-      {freq:146.83, pan:-0.1, t:4.4},    // D3
-      {freq:116.54, pan: 0.1, t:6.6},    // Bb2 — paling dalam
+    // Ping-pong delay — efek echo stereo indah
+    const ppd=pingPongDelay(ac,mb,0.28,0.38,0.30);
+
+    const sendPP = n => { n.connect(rv.wG); n.connect(rv.dG); rv.dG.connect(mb); n.connect(ppd); };
+    const sendDirect = n => { n.connect(rv.wG); n.connect(rv.dG); rv.dG.connect(mb); };
+
+    const t0 = ac.currentTime + 0.08;
+
+    // D minor pentatonic scale — frekuensi dalam Hz
+    // D4=293.66, E4=329.63, F4=349.23, A4=440.00, C5=523.25
+    // D5=587.33, F5=698.46, A5=880.00
+    const notes = [
+      // [freq, pan, timing, amp]  — motif pembuka, dari atas turun
+      [880.00,  0.0,  0.00, 0.18],  // A5 — tinggi, lembut
+      [587.33, -0.3,  0.42, 0.20],  // D5
+      [523.25,  0.3,  0.80, 0.22],  // C5
+      [440.00, -0.2,  1.18, 0.24],  // A4
+      [349.23,  0.2,  1.62, 0.24],  // F4 — tengah
+      [329.63, -0.3,  2.10, 0.22],  // E4
+      [293.66,  0.0,  2.62, 0.26],  // D4 — resolusi ke root
+      // Jeda sejenak, lalu tiga nada akhir penutup
+      [440.00, -0.2,  3.50, 0.18],  // A4
+      [349.23,  0.2,  3.88, 0.16],  // F4
+      [293.66,  0.0,  4.32, 0.22],  // D4 — final, paling lama
     ];
 
-    bellSeq.forEach(({freq,pan,t})=>{
-      const tt=t0+t;
-      luxuryBell(ac,freq,0.26,pan,tt,mb,rv);
-      // Oktaf atas (lebih lembut)
-      luxuryBell(ac,freq*2,0.10,pan*-0.5,tt+0.004,mb,rv);
-      // Brass impact bersamaan dengan lonceng
-      brassHit(ac,freq*0.5,0.07,tt+0.02,mb,rv);
+    notes.forEach(([freq, pan, dt, amp], i) => {
+      const t = t0 + dt;
+      // Note terakhir melalui ping-pong delay untuk efek fadeout indah
+      if(i >= 7) kalimbaTone(ac, freq, amp, pan, t, mb, {wG:{connect:n=>sendPP(n)}, dG:{connect:()=>{}}});
+      else        kalimbaTone(ac, freq, amp, pan, t, mb, rv);
     });
 
-    // String swell mewah setelah lonceng ke-2
-    stringSwell(ac,[
-      130.81,164.81,196.00,261.63,  // C minor chord — dramatic
-    ], t0+2.0, 8.0, 1.0, mb, rv);
+    // Sub-tone body resonance D (wooden box ambience)
+    const sub=ac.createOscillator(), subE=ac.createGain();
+    sub.type='sine'; sub.frequency.value=73.42; // D2
+    subE.gain.setValueAtTime(0,t0); subE.gain.linearRampToValueAtTime(0.035,t0+0.3);
+    subE.gain.setValueAtTime(0.035,t0+2.5); subE.gain.exponentialRampToValueAtTime(0.00001,t0+5.5);
+    sub.connect(subE); subE.connect(mb);
+    sub.start(t0); sub.stop(t0+6);
 
-    // Deep sub bass growl
-    const sub=ac.createOscillator(), subE=ac.createGain(), subF=ac.createBiquadFilter();
-    sub.type='sine'; sub.frequency.setValueAtTime(55,t0); sub.frequency.exponentialRampToValueAtTime(48,t0+5);
-    subF.type='lowpass'; subF.frequency.value=90;
-    subE.gain.setValueAtTime(0,t0); subE.gain.linearRampToValueAtTime(0.18,t0+0.05);
-    subE.gain.setValueAtTime(0.18,t0+1.5); subE.gain.exponentialRampToValueAtTime(0.00001,t0+7);
-    sub.connect(subF); subF.connect(subE); subE.connect(mb);
-    sub.start(t0); sub.stop(t0+8);
-
-  }catch(e){console.warn('Audio:',e);}
+  }catch(e){console.warn('Kalimba audio error:',e);}
 }
 
 /* ══════════════════════════════════════════════════════════════
-   PLAY HOKI — Royal Fanfare + Harp + Choir
+   PLAY HOKI — Kalimba Arpeggio Ceria & Menenangkan
    
-   Opening: Royal brass fanfare ascending (4 nada)
-   Middle:  Harp glissando cascading naik
-   Ending:  Choir swell + high bells tinkle
+   Tangga nada: C major pentatonic (C D E G A)
+   Motif: naik cepat arpeggio → melodi mengambang indah
+   Terasa seperti angin sepoi membawa keberuntungan 🌟
 ══════════════════════════════════════════════════════════════ */
 function playHoki(){
   try{
     const ac=getAC(); buildRev(ac);
-    const mb=mBus(ac), rv=mkRev(ac,0.65);
+    const mb=mBus(ac), rv=mkRev(ac,0.60);
     rv.cv.connect(mb); rv.wG.connect(rv.cv);
-    const t0=ac.currentTime+0.05;
 
-    // ── Royal Fanfare: G major ascending ──
-    const fanfareNotes=[
-      {f:196.00,t:0.0,pan:-.4},  // G3
-      {f:246.94,t:0.28,pan:-.2}, // B3
-      {f:293.66,t:0.56,pan: 0.0}, // D4
-      {f:392.00,t:0.84,pan: 0.2}, // G4
-      {f:493.88,t:1.18,pan: 0.4}, // B4
-      {f:587.33,t:1.55,pan: 0.2}, // D5
-      {f:783.99,t:1.95,pan: 0.0}, // G5 — grand finale
+    // Ping-pong delay lebih cepat untuk efek sparkle
+    const ppd=pingPongDelay(ac,mb,0.18,0.42,0.35);
+
+    const t0 = ac.currentTime + 0.05;
+
+    // C major pentatonic:
+    // C4=261.63, D4=293.66, E4=329.63, G4=392.00, A4=440.00
+    // C5=523.25, D5=587.33, E5=659.25, G5=783.99, A5=880.00, C6=1046.50
+
+    // Arpeggio naik cepat (sweep)
+    const arp = [
+      [261.63, -0.5, 0.00, 0.16],  // C4
+      [329.63, -0.3, 0.09, 0.16],  // E4
+      [392.00, -0.1, 0.18, 0.17],  // G4
+      [523.25,  0.1, 0.27, 0.17],  // C5
+      [659.25,  0.3, 0.36, 0.18],  // E5
+      [783.99,  0.5, 0.45, 0.20],  // G5 — puncak arpeggio
     ];
-    const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
-    fanfareNotes.forEach(({f,t,pan},i)=>{
-      const tt=t0+t;
-      // Brass tone (2 osilator: fundamental + upper harmonics)
-      [1,2,3,4].forEach((r,ri)=>{
-        const o=ac.createOscillator(),e=ac.createGain(),filt=ac.createBiquadFilter();
-        o.type=ri===0?'sawtooth':'square';
-        o.frequency.value=f*r;
-        filt.type='lowpass'; filt.frequency.setValueAtTime(f*r*4,tt); filt.frequency.exponentialRampToValueAtTime(f*r*2,tt+0.5); filt.Q.value=1.5;
-        const amp=[0.18,0.10,0.06,0.03][ri]*(i>4?1.3:1.0);
-        e.gain.setValueAtTime(0,tt); e.gain.linearRampToValueAtTime(amp,tt+0.012);
-        e.gain.exponentialRampToValueAtTime(amp*0.7,tt+0.25); e.gain.exponentialRampToValueAtTime(0.00001,tt+(i===6?3.5:1.2));
-        const pn=ac.createStereoPanner?ac.createStereoPanner():null;
-        if(pn)pn.pan.value=pan+(ri%2===0?0.08:-0.08);
-        o.connect(filt); filt.connect(e); if(pn){e.connect(pn);send(pn);}else send(e);
-        o.start(tt); o.stop(tt+4);
-      });
-      // Bell shimmer di atas fanfare
-      if(i>=3) luxuryBell(ac,f*2,0.05,pan,tt+0.01,mb,rv);
+
+    // Melodi utama setelah arpeggio
+    const melody = [
+      [880.00,  0.0,  0.70, 0.22],  // A5 — tinggi cerah
+      [783.99, -0.3,  1.12, 0.20],  // G5
+      [659.25,  0.3,  1.52, 0.22],  // E5
+      [783.99, -0.2,  1.90, 0.18],  // G5
+      [523.25,  0.2,  2.35, 0.24],  // C5
+      [587.33, -0.3,  2.78, 0.20],  // D5
+      [523.25,  0.0,  3.22, 0.22],  // C5
+      [440.00, -0.2,  3.72, 0.18],  // A4
+      [392.00,  0.2,  4.18, 0.16],  // G4
+      [523.25,  0.0,  4.65, 0.24],  // C5 — resolution
+      [783.99,  0.0,  5.20, 0.16],  // G5 — sparkle akhir
+      [1046.50, 0.0,  5.65, 0.12],  // C6 — tinkle paling atas
+    ];
+
+    // Render arpeggio
+    arp.forEach(([freq, pan, dt, amp]) => {
+      kalimbaTone(ac, freq, amp, pan, t0+dt, mb, rv);
+      // Double note: oktaf bawah lebih lembut, ping-pong
+      const o=ac.createOscillator(),e=ac.createGain();
+      o.type='sine'; o.frequency.value=freq*0.5;
+      e.gain.setValueAtTime(0,t0+dt); e.gain.linearRampToValueAtTime(amp*0.06,t0+dt+0.002);
+      e.gain.exponentialRampToValueAtTime(0.00001,t0+dt+1.8);
+      o.connect(e); e.connect(ppd); e.connect(mb);
+      o.start(t0+dt); o.stop(t0+dt+2.2);
     });
 
-    // ── Harp Glissando ── mulai bersamaan dengan fanfare note ke-3
-    harpGliss(ac,261.63,
-      [0,2,4,7,9,12,14,16,19,21,24], // C major pentatonic + lebih tinggi
-      t0+0.52, mb, rv
-    );
-    // Harp kedua (lebih tinggi, sedikit delay)
-    harpGliss(ac,523.25,
-      [0,3,5,7,10,12,15,17,19],
-      t0+0.85, mb, rv
-    );
-
-    // ── Choir Rise — masuk di t0+1.2 ──
-    choirRise(ac,[
-      196.00,246.94,293.66,  // G major triad
-      392.00,493.88,587.33,
-    ], t0+1.2, 5.5, mb, rv);
-
-    // ── String swell besar di akhir ──
-    stringSwell(ac,[
-      196.00,246.94,293.66,392.00,493.88,
-    ], t0+1.8, 6.0, 1.2, mb, rv);
-
-    // ── Timpani Roll — drum orchestral ──
-    const timpFreqs=[73.42, 87.31]; // D2, F2
-    timpFreqs.forEach((f,fi)=>{
-      const t=t0+fi*0.15;
-      for(let i=0;i<18;i++){
-        const nt=t+i*0.055+Math.random()*0.01;
-        const o=ac.createOscillator(),e=ac.createGain(),filt=ac.createBiquadFilter();
-        o.type='sine'; o.frequency.value=f;
-        filt.type='lowpass'; filt.frequency.value=220;
-        e.gain.setValueAtTime(0,nt); e.gain.linearRampToValueAtTime(0.055*(1-i/20),nt+0.008); e.gain.exponentialRampToValueAtTime(0.00001,nt+0.25);
-        o.connect(filt); filt.connect(e); send(e);
-        o.start(nt); o.stop(nt+0.35);
-      }
+    // Render melodi utama
+    melody.forEach(([freq, pan, dt, amp]) => {
+      kalimbaTone(ac, freq, amp, pan, t0+dt, mb, rv);
     });
 
-  }catch(e){console.warn('Audio:',e);}
+    // Chord resonance di bawah — C major warm pad
+    [[261.63,0],[329.63,0.3],[392.00,-0.3]].forEach(([f,pan],i)=>{
+      const o=ac.createOscillator(),e=ac.createGain(),filt=ac.createBiquadFilter();
+      o.type='triangle'; o.frequency.value=f;
+      filt.type='lowpass'; filt.frequency.value=f*3; filt.Q.value=0.8;
+      const st=t0+0.55;
+      e.gain.setValueAtTime(0,st); e.gain.linearRampToValueAtTime(0.030,st+0.6);
+      e.gain.setValueAtTime(0.030,st+3.2); e.gain.exponentialRampToValueAtTime(0.00001,st+6.5);
+      const pn=ac.createStereoPanner?ac.createStereoPanner():null;
+      if(pn){pn.pan.value=pan;o.connect(filt);filt.connect(e);e.connect(pn);pn.connect(mb);}
+      else{o.connect(filt);filt.connect(e);e.connect(mb);}
+      o.start(st); o.stop(st+7);
+    });
+
+  }catch(e){console.warn('Kalimba hoki audio error:',e);}
 }
 
 /* ══════ ALARM LOOP ══════ */
