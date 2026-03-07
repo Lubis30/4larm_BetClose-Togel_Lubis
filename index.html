@@ -49,7 +49,6 @@ body {
     repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,245,255,0.015) 40px);
 }
 
-/* ── SCANLINE OVERLAY ── */
 body::before {
   content:'';
   position:fixed;inset:0;z-index:9999;
@@ -63,7 +62,6 @@ body::before {
   pointer-events:none;
 }
 
-/* ══════════════ WELCOME SCREEN ══════════════ */
 #welcome {
   position:fixed;inset:0;z-index:9000;
   display:flex;align-items:center;justify-content:center;
@@ -132,11 +130,9 @@ body::before {
 }
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
-/* ══════════════ APP ══════════════ */
 #app { max-width:1600px; margin:0 auto; padding:0 28px 80px; opacity:0; transition:opacity 1s ease; }
 #app.on { opacity:1; }
 
-/* ══════════════ NOTIF BANNER ══════════════ */
 #notif-banner {
   background: linear-gradient(135deg, rgba(240,180,41,0.08), rgba(6,12,20,0.97));
   border-bottom: 1px solid rgba(240,180,41,0.3);
@@ -165,7 +161,6 @@ body::before {
 .nb-close { background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;padding:4px 8px;flex-shrink:0; }
 .nb-close:hover { color:var(--text); }
 
-/* ══════════════ HEADER ══════════════ */
 .hdr {
   padding: 52px 0 36px;
   display:flex; align-items:flex-end; justify-content:space-between;
@@ -204,7 +199,6 @@ body::before {
 }
 .hdr-right span { color:var(--neon3); }
 
-/* ══════════════ PERSIST INFO ══════════════ */
 #persist-info {
   background: rgba(0,232,122,0.04);
   border:1px solid rgba(0,232,122,0.15);
@@ -219,7 +213,6 @@ body::before {
   font-size:12px; letter-spacing:0; text-transform:none;
 }
 
-/* ══════════════ CLOCK PANEL ══════════════ */
 .clock-panel {
   display:grid; grid-template-columns:1fr 1fr;
   gap:2px; margin:24px 0;
@@ -261,10 +254,8 @@ body::before {
   margin-top:10px; font-weight:600; letter-spacing:1px;
 }
 .clk-info.gold-c { color:var(--gold2); }
-/* Blinking colon */
 .clk-colon { animation:blink 1s step-end infinite; }
 
-/* ══════════════ STATUS STRIP ══════════════ */
 .status-strip {
   display:flex; align-items:center; gap:14px; flex-wrap:wrap;
   padding:14px 22px;
@@ -315,7 +306,6 @@ body::before {
 .s-btn.ok { border-color:rgba(0,232,122,0.4); color:var(--green2); }
 .s-btn.deny { border-color:rgba(255,43,78,0.4); color:var(--red); }
 
-/* ══════════════ STATS ROW ══════════════ */
 .stats-row {
   display:grid; grid-template-columns:repeat(5,1fr);
   gap:2px; margin-bottom:24px;
@@ -347,7 +337,6 @@ body::before {
   font-size:8px; color:var(--text3); letter-spacing:3px; text-transform:uppercase;
 }
 
-/* ══════════════ FILTER BAR ══════════════ */
 .filter-bar {
   display:flex; align-items:center; gap:8px;
   flex-wrap:wrap; margin-bottom:16px;
@@ -379,7 +368,6 @@ body::before {
 .search-box:focus { border-color:var(--neon3); }
 .search-box::placeholder { color:var(--text3); }
 
-/* ══════════════ CARDS GRID ══════════════ */
 .grid {
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(285px,1fr));
@@ -414,8 +402,6 @@ body::before {
   0%,100%{box-shadow:none;}
   50%{box-shadow:0 0 20px rgba(240,180,41,0.08);}
 }
-
-/* Card Top Accent Line */
 .card::after {
   content:''; position:absolute; top:0;left:0;right:0; height:1px;
   background:linear-gradient(90deg, var(--neon3), transparent);
@@ -437,7 +423,6 @@ body::before {
 .card.closed .card-name { color:var(--red); }
 .card.soon .card-name { color:var(--gold); }
 
-/* BADGE */
 .badge {
   font-family:'JetBrains Mono',monospace;
   font-size:8px; font-weight:700; letter-spacing:2px;
@@ -454,7 +439,6 @@ body::before {
   font-family:'JetBrains Mono',monospace;
   font-size:9px; color:var(--text3); letter-spacing:1px; margin-bottom:14px;
 }
-/* LIBUR indicator */
 .card-libur {
   display:inline-flex; align-items:center; gap:5px;
   background:rgba(255,43,78,0.08); border:1px solid rgba(255,43,78,0.25);
@@ -517,7 +501,6 @@ body::before {
   letter-spacing:2px; text-transform:uppercase;
 }
 
-/* ══════════════ MODAL ALARM ══════════════ */
 #overlay {
   position:fixed;inset:0;z-index:9999;
   background:rgba(0,2,8,0.92); backdrop-filter:blur(16px) saturate(0.5);
@@ -603,7 +586,6 @@ body::before {
 .bell-shake { font-size:16px; animation:bell-s 0.5s ease-in-out infinite alternate; }
 @keyframes bell-s{from{transform:rotate(-15deg);}to{transform:rotate(15deg);}}
 
-/* ══════════════ TOAST ══════════════ */
 #toast-wrap {
   position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
   z-index:8500; display:flex; flex-direction:column; align-items:center;
@@ -666,7 +648,6 @@ body::before {
 }
 @keyframes prog-bar{from{width:100%;}to{width:0%;}}
 
-/* ══════════════ RETURN BANNER ══════════════ */
 #return-banner {
   position:fixed; top:0;left:0;right:0; z-index:8800;
   background:linear-gradient(135deg,rgba(6,12,20,0.97),rgba(10,4,8,0.97));
@@ -702,7 +683,6 @@ body::before {
 .rb-bar-fill { height:100%; background:linear-gradient(90deg,var(--red2),var(--red)); animation:rb-f 3s ease-in-out infinite alternate; }
 @keyframes rb-f{from{width:30%;}to{width:100%;}}
 
-/* ══════════════ QUEUE BADGE ══════════════ */
 #q-badge {
   position:fixed; top:18px; right:18px; z-index:200;
   background:var(--bg3); border:1px solid rgba(0,245,255,0.3);
@@ -712,7 +692,6 @@ body::before {
   box-shadow:var(--glow); display:none;
 }
 
-/* ══════════════ RIPPLE ══════════════ */
 #toast-ripple {
   position:fixed; top:50%;left:50%; transform:translate(-50%,-50%);
   pointer-events:none; z-index:8490; width:520px; height:220px; display:none;
@@ -725,7 +704,6 @@ body::before {
 #toast-ripple span:nth-child(3){animation-delay:1.1s;}
 @keyframes ripple-anim{0%{opacity:.8;transform:scale(1);}100%{opacity:0;transform:scale(1.6);}}
 
-/* ══════════════ FOOTER ══════════════ */
 .footer {
   text-align:center; padding:40px 0 24px; margin-top:32px;
   border-top:1px solid rgba(0,245,255,0.06);
@@ -741,12 +719,10 @@ body::before {
 }
 .footer-copy::before { content:'// '; }
 
-/* ══════════════ SCROLLBAR ══════════════ */
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--neon3);}
 
-/* ══════════════ RESPONSIVE ══════════════ */
 @media(max-width:640px){
   .clock-panel{grid-template-columns:1fr;}
   .grid{grid-template-columns:1fr 1fr;}
@@ -761,7 +737,6 @@ body::before {
 </head>
 <body>
 
-<!-- ══ WELCOME ══ -->
 <div id="welcome">
   <div class="wlc">
     <div class="wlc-logo">TOGEL LUBIS</div>
@@ -772,7 +747,6 @@ body::before {
   </div>
 </div>
 
-<!-- ══ MODAL ALARM ══ -->
 <div id="overlay">
   <div class="modal">
     <div class="modal-alarm-line"></div>
@@ -799,16 +773,14 @@ body::before {
   </div>
 </div>
 
-<!-- ══ TOAST ══ -->
 <div id="toast-wrap"></div>
 <div id="toast-ripple"><span></span><span></span><span></span></div>
 
-<!-- ══ RETURN BANNER ══ -->
 <div id="return-banner">
   <div class="rb-inner">
     <div class="rb-pulse"></div>
     <div class="rb-text">
-      <div class="rb-title">🔔 BET CLOSE TERJADI — ALARM MASIH BERBUNYI</div>
+      <div class="rb-title">🐦 BET CLOSE TERJADI — ALARM MASIH BERBUNYI</div>
       <div class="rb-names" id="rb-names">—</div>
     </div>
     <div class="rb-actions">
@@ -821,10 +793,8 @@ body::before {
 
 <div id="q-badge">ANTRIAN: <span id="qnum">0</span> ALARM</div>
 
-<!-- ══ APP ══ -->
 <div id="app">
 
-  <!-- NOTIF BANNER -->
   <div id="notif-banner" class="show">
     <div class="nb-icon">🔔</div>
     <div class="nb-text">
@@ -835,7 +805,6 @@ body::before {
     <button class="nb-close" onclick="closeNotifBanner()">✕</button>
   </div>
 
-  <!-- HEADER -->
   <div class="hdr">
     <div>
       <div class="hdr-label">SISTEM MONITORING REAL-TIME</div>
@@ -849,13 +818,11 @@ body::before {
     </div>
   </div>
 
-  <!-- PERSIST INFO -->
   <div id="persist-info">
     ▸ DATA TERSIMPAN
     <span id="persist-detail">Memuat...</span>
   </div>
 
-  <!-- CLOCK -->
   <div class="clock-panel">
     <div class="clk-cell">
       <div class="clk-label">WAKTU WIB</div>
@@ -869,7 +836,6 @@ body::before {
     </div>
   </div>
 
-  <!-- STATUS STRIP -->
   <div class="status-strip">
     <div class="s-live"><div class="s-dot"></div><span class="s-live-txt">LIVE</span></div>
     <span class="s-div">·</span>
@@ -880,13 +846,12 @@ body::before {
     <span class="s-stat">ALARM <b class="a" id="sA">0</b></span>
     <div class="s-actions">
       <button class="s-btn" id="notifBtn" onclick="requestNotif()">🔔 NOTIFIKASI</button>
-      <button class="s-btn" onclick="testSuara(false)">🔊 TEST BELL</button>
+      <button class="s-btn" onclick="testSuara(false)">🐦 TEST KICAU</button>
       <button class="s-btn" onclick="testSuara(true)">✦ HOKI</button>
       <button class="s-btn" onclick="testToast()">⚡ TEST ALARM</button>
     </div>
   </div>
 
-  <!-- STATS ROW -->
   <div class="stats-row">
     <div class="stat"><div class="stat-n" id="stT">0</div><div class="stat-l">TOTAL</div></div>
     <div class="stat"><div class="stat-n g" id="stO">0</div><div class="stat-l">BUKA</div></div>
@@ -895,7 +860,6 @@ body::before {
     <div class="stat"><div class="stat-n" id="stA">0</div><div class="stat-l">ALARM HARI INI</div></div>
   </div>
 
-  <!-- FILTER -->
   <div class="filter-bar">
     <span class="filter-label">FILTER</span>
     <button class="filter-btn on" onclick="setFilter('all',this)">SEMUA</button>
@@ -916,11 +880,6 @@ body::before {
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════════════════════
-   DATA PASARAN
-   Format libur: array hari (0=Minggu,1=Senin,...,6=Sabtu) yang libur
-   libur: string deskripsi hari libur
-══════════════════════════════════════════════════════════════════ */
 const DATA=[
   {n:"HOKIDRAW 5D",        d:"Senin – Minggu",             t:null,  b:null,  hoki:true,  offDays:[], libur:""},
   {n:"TOTOMACAU PAGI",     d:"Senin – Minggu",             t:"00:00",b:"00:15",offDays:[], libur:""},
@@ -1052,7 +1011,7 @@ let swReg=null;
     self.addEventListener('message',e=>{
       if(e.data&&e.data.type==='SHOW_NOTIF'){
         const{title,body,tag}=e.data;
-        e.waitUntil(self.registration.showNotification(title,{body,tag,requireInteraction:true,icon:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect fill="%2303050a" width="64" height="64" rx="4"/%3E%3Ctext y="48" font-size="44" x="10"%3E%F0%9F%94%94%3C/text%3E%3C/svg%3E'}));
+        e.waitUntil(self.registration.showNotification(title,{body,tag,requireInteraction:true,icon:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect fill="%2303050a" width="64" height="64" rx="4"/%3E%3Ctext y="48" font-size="44" x="10"%3E%F0%9F%90%A6%3C/text%3E%3C/svg%3E'}));
       }
     });
     self.addEventListener('notificationclick',e=>{
@@ -1082,28 +1041,23 @@ function showNotifHelp(){alert('Cara izinkan notifikasi:\n\n🌐 Chrome/Edge:\nK
 function closeNotifBanner(){document.getElementById('notif-banner').classList.remove('show');}
 function sendOSNotif(name,t,b){
   if(!notifOk||typeof Notification==='undefined')return;
-  const title='🔔 BET CLOSE — TOGEL LUBIS';
-  const body=`⚠ ${name}\n⏰ Tutup: ${t} WIB\n🔓 Buka: ${b} WIB\n\nKlik untuk kembali & matikan alarm`;
+  const title='🐦 BET CLOSE — TOGEL LUBIS';
+  const body=`🎵 ${name}\n⏰ Tutup: ${t} WIB\n🔓 Buka: ${b} WIB\n\nKlik untuk kembali & matikan alarm`;
   const tag='BC-'+name+t;
   if(swReg&&swReg.active){swReg.active.postMessage({type:'SHOW_NOTIF',title,body,tag});return;}
   try{const n=new Notification(title,{body,requireInteraction:true,tag,renotify:false});n.onclick=()=>{window.focus();dismissAlarm();n.close();};setTimeout(()=>n.close(),90000);}catch(e){}
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   PROTEKSI: Klik kanan, F12, Ctrl+Shift+I/J/C/U diblokir
+   PROTEKSI
 ══════════════════════════════════════════════════════════════════ */
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('keydown', e => {
-  // F12
   if (e.key === 'F12') { e.preventDefault(); return false; }
-  // Ctrl+Shift+I / J / C / K
   if (e.ctrlKey && e.shiftKey && ['i','I','j','J','c','C','k','K'].includes(e.key)) { e.preventDefault(); return false; }
-  // Ctrl+U (view source)
   if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); return false; }
-  // Ctrl+S (save)
   if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
 });
-// Deteksi DevTools dibuka via ukuran window
 (function devToolsDetect(){
   let dt = false;
   setInterval(() => {
@@ -1117,6 +1071,7 @@ document.addEventListener('keydown', e => {
   }, 500);
 })();
 
+/* ══════ AUDIO ENGINE ══════ */
 let AC=null,auUnlocked=false;
 
 function getAC(){
@@ -1140,81 +1095,104 @@ function unlockAudio(){
 });
 
 /* ════════════════════════════════════════════════════════════════
-   MASTER BUS — clean, punchy, tidak distorsi
+   MASTER BUS — natural, warm bird sound
 ════════════════════════════════════════════════════════════════ */
 function makeMasterBus(ac){
-  // Slight presence boost agar jelas di speaker kecil
+  // Warm presence boost untuk suara burung agar terdengar natural
   const pres=ac.createBiquadFilter();
-  pres.type='peaking'; pres.frequency.value=3200; pres.Q.value=1.2; pres.gain.value=2.5;
-  // High shelf sparkle
+  pres.type='peaking'; pres.frequency.value=2800; pres.Q.value=1.0; pres.gain.value=3.0;
+  // High shelf sparkle — seperti suara burung di alam terbuka
   const air=ac.createBiquadFilter();
-  air.type='highshelf'; air.frequency.value=8000; air.gain.value=2.0;
-  // Brickwall limiter
+  air.type='highshelf'; air.frequency.value=6000; air.gain.value=1.5;
+  // Soft limiter agar tidak clipping
   const lim=ac.createDynamicsCompressor();
-  lim.threshold.value=-1.0; lim.knee.value=0; lim.ratio.value=20;
-  lim.attack.value=0.001; lim.release.value=0.05;
-  const vol=ac.createGain(); vol.gain.value=0.85;
+  lim.threshold.value=-2.0; lim.knee.value=2; lim.ratio.value=10;
+  lim.attack.value=0.002; lim.release.value=0.08;
+  const vol=ac.createGain(); vol.gain.value=0.80;
   pres.connect(air); air.connect(lim); lim.connect(vol); vol.connect(ac.destination);
   return pres;
 }
 
 /* ════════════════════════════════════════════════════════════════
-   SATU BEEP — nada bersih seperti alarm clock PC / Windows
-   freq   : Hz (880 = A5, 1046 = C6, dll)
-   dur    : durasi suara nyala (detik)
-   startT : waktu mulai (AudioContext.currentTime)
-   amp    : volume 0-1
-   mb     : master bus node
+   BIRD WHISTLE — satu siulan burung yang merdu
+   Menggunakan osilator sinusoida dengan pitch glide (portamento)
+   + vibrato alami seperti tenggorokan burung
+   + harmonik kedua untuk warna suara lebih kaya
+   
+   startFreq → endFreq: glide nada (seperti burung melengking)
+   dur      : durasi suara nyala (detik)
+   startT   : waktu mulai (AudioContext.currentTime)
+   amp      : volume 0-1
+   mb       : master bus node
 ════════════════════════════════════════════════════════════════ */
-function makeBeep(ac, freq, dur, startT, amp, mb){
+function makeWhistle(ac, startFreq, endFreq, startT, dur, amp, mb){
   const osc  = ac.createOscillator();
   const env  = ac.createGain();
+  const vib  = ac.createOscillator(); // vibrato LFO
+  const vibG = ac.createGain();
 
-  // Square wave 50% duty → suara alarm clock klasik yang ikonik
-  osc.type = 'square';
-  osc.frequency.value = freq;
+  // Sine wave murni — persis suara seruling/burung
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(startFreq, startT);
+  // Glide ke nada tujuan di 75% durasi, lalu sedikit turun di akhir (seperti burung menutup siulan)
+  osc.frequency.exponentialRampToValueAtTime(endFreq, startT + dur * 0.75);
+  osc.frequency.exponentialRampToValueAtTime(endFreq * 0.97, startT + dur);
 
-  // Envelope: attack sangat cepat (1ms), sustain penuh, release cepat (8ms)
-  // Persis seperti Windows / macOS alarm beep
+  // Vibrato alami — burung sungguhan bergetar di frekuensi ~5-7 Hz
+  vib.type = 'sine';
+  vib.frequency.value = 6.2; // 6.2 Hz vibrato
+  vibG.gain.value = startFreq * 0.016; // deviasi pitch ~1.6%
+  vib.connect(vibG);
+  vibG.connect(osc.frequency);
+
+  // Envelope halus: attack lembut, sustain penuh, decay natural
   env.gain.setValueAtTime(0, startT);
-  env.gain.linearRampToValueAtTime(amp, startT + 0.001);        // attack 1ms
-  env.gain.setValueAtTime(amp, startT + dur - 0.008);           // sustain
-  env.gain.linearRampToValueAtTime(0, startT + dur);            // release 8ms
+  env.gain.linearRampToValueAtTime(amp * 0.55, startT + 0.016);     // attack 16ms
+  env.gain.linearRampToValueAtTime(amp, startT + dur * 0.28);        // rise menuju puncak
+  env.gain.setValueAtTime(amp, startT + dur * 0.68);                 // sustain
+  env.gain.exponentialRampToValueAtTime(0.001, startT + dur);        // decay alami
 
-  // Soft low-pass agar tidak terlalu harsh di speaker kecil
-  const lp = ac.createBiquadFilter();
-  lp.type = 'lowpass'; lp.frequency.value = 4800; lp.Q.value = 0.5;
+  // Harmonik ke-2 (oktaf atas) yang sangat halus — memberi warna "brilliance" seperti suara burung asli
+  const osc2 = ac.createOscillator();
+  const env2 = ac.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(startFreq * 2, startT);
+  osc2.frequency.exponentialRampToValueAtTime(endFreq * 2, startT + dur * 0.75);
+  env2.gain.setValueAtTime(0, startT);
+  env2.gain.linearRampToValueAtTime(amp * 0.07, startT + 0.02);
+  env2.gain.setValueAtTime(amp * 0.07, startT + dur * 0.6);
+  env2.gain.exponentialRampToValueAtTime(0.001, startT + dur);
 
-  osc.connect(lp); lp.connect(env); env.connect(mb);
-  osc.start(startT);
-  osc.stop(startT + dur + 0.01);
+  // Harmonik ke-3 sangat samar untuk kedalaman timbre
+  const osc3 = ac.createOscillator();
+  const env3 = ac.createGain();
+  osc3.type = 'sine';
+  osc3.frequency.setValueAtTime(startFreq * 3, startT);
+  osc3.frequency.exponentialRampToValueAtTime(endFreq * 3, startT + dur * 0.75);
+  env3.gain.setValueAtTime(0, startT);
+  env3.gain.linearRampToValueAtTime(amp * 0.025, startT + 0.02);
+  env3.gain.setValueAtTime(amp * 0.025, startT + dur * 0.5);
+  env3.gain.exponentialRampToValueAtTime(0.001, startT + dur);
+
+  vib.start(startT); vib.stop(startT + dur + 0.05);
+  osc.connect(env); env.connect(mb);
+  osc2.connect(env2); env2.connect(mb);
+  osc3.connect(env3); env3.connect(mb);
+  osc.start(startT); osc.stop(startT + dur + 0.05);
+  osc2.start(startT); osc2.stop(startT + dur + 0.05);
+  osc3.start(startT); osc3.stop(startT + dur + 0.05);
 }
 
 /* ════════════════════════════════════════════════════════════════
-   PLAY ALARM — Pola alarm PC klasik SEMPURNA
+   PLAY ALARM — Kicauan burung kenari waspada
    
-   Pola: BEEP-BEEP  BEEP-BEEP  BEEP-BEEP  (pause)  ulang
-   ━━━━  ━━━━       ━━━━  ━━━━      ━━━━  ━━━━
+   Pola: 4 siulan naik-turun cepat (alert call burung kenari)
+   Terdengar seperti: "twit-twit-twEEt! twit-twit-twEEt!"
    
-   Persis seperti: Windows XP / Windows 10 Clock Alarm
-   Frekuensi alternating: 880Hz (A5) dan 1046Hz (C6)
-   untuk efek "ding-dong" yang familiar dan jelas.
-   
-   Timeline satu siklus (~5 detik):
-   t=0.00: beep 880Hz 0.18s
-   t=0.25: beep 1046Hz 0.18s
-   t=0.65: beep 880Hz 0.18s
-   t=0.90: beep 1046Hz 0.18s
-   t=1.30: beep 880Hz 0.18s
-   t=1.55: beep 1046Hz 0.18s
-   t=1.95: beep 880Hz 0.18s
-   t=2.20: beep 1046Hz 0.18s  ← akhir grup 1
-   JEDA 0.7s
-   t=3.05: beep 880Hz 0.18s
-   t=3.30: beep 1046Hz 0.18s  ← grup 2
-   JEDA 0.7s
-   t=4.15: beep 880Hz 0.25s  ← long final tone
-   t=4.50: beep 1046Hz 0.35s
+   Timeline satu siklus (~5.5 detik):
+   Grup 1: 4 siulan kenari naik + 1 siulan panjang dramatis
+   Jeda, lalu Grup 2 ulang lebih keras
+   Penutup: siulan panjang menghilang (fade out)
 ════════════════════════════════════════════════════════════════ */
 function playAlarm(){
   try{
@@ -1222,46 +1200,39 @@ function playAlarm(){
     const mb  = makeMasterBus(ac);
     const t0  = ac.currentTime + 0.04;
 
-    // Grup 1: 4 pasang beep cepat
-    const beeps1 = [
-      [0.00, 880,  0.18],
-      [0.25, 1046, 0.18],
-      [0.62, 880,  0.18],
-      [0.87, 1046, 0.18],
-      [1.24, 880,  0.18],
-      [1.49, 1046, 0.18],
-      [1.86, 880,  0.18],
-      [2.11, 1046, 0.18],
-    ];
+    // Grup 1 — kicauan cepat naik (C5→E5→G5→C6→A5)
+    makeWhistle(ac, 523.25, 659.25, t0 + 0.00, 0.20, 0.60, mb);  // C5→E5 (twit)
+    makeWhistle(ac, 659.25, 783.99, t0 + 0.26, 0.20, 0.64, mb);  // E5→G5 (twit)
+    makeWhistle(ac, 783.99, 1046.5, t0 + 0.52, 0.22, 0.70, mb);  // G5→C6 (twEEt! naik tinggi)
+    makeWhistle(ac, 1046.5, 880.00, t0 + 0.78, 0.18, 0.58, mb);  // C6→A5 (turun lembut)
 
-    // Jeda, lalu Grup 2: 2 pasang
-    const beeps2 = [
-      [2.95, 880,  0.18],
-      [3.20, 1046, 0.18],
-      [3.57, 880,  0.18],
-      [3.82, 1046, 0.18],
-    ];
+    // Siulan tunggal panjang — seperti burung memperingatkan koloni
+    makeWhistle(ac, 880.00, 1174.66,t0 + 1.10, 0.38, 0.75, mb);  // A5→D6 melisma panjang
+    makeWhistle(ac, 1174.66,880.00, t0 + 1.52, 0.28, 0.65, mb);  // D6→A5 turun indah
 
-    // Final: 2 nada panjang — seperti "alarm finished"
-    const beepsFinal = [
-      [4.45, 880,  0.30],
-      [4.85, 1046, 0.40],
-    ];
+    // Jeda sebentar, lalu Grup 2 — lebih bersemangat
+    makeWhistle(ac, 523.25, 659.25, t0 + 2.10, 0.20, 0.65, mb);
+    makeWhistle(ac, 659.25, 783.99, t0 + 2.36, 0.20, 0.69, mb);
+    makeWhistle(ac, 783.99, 1046.5, t0 + 2.62, 0.22, 0.75, mb);
+    makeWhistle(ac, 1046.5, 880.00, t0 + 2.88, 0.18, 0.62, mb);
 
-    [...beeps1, ...beeps2, ...beepsFinal].forEach(([dt, freq, dur]) => {
-      makeBeep(ac, freq, dur, t0 + dt, 0.72, mb);
-    });
+    // Siulan penutup dramatis — naik ke nada tertinggi lalu fade
+    makeWhistle(ac, 659.25, 1318.51,t0 + 3.25, 0.42, 0.78, mb);  // E5→E6 sangat tinggi
+    makeWhistle(ac, 1318.51,783.99, t0 + 3.72, 0.50, 0.60, mb);  // E6→G5 turun perlahan
 
   }catch(e){ console.warn('Alarm audio error:', e); }
 }
 
 /* ════════════════════════════════════════════════════════════════
-   PLAY HOKI — Ascending chime tone mewah
+   PLAY HOKI — Kicauan burung murai batu hoki pagi hari
    
-   Pola: nada naik bertangga (ding-ding-ding-DING!)
-   Seperti alarm "Good Morning" iPhone / Samsung premium.
-   Frekuensi: C5 → E5 → G5 → C6 (arpeggio C major)
-   Diulang dua kali dengan sedikit lebih keras.
+   Lebih kompleks, lebih merdu, lebih "premium" dari alarm biasa.
+   Seperti murai batu yang sedang unjuk kebolehan di pagi hari.
+   Pola arpeggio naik bertangga dengan ornamen trill.
+   
+   Frasa 1: C5→D5→E5→G5→C6 (arpeggio major naik)
+   Frasa 2: G5→B5→D6→E6→C6 (semakin tinggi, klimaks)
+   Frasa 3: Siulan panjang menurun elegan (resolution)
 ════════════════════════════════════════════════════════════════ */
 function playHoki(){
   try{
@@ -1269,32 +1240,30 @@ function playHoki(){
     const mb  = makeMasterBus(ac);
     const t0  = ac.currentTime + 0.04;
 
-    // Arpeggio naik C major: C5-E5-G5-C6
-    // Setiap nada 0.12s ON, 0.08s OFF
-    const chime = [
-      // [dt, freq, dur, amp]
-      [0.00, 523.25, 0.14, 0.55],  // C5
-      [0.22, 659.25, 0.14, 0.60],  // E5
-      [0.44, 783.99, 0.14, 0.65],  // G5
-      [0.66, 1046.5, 0.22, 0.72],  // C6 — paling tinggi, paling panjang
+    // Frasa 1 — tangga nada naik ceria seperti murai pagi hari
+    makeWhistle(ac, 523.25, 587.33, t0 + 0.00, 0.15, 0.52, mb);  // C5→D5
+    makeWhistle(ac, 587.33, 659.25, t0 + 0.17, 0.15, 0.56, mb);  // D5→E5
+    makeWhistle(ac, 659.25, 783.99, t0 + 0.34, 0.17, 0.61, mb);  // E5→G5
+    makeWhistle(ac, 783.99, 1046.5, t0 + 0.53, 0.26, 0.68, mb);  // G5→C6 (klimaks frasa 1)
+    makeWhistle(ac, 1046.5, 880.00, t0 + 0.83, 0.22, 0.57, mb);  // C6→A5 (turun manja)
+    makeWhistle(ac, 880.00, 783.99, t0 + 1.08, 0.17, 0.48, mb);  // A5→G5 (settle)
 
-      // Ulang, sedikit lebih keras
-      [1.20, 523.25, 0.14, 0.60],
-      [1.42, 659.25, 0.14, 0.65],
-      [1.64, 783.99, 0.14, 0.70],
-      [1.86, 1046.5, 0.28, 0.80],  // C6 — lebih panjang
+    // Frasa 2 — lebih tinggi, lebih bersemangat (murai makin bergairah)
+    makeWhistle(ac, 659.25, 783.99, t0 + 1.45, 0.13, 0.60, mb);  // E5→G5
+    makeWhistle(ac, 783.99, 987.77, t0 + 1.60, 0.13, 0.64, mb);  // G5→B5
+    makeWhistle(ac, 987.77, 1174.66,t0 + 1.75, 0.15, 0.69, mb);  // B5→D6
+    makeWhistle(ac, 1174.66,1318.51,t0 + 1.92, 0.24, 0.74, mb);  // D6→E6 (sangat tinggi!)
+    makeWhistle(ac, 1318.51,1046.5, t0 + 2.20, 0.30, 0.70, mb);  // E6→C6 (turun dramatis)
 
-      // Ulang ketiga — semakin kuat, dramatik
-      [2.45, 523.25, 0.12, 0.62],
-      [2.63, 659.25, 0.12, 0.67],
-      [2.81, 783.99, 0.12, 0.72],
-      [2.99, 1046.5, 0.12, 0.78],
-      [3.17, 1318.5, 0.32, 0.82],  // E6 — extra high sparkle
-    ];
+    // Ornamen trill cepat di tengah — tanda tangan murai batu
+    makeWhistle(ac, 1046.5, 1174.66,t0 + 2.54, 0.12, 0.65, mb);  // C6→D6
+    makeWhistle(ac, 1174.66,1046.5, t0 + 2.68, 0.12, 0.62, mb);  // D6→C6 (trill)
+    makeWhistle(ac, 1046.5, 1174.66,t0 + 2.82, 0.12, 0.60, mb);  // C6→D6 (trill lagi)
 
-    chime.forEach(([dt, freq, dur, amp]) => {
-      makeBeep(ac, freq, dur, t0 + dt, amp, mb);
-    });
+    // Frasa 3 — penutup yang merdu & panjang (murai selesai bernyanyi)
+    makeWhistle(ac, 1174.66,880.00, t0 + 3.10, 0.52, 0.72, mb);  // D6→A5 turun panjang elegan
+    makeWhistle(ac, 880.00, 659.25, t0 + 3.66, 0.42, 0.55, mb);  // A5→E5 fade berakhir indah
+    makeWhistle(ac, 659.25, 523.25, t0 + 4.12, 0.35, 0.35, mb);  // E5→C5 hampir menghilang
 
   }catch(e){ console.warn('Hoki audio error:', e); }
 }
@@ -1302,7 +1271,7 @@ function playHoki(){
 /* ══════ ALARM LOOP ══════ */
 let loopT=null,bgT=null,looping=false,loopH=false,lastPlayTime=0;
 function startLoop(isH){
-  stopLoop();looping=true;loopH=isH;const INTERVAL=isH?6200:5800;unlockAudio();
+  stopLoop();looping=true;loopH=isH;const INTERVAL=isH?5800:5500;unlockAudio();
   function playNow(){if(!looping)return;if(AC&&AC.state==='suspended'){AC.resume().then(()=>{if(looping)(loopH?playHoki:playAlarm)();}).catch(()=>{});}else(loopH?playHoki:playAlarm)();lastPlayTime=Date.now();}
   playNow();loopT=setInterval(()=>{if(!looping)return;playNow();},INTERVAL);
   bgT=setInterval(()=>{if(!looping)return;if(AC&&AC.state==='suspended')AC.resume().catch(()=>{});if(Date.now()-lastPlayTime>INTERVAL+1200)playNow();},100);
@@ -1324,7 +1293,7 @@ function showToast(name,t,b,isH,dur=10000){
   const w=document.getElementById('toast-wrap'),rip=document.getElementById('toast-ripple');
   rip.style.display='block';setTimeout(()=>rip.style.display='none',3500);
   const id='t'+Date.now()+Math.random().toString(36).slice(2,6);
-  const icon=isH?'✦':'🔔',tag=isH?'HOKI · SETIAP JAM':'BET CLOSE ALERT';
+  const icon=isH?'✦':'🐦',tag=isH?'HOKI · SETIAP JAM':'BET CLOSE ALERT';
   const el=document.createElement('div');el.className='toast';el.id=id;
   el.style.setProperty('--dur',dur+'ms');
   el.innerHTML=`<div class="toast-top"></div><div class="toast-body"><div class="toast-icon ${isH?'hoki':''}">${icon}</div><div class="toast-info"><div class="toast-tag ${isH?'h':''}">${tag}</div><div class="toast-title">${name}</div><div class="toast-times"><div class="toast-ti"><div class="toast-ti-l">BET CLOSE</div><div class="toast-ti-v">${t}</div></div><div style="color:var(--text3);align-self:flex-end;padding-bottom:2px;font-size:12px;">→</div><div class="toast-ti"><div class="toast-ti-l">BUKA KEMBALI</div><div class="toast-ti-v">${b}</div></div></div></div><button class="toast-x" onclick="closeToast('${id}')">✕</button></div><div class="toast-prog"><div class="toast-prog-bar"></div></div>`;
@@ -1368,7 +1337,7 @@ function renderCards(){
       </div>`;
     }
     const holidayBadge=isHoliday&&!p.hoki?`<div class="card-libur">LIBUR HARI INI: ${p.libur}</div>`:'';
-    const firedBadge=hasFired?`<div class="alarm-fired-badge">🔔 ALARM SUDAH BUNYI HARI INI</div>`:'';
+    const firedBadge=hasFired?`<div class="alarm-fired-badge">🐦 ALARM SUDAH BUNYI HARI INI</div>`:'';
     const div=document.createElement('div');
     div.className=`card ${st==='closed'?'closed':st==='soon'?'soon':''}`;
     div.innerHTML=`
@@ -1453,7 +1422,7 @@ function dismissAlarm(){
 }
 
 function updateQ(){const n=queue.length;document.getElementById('qnum').textContent=n;document.getElementById('q-badge').style.display=n>1?'block':'none';}
-function flashTitle(name){stopFlash();let on=true;titleT=setInterval(()=>{document.title=on?`🔔 ${name} — BET CLOSE!`:'⚡ TOGEL LUBIS · ALARM!';on=!on;},700);}
+function flashTitle(name){stopFlash();let on=true;titleT=setInterval(()=>{document.title=on?`🐦 ${name} — BET CLOSE!`:'🎵 TOGEL LUBIS · ALARM!';on=!on;},700);}
 function stopFlash(){if(titleT){clearInterval(titleT);titleT=null;}document.title='TOGEL LUBIS · ALARM SYSTEM';}
 
 /* ══════ CHECK ALARMS ══════ */
