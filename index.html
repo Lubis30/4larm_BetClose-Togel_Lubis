@@ -1089,18 +1089,370 @@ function sendOSNotif(name,t,b){
   try{const n=new Notification(title,{body,requireInteraction:true,tag,renotify:false});n.onclick=()=>{window.focus();dismissAlarm();n.close();};setTimeout(()=>n.close(),90000);}catch(e){}
 }
 
-/* ══════ AUDIO ENGINE ══════ */
+/* ══════════════════════════════════════════════════════════════════
+   PROTEKSI: Klik kanan, F12, Ctrl+Shift+I/J/C/U diblokir
+══════════════════════════════════════════════════════════════════ */
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  // F12
+  if (e.key === 'F12') { e.preventDefault(); return false; }
+  // Ctrl+Shift+I / J / C / K
+  if (e.ctrlKey && e.shiftKey && ['i','I','j','J','c','C','k','K'].includes(e.key)) { e.preventDefault(); return false; }
+  // Ctrl+U (view source)
+  if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); return false; }
+  // Ctrl+S (save)
+  if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
+});
+// Deteksi DevTools dibuka via ukuran window
+(function devToolsDetect(){
+  let dt = false;
+  setInterval(() => {
+    const w = window.outerWidth - window.innerWidth > 160;
+    const h = window.outerHeight - window.innerHeight > 160;
+    if ((w || h) && !dt) {
+      dt = true;
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#03050a;flex-direction:column;gap:16px;"><div style="font-family:Orbitron,monospace;font-size:28px;color:#ff2b4e;letter-spacing:4px;text-shadow:0 0 20px rgba(255,43,78,0.7);">⛔ AKSES DITOLAK</div><div style="font-family:JetBrains Mono,monospace;font-size:11px;color:#3a5470;letter-spacing:3px;">DEVELOPER TOOLS TERDETEKSI</div></div>';
+    }
+    if (!w && !h) dt = false;
+  }, 500);
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   LUXURY AUDIO ENGINE
+   
+   playAlarm  → Grand Cathedral Bell + Orchestral Strike
+                Suara lonceng katedral besar dengan reverb panjang,
+                diikuti low brass impact dan string swell mewah.
+   
+   playHoki   → Royal Fanfare + Cascading Harp + Choir Rise
+                Fanfare brass ascending + harp glissando + choir pad
+══════════════════════════════════════════════════════════════════ */
 let AC=null,rBuf=null,auUnlocked=false;
-function getAC(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)({latencyHint:'playback',sampleRate:44100});if(AC.state==='suspended')AC.resume();return AC;}
-function unlockAudio(){if(auUnlocked)return;try{const ac=getAC();buildRev(ac);const b=ac.createBuffer(1,1,22050),s=ac.createBufferSource();s.buffer=b;s.connect(ac.destination);s.start(0);auUnlocked=true;}catch(e){}}
-['click','touchstart','keydown','pointerdown'].forEach(ev=>{document.addEventListener(ev,unlockAudio,{once:false,passive:true});});
-function buildRev(ac){if(rBuf)return;const sr=ac.sampleRate,len=Math.floor(sr*5);rBuf=ac.createBuffer(2,len,sr);for(let ch=0;ch<2;ch++){const d=rBuf.getChannelData(ch);const er=[[.012,.70],[.024,.55],[.038,.44],[.052,.36],[.071,.28],[.085,.22]];for(let i=0;i<len;i++){const t=i/sr;let v=(Math.random()*2-1)*Math.exp(-t*.62)*.28;if(i<sr*.01)v*=(i/(sr*.01));d[i]=v;}er.forEach(([dt,amp])=>{const di=Math.floor(dt*sr);if(di<len)d[di]+=(Math.random()*2-1)*amp;});const cd=Math.floor(sr*.0293);for(let i=cd;i<len;i++)d[i]+=d[i-cd]*.18;}}
-function mBus(ac){const h=ac.createBiquadFilter();h.type='highpass';h.frequency.value=48;h.Q.value=.5;const w=ac.createBiquadFilter();w.type='peaking';w.frequency.value=180;w.Q.value=1.2;w.gain.value=1.8;const p=ac.createBiquadFilter();p.type='peaking';p.frequency.value=4200;p.Q.value=1;p.gain.value=3;const a=ac.createBiquadFilter();a.type='highshelf';a.frequency.value=9000;a.gain.value=3.5;const c=ac.createDynamicsCompressor();c.threshold.value=-14;c.knee.value=10;c.ratio.value=2.5;c.attack.value=.004;c.release.value=.22;const l=ac.createDynamicsCompressor();l.threshold.value=-.3;l.knee.value=0;l.ratio.value=25;l.attack.value=.001;l.release.value=.04;const o=ac.createGain();o.gain.value=.88;h.connect(w);w.connect(p);p.connect(a);a.connect(c);c.connect(l);l.connect(o);o.connect(ac.destination);return h;}
-function mkRev(ac,wet){if(!rBuf)buildRev(ac);const cv=ac.createConvolver();cv.buffer=rBuf;const wG=ac.createGain();wG.gain.value=wet;const dG=ac.createGain();dG.gain.value=1-wet*.4;return{cv,wG,dG};}
-function bP(ac,f,amp,pan,t,atk,dec){const o=ac.createOscillator(),e=ac.createGain();o.type='sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*.9975,t+.12);e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(amp,t+atk);e.gain.exponentialRampToValueAtTime(amp*.55,t+atk+dec*.12);e.gain.exponentialRampToValueAtTime(.00008,t+atk+dec);o.connect(e);let out=e;if(ac.createStereoPanner){const pn=ac.createStereoPanner();pn.pan.value=Math.max(-1,Math.min(1,pan));e.connect(pn);out=pn;}o.start(t);o.stop(t+atk+dec+.5);return out;}
-function mlt(ac,f,t,snd){const nl=Math.floor(ac.sampleRate*.065),nb=ac.createBuffer(1,nl,ac.sampleRate);const nd=nb.getChannelData(0);for(let i=0;i<nl;i++)nd[i]=(Math.random()*2-1)*Math.exp(-i/(nl*.12));const ns=ac.createBufferSource(),bf=ac.createBiquadFilter(),ne=ac.createGain();ns.buffer=nb;bf.type='bandpass';bf.frequency.value=f*2.8;bf.Q.value=2;ne.gain.setValueAtTime(.22,t);ne.gain.exponentialRampToValueAtTime(.0001,t+.08);ns.connect(bf);bf.connect(ne);snd(ne);ns.start(t);ns.stop(t+.12);}
-function playAlarm(){try{const ac=getAC();buildRev(ac);const mb=mBus(ac),rv=mkRev(ac,.52);rv.cv.connect(mb);rv.wG.connect(rv.cv);const snd=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};const t0=ac.currentTime+.06;[{f:329.63,t:0,pan:-.3},{f:261.63,t:.62,pan:.1},{f:293.66,t:1.24,pan:-.1},{f:196.00,t:1.86,pan:.2}].forEach(({f,t,pan},i)=>{const tt=t0+t,amp=.22-i*.01,dec=4.2-i*.15;[[.5,.38,0],[1,.65,0],[1.2,.48,-.12],[1.5,.36,.14],[2,.28,-.2],[3.01,.16,.22],[4,.1,0],[5.12,.06,-.15]].forEach(([r,ra,po])=>snd(bP(ac,f*r,amp*ra,pan+po,tt,.004,dec)));mlt(ac,f,tt,snd);});const sb=ac.createOscillator(),sF=ac.createBiquadFilter(),sE=ac.createGain();sb.type='sine';sb.frequency.value=98;sF.type='lowpass';sF.frequency.value=120;const sT=t0+1.86;sE.gain.setValueAtTime(0,sT);sE.gain.linearRampToValueAtTime(.22,sT+.025);sE.gain.exponentialRampToValueAtTime(.00008,sT+5.5);sb.connect(sF);sF.connect(sE);sE.connect(mb);sb.start(sT);sb.stop(sT+6.5);}catch(e){console.warn('Audio err:',e);}}
-function playHoki(){try{const ac=getAC();buildRev(ac);const mb=mBus(ac),rv=mkRev(ac,.55);rv.cv.connect(mb);rv.wG.connect(rv.cv);const snd=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};const t0=ac.currentTime+.05;[196,220,246.9,293.7,329.6,392,440,493.9,587.3,659.3,784,880,987.8].forEach((f,i)=>{const tt=t0+i*.068,amp=.082+(i>7?.012:0)-(i<3?.012:0),dec=3.8-i*.09,pan=(i/12-.5)*.85;snd(bP(ac,f,amp,pan,tt,.004,dec));snd(bP(ac,f*2,amp*.28,-pan,tt+.003,.003,dec*.62));snd(bP(ac,f*3,amp*.1,pan*.5,tt+.004,.002,dec*.42));if(i<7)snd(bP(ac,f*.5,amp*.14,0,tt,.006,dec*1.15));mlt(ac,f,tt,snd);});[2093,2349,2637,3136,3520,3951].forEach((f,i)=>snd(bP(ac,f,.030,(i%2===0?.5:-.5),t0+.48+i*.068,.002,2.4)));[98,123.5,147,196,246.9,329.6].forEach((f,i)=>{const o1=ac.createOscillator(),o2=ac.createOscillator(),env=ac.createGain();o1.type='triangle';o1.frequency.value=f;o2.type='sawtooth';o2.frequency.value=f*1.0038;const vol=.024-i*.002;env.gain.setValueAtTime(0,t0+.25);env.gain.linearRampToValueAtTime(vol,t0+.9+i*.08);env.gain.setValueAtTime(vol,t0+2.4);env.gain.exponentialRampToValueAtTime(.00008,t0+5.8);const pn=ac.createStereoPanner?ac.createStereoPanner():null;o1.connect(env);o2.connect(env);if(pn){pn.pan.value=(i%2===0?.22:-.22);env.connect(pn);snd(pn);}else snd(env);[o1,o2].forEach(o=>{o.start(t0+.25);o.stop(t0+6.5);});});}catch(e){console.warn('Audio err:',e);}}
+
+function getAC(){
+  if(!AC) AC=new(window.AudioContext||window.webkitAudioContext)({latencyHint:'playback',sampleRate:44100});
+  if(AC.state==='suspended') AC.resume();
+  return AC;
+}
+
+function unlockAudio(){
+  if(auUnlocked)return;
+  try{
+    const ac=getAC(); buildRev(ac);
+    const b=ac.createBuffer(1,1,22050),s=ac.createBufferSource();
+    s.buffer=b; s.connect(ac.destination); s.start(0);
+    auUnlocked=true;
+  }catch(e){}
+}
+
+['click','touchstart','keydown','pointerdown'].forEach(ev=>{
+  document.addEventListener(ev,unlockAudio,{once:false,passive:true});
+});
+
+/* ── Luxury Hall Reverb (8 saniyeye kadar uzun kuyruk) ── */
+function buildRev(ac){
+  if(rBuf)return;
+  const sr=ac.sampleRate, len=Math.floor(sr*8);
+  rBuf=ac.createBuffer(2,len,sr);
+  for(let ch=0;ch<2;ch++){
+    const d=rBuf.getChannelData(ch);
+    // Early reflections — grand hall
+    const er=[[.011,.82],[.023,.68],[.041,.58],[.063,.47],[.089,.38],[.112,.30],[.148,.22],[.195,.16],[.245,.11]];
+    for(let i=0;i<len;i++){
+      const t=i/sr;
+      let v=(Math.random()*2-1)*Math.exp(-t*0.38)*0.32;
+      if(i<sr*.015)v*=(i/(sr*.015));
+      d[i]=v;
+    }
+    er.forEach(([dt,amp])=>{
+      const di=Math.floor(dt*sr);
+      if(di<len) d[di]+=(Math.random()*2-1)*amp*(ch===0?1.0:0.88);
+    });
+    // Comb filter diffusion
+    const cds=[Math.floor(sr*.0293),Math.floor(sr*.0379),Math.floor(sr*.0441)];
+    cds.forEach(cd=>{ for(let i=cd;i<len;i++) d[i]+=d[i-cd]*0.14; });
+  }
+}
+
+/* ── Master Bus: Warmth + Air + Limiting ── */
+function mBus(ac){
+  const lo=ac.createBiquadFilter(); lo.type='lowshelf'; lo.frequency.value=120; lo.gain.value=3.5;
+  const warm=ac.createBiquadFilter(); warm.type='peaking'; warm.frequency.value=280; warm.Q.value=0.8; warm.gain.value=2.8;
+  const air=ac.createBiquadFilter(); air.type='highshelf'; air.frequency.value=8000; air.gain.value=4.2;
+  const comp=ac.createDynamicsCompressor(); comp.threshold.value=-12; comp.knee.value=8; comp.ratio.value=3; comp.attack.value=.003; comp.release.value=.18;
+  const lim=ac.createDynamicsCompressor(); lim.threshold.value=-.5; lim.knee.value=0; lim.ratio.value=20; lim.attack.value=.001; lim.release.value=.05;
+  const out=ac.createGain(); out.gain.value=0.82;
+  lo.connect(warm); warm.connect(air); air.connect(comp); comp.connect(lim); lim.connect(out); out.connect(ac.destination);
+  return lo;
+}
+
+/* ── Reverb Send ── */
+function mkRev(ac,wet){
+  if(!rBuf)buildRev(ac);
+  const cv=ac.createConvolver(); cv.buffer=rBuf;
+  const wG=ac.createGain(); wG.gain.value=wet;
+  const dG=ac.createGain(); dG.gain.value=1-wet*0.35;
+  return{cv,wG,dG};
+}
+
+/* ── Satu tone bell dengan karakter mewah ── */
+function luxuryBell(ac,freq,amp,pan,startT,mb,rv){
+  // Bell terdiri dari 5 parsial dengan detuning khas lonceng besar
+  const partials=[
+    {r:1.000, a:1.00, decay:9.0},
+    {r:2.756, a:0.42, decay:5.5},
+    {r:5.404, a:0.22, decay:3.8},
+    {r:8.933, a:0.10, decay:2.4},
+    {r:13.67, a:0.05, decay:1.6},
+  ];
+  const send=n=>{n.connect(rv.wG); n.connect(rv.dG); rv.dG.connect(mb);};
+  partials.forEach(({r,a,decay})=>{
+    const osc=ac.createOscillator(), env=ac.createGain();
+    // Tambahan detune kecil untuk warmth
+    const detune=(Math.random()-0.5)*1.8;
+    osc.type='sine';
+    osc.frequency.setValueAtTime(freq*r+detune, startT);
+    // Bell transient — pitch drops sedikit
+    osc.frequency.exponentialRampToValueAtTime(freq*r*0.998, startT+0.08);
+    env.gain.setValueAtTime(0, startT);
+    env.gain.linearRampToValueAtTime(amp*a, startT+0.004);
+    env.gain.exponentialRampToValueAtTime(amp*a*0.6, startT+0.18);
+    env.gain.exponentialRampToValueAtTime(0.00001, startT+decay);
+    osc.connect(env);
+    if(ac.createStereoPanner){
+      const pn=ac.createStereoPanner(); pn.pan.value=Math.max(-1,Math.min(1,pan));
+      env.connect(pn); send(pn);
+    } else send(env);
+    osc.start(startT); osc.stop(startT+decay+0.5);
+  });
+  // Attack transient (metallic click untuk realisme)
+  const noise=ac.createBuffer(1,Math.floor(ac.sampleRate*0.04),ac.sampleRate);
+  const nd=noise.getChannelData(0);
+  for(let i=0;i<nd.length;i++) nd[i]=(Math.random()*2-1)*Math.exp(-i/(nd.length*0.1));
+  const ns=ac.createBufferSource(), bf=ac.createBiquadFilter(), ne=ac.createGain();
+  ns.buffer=noise; bf.type='bandpass'; bf.frequency.value=freq*3.2; bf.Q.value=3;
+  ne.gain.setValueAtTime(amp*0.18,startT); ne.gain.exponentialRampToValueAtTime(0.00001,startT+0.06);
+  ns.connect(bf); bf.connect(ne); send(ne);
+  ns.start(startT); ns.stop(startT+0.08);
+}
+
+/* ── Low brass impact ── */
+function brassHit(ac,freq,amp,startT,mb,rv){
+  const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
+  [1,2,3,4].forEach((r,i)=>{
+    const o=ac.createOscillator(),e=ac.createGain();
+    o.type=i<2?'sawtooth':'square';
+    o.frequency.setValueAtTime(freq*r,startT);
+    o.frequency.linearRampToValueAtTime(freq*r*1.004,startT+0.12);
+    o.frequency.exponentialRampToValueAtTime(freq*r*0.995,startT+1.2);
+    const a=amp*[0.5,0.35,0.18,0.08][i];
+    e.gain.setValueAtTime(0,startT);
+    e.gain.linearRampToValueAtTime(a,startT+0.015);
+    e.gain.exponentialRampToValueAtTime(a*0.7,startT+0.3);
+    e.gain.exponentialRampToValueAtTime(0.00001,startT+2.8);
+    const filt=ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=freq*r*3.5; filt.Q.value=1.2;
+    o.connect(filt); filt.connect(e); send(e);
+    o.start(startT); o.stop(startT+3.2);
+  });
+}
+
+/* ── String swell pad ── */
+function stringSwell(ac,chords,startT,duration,amp,mb,rv){
+  const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
+  chords.forEach((freq,ci)=>{
+    // Tiga osilator per string note (unison detune)
+    [-0.18,0,0.18].forEach((detune,di)=>{
+      const o=ac.createOscillator(),e=ac.createGain(),vib=ac.createOscillator(),vibG=ac.createGain();
+      o.type='sawtooth'; o.frequency.setValueAtTime(freq+detune,startT);
+      vib.type='sine'; vib.frequency.value=5.2; vibG.gain.value=freq*0.003;
+      vib.connect(vibG); vibG.connect(o.frequency);
+      const filt=ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=freq*6; filt.Q.value=0.7;
+      const pan=ac.createStereoPanner?ac.createStereoPanner():null;
+      if(pan) pan.pan.value=(ci/chords.length-0.5)*0.5+(di-1)*0.12;
+      e.gain.setValueAtTime(0,startT);
+      e.gain.linearRampToValueAtTime(amp*0.055,startT+duration*0.25);
+      e.gain.setValueAtTime(amp*0.055,startT+duration*0.7);
+      e.gain.exponentialRampToValueAtTime(0.00001,startT+duration);
+      o.connect(filt); filt.connect(e);
+      if(pan){e.connect(pan);send(pan);}else send(e);
+      [o,vib].forEach(x=>{x.start(startT);x.stop(startT+duration+0.3);});
+    });
+  });
+}
+
+/* ── Harp glissando ── */
+function harpGliss(ac,baseFreq,notes,startT,mb,rv){
+  const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
+  notes.forEach((semi,i)=>{
+    const freq=baseFreq*Math.pow(2,semi/12);
+    const t=startT+i*0.055;
+    const o1=ac.createOscillator(),o2=ac.createOscillator(),env=ac.createGain();
+    o1.type='sine'; o1.frequency.value=freq;
+    o2.type='triangle'; o2.frequency.value=freq*2.003;
+    const g1=ac.createGain(),g2=ac.createGain();
+    g1.gain.value=0.6; g2.gain.value=0.22;
+    env.gain.setValueAtTime(0,t);
+    env.gain.linearRampToValueAtTime(0.065,t+0.003);
+    env.gain.exponentialRampToValueAtTime(0.028,t+0.4);
+    env.gain.exponentialRampToValueAtTime(0.00001,t+3.5);
+    o1.connect(g1); o2.connect(g2); g1.connect(env); g2.connect(env); send(env);
+    [o1,o2].forEach(o=>{o.start(t);o.stop(t+4);});
+  });
+}
+
+/* ── Choir pad ── */
+function choirRise(ac,freqs,startT,duration,mb,rv){
+  const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
+  freqs.forEach((f,fi)=>{
+    const o=ac.createOscillator(),e=ac.createGain(),filt=ac.createBiquadFilter();
+    o.type='sine'; o.frequency.setValueAtTime(f*0.985,startT);
+    o.frequency.linearRampToValueAtTime(f,startT+duration*0.5);
+    filt.type='bandpass'; filt.frequency.value=f*1.6; filt.Q.value=3;
+    e.gain.setValueAtTime(0,startT);
+    e.gain.linearRampToValueAtTime(0.048,startT+duration*0.3);
+    e.gain.setValueAtTime(0.048,startT+duration*0.75);
+    e.gain.exponentialRampToValueAtTime(0.00001,startT+duration);
+    const pn=ac.createStereoPanner?ac.createStereoPanner():null;
+    if(pn)pn.pan.value=(fi/freqs.length-0.5)*0.6;
+    o.connect(filt); filt.connect(e);
+    if(pn){e.connect(pn);send(pn);}else send(e);
+    o.start(startT); o.stop(startT+duration+0.5);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PLAY ALARM — Grand Cathedral Bell Sequence
+   
+   Urutan: Bong... Bong... Bong... Bong...
+   Lonceng besar (Eb3, C3, D3, Bb2) dengan reverb hall panjang
+   + Low brass impact di setiap pukulan
+   + String swell di akhir
+══════════════════════════════════════════════════════════════ */
+function playAlarm(){
+  try{
+    const ac=getAC(); buildRev(ac);
+    const mb=mBus(ac), rv=mkRev(ac,0.72);
+    rv.cv.connect(mb); rv.wG.connect(rv.cv);
+    const t0=ac.currentTime+0.06;
+
+    // Urutan lonceng katedral — 4 pukulan agung
+    const bellSeq=[
+      {freq:155.56, pan:-0.3, t:0.0},    // Eb3 — dalam, berat
+      {freq:130.81, pan: 0.2, t:2.2},    // C3  — lebih dalam
+      {freq:146.83, pan:-0.1, t:4.4},    // D3
+      {freq:116.54, pan: 0.1, t:6.6},    // Bb2 — paling dalam
+    ];
+
+    bellSeq.forEach(({freq,pan,t})=>{
+      const tt=t0+t;
+      luxuryBell(ac,freq,0.26,pan,tt,mb,rv);
+      // Oktaf atas (lebih lembut)
+      luxuryBell(ac,freq*2,0.10,pan*-0.5,tt+0.004,mb,rv);
+      // Brass impact bersamaan dengan lonceng
+      brassHit(ac,freq*0.5,0.07,tt+0.02,mb,rv);
+    });
+
+    // String swell mewah setelah lonceng ke-2
+    stringSwell(ac,[
+      130.81,164.81,196.00,261.63,  // C minor chord — dramatic
+    ], t0+2.0, 8.0, 1.0, mb, rv);
+
+    // Deep sub bass growl
+    const sub=ac.createOscillator(), subE=ac.createGain(), subF=ac.createBiquadFilter();
+    sub.type='sine'; sub.frequency.setValueAtTime(55,t0); sub.frequency.exponentialRampToValueAtTime(48,t0+5);
+    subF.type='lowpass'; subF.frequency.value=90;
+    subE.gain.setValueAtTime(0,t0); subE.gain.linearRampToValueAtTime(0.18,t0+0.05);
+    subE.gain.setValueAtTime(0.18,t0+1.5); subE.gain.exponentialRampToValueAtTime(0.00001,t0+7);
+    sub.connect(subF); subF.connect(subE); subE.connect(mb);
+    sub.start(t0); sub.stop(t0+8);
+
+  }catch(e){console.warn('Audio:',e);}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PLAY HOKI — Royal Fanfare + Harp + Choir
+   
+   Opening: Royal brass fanfare ascending (4 nada)
+   Middle:  Harp glissando cascading naik
+   Ending:  Choir swell + high bells tinkle
+══════════════════════════════════════════════════════════════ */
+function playHoki(){
+  try{
+    const ac=getAC(); buildRev(ac);
+    const mb=mBus(ac), rv=mkRev(ac,0.65);
+    rv.cv.connect(mb); rv.wG.connect(rv.cv);
+    const t0=ac.currentTime+0.05;
+
+    // ── Royal Fanfare: G major ascending ──
+    const fanfareNotes=[
+      {f:196.00,t:0.0,pan:-.4},  // G3
+      {f:246.94,t:0.28,pan:-.2}, // B3
+      {f:293.66,t:0.56,pan: 0.0}, // D4
+      {f:392.00,t:0.84,pan: 0.2}, // G4
+      {f:493.88,t:1.18,pan: 0.4}, // B4
+      {f:587.33,t:1.55,pan: 0.2}, // D5
+      {f:783.99,t:1.95,pan: 0.0}, // G5 — grand finale
+    ];
+    const send=n=>{n.connect(rv.wG);n.connect(rv.dG);rv.dG.connect(mb);};
+    fanfareNotes.forEach(({f,t,pan},i)=>{
+      const tt=t0+t;
+      // Brass tone (2 osilator: fundamental + upper harmonics)
+      [1,2,3,4].forEach((r,ri)=>{
+        const o=ac.createOscillator(),e=ac.createGain(),filt=ac.createBiquadFilter();
+        o.type=ri===0?'sawtooth':'square';
+        o.frequency.value=f*r;
+        filt.type='lowpass'; filt.frequency.setValueAtTime(f*r*4,tt); filt.frequency.exponentialRampToValueAtTime(f*r*2,tt+0.5); filt.Q.value=1.5;
+        const amp=[0.18,0.10,0.06,0.03][ri]*(i>4?1.3:1.0);
+        e.gain.setValueAtTime(0,tt); e.gain.linearRampToValueAtTime(amp,tt+0.012);
+        e.gain.exponentialRampToValueAtTime(amp*0.7,tt+0.25); e.gain.exponentialRampToValueAtTime(0.00001,tt+(i===6?3.5:1.2));
+        const pn=ac.createStereoPanner?ac.createStereoPanner():null;
+        if(pn)pn.pan.value=pan+(ri%2===0?0.08:-0.08);
+        o.connect(filt); filt.connect(e); if(pn){e.connect(pn);send(pn);}else send(e);
+        o.start(tt); o.stop(tt+4);
+      });
+      // Bell shimmer di atas fanfare
+      if(i>=3) luxuryBell(ac,f*2,0.05,pan,tt+0.01,mb,rv);
+    });
+
+    // ── Harp Glissando ── mulai bersamaan dengan fanfare note ke-3
+    harpGliss(ac,261.63,
+      [0,2,4,7,9,12,14,16,19,21,24], // C major pentatonic + lebih tinggi
+      t0+0.52, mb, rv
+    );
+    // Harp kedua (lebih tinggi, sedikit delay)
+    harpGliss(ac,523.25,
+      [0,3,5,7,10,12,15,17,19],
+      t0+0.85, mb, rv
+    );
+
+    // ── Choir Rise — masuk di t0+1.2 ──
+    choirRise(ac,[
+      196.00,246.94,293.66,  // G major triad
+      392.00,493.88,587.33,
+    ], t0+1.2, 5.5, mb, rv);
+
+    // ── String swell besar di akhir ──
+    stringSwell(ac,[
+      196.00,246.94,293.66,392.00,493.88,
+    ], t0+1.8, 6.0, 1.2, mb, rv);
+
+    // ── Timpani Roll — drum orchestral ──
+    const timpFreqs=[73.42, 87.31]; // D2, F2
+    timpFreqs.forEach((f,fi)=>{
+      const t=t0+fi*0.15;
+      for(let i=0;i<18;i++){
+        const nt=t+i*0.055+Math.random()*0.01;
+        const o=ac.createOscillator(),e=ac.createGain(),filt=ac.createBiquadFilter();
+        o.type='sine'; o.frequency.value=f;
+        filt.type='lowpass'; filt.frequency.value=220;
+        e.gain.setValueAtTime(0,nt); e.gain.linearRampToValueAtTime(0.055*(1-i/20),nt+0.008); e.gain.exponentialRampToValueAtTime(0.00001,nt+0.25);
+        o.connect(filt); filt.connect(e); send(e);
+        o.start(nt); o.stop(nt+0.35);
+      }
+    });
+
+  }catch(e){console.warn('Audio:',e);}
+}
 
 /* ══════ ALARM LOOP ══════ */
 let loopT=null,bgT=null,looping=false,loopH=false,lastPlayTime=0;
