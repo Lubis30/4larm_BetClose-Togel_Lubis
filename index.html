@@ -1117,21 +1117,7 @@ document.addEventListener('keydown', e => {
   }, 500);
 })();
 
-/* ══════════════════════════════════════════════════════════════════
-   KALIMBA AUDIO ENGINE
-   
-   Kalimba (thumb piano) menghasilkan suara dengan karakter:
-   - Attack sangat cepat (dipetik ibu jari)
-   - Decay panjang dengan shimmer alami
-   - Inharmonic partials yang khas (bukan integer ratios)
-   - Warm metallic tone dengan body resonance kayu
-   
-   playAlarm → Melodi kalimba pentatonic minor yang sendu & merdu
-               Urutan: motif turun perlahan dengan reverb ruangan
-   playHoki  → Melodi kalimba pentatonic major ascending — ceria & menenangkan
-               Arpeggio naik + echo ping-pong stereo
-══════════════════════════════════════════════════════════════════ */
-let AC=null,rBuf=null,auUnlocked=false;
+let AC=null,auUnlocked=false;
 
 function getAC(){
   if(!AC) AC=new(window.AudioContext||window.webkitAudioContext)({latencyHint:'playback',sampleRate:44100});
@@ -1142,9 +1128,9 @@ function getAC(){
 function unlockAudio(){
   if(auUnlocked)return;
   try{
-    const ac=getAC(); buildRev(ac);
+    const ac=getAC();
     const b=ac.createBuffer(1,1,22050),s=ac.createBufferSource();
-    s.buffer=b; s.connect(ac.destination); s.start(0);
+    s.buffer=b;s.connect(ac.destination);s.start(0);
     auUnlocked=true;
   }catch(e){}
 }
@@ -1153,286 +1139,164 @@ function unlockAudio(){
   document.addEventListener(ev,unlockAudio,{once:false,passive:true});
 });
 
-/* ── Room Reverb — ruangan kecil hangat, bukan hall besar ── */
-function buildRev(ac){
-  if(rBuf)return;
-  const sr=ac.sampleRate, len=Math.floor(sr*3.2);
-  rBuf=ac.createBuffer(2,len,sr);
-  for(let ch=0;ch<2;ch++){
-    const d=rBuf.getChannelData(ch);
-    // Early reflections — ruangan kayu kecil
-    const er=[
-      [.006,.70],[.013,.55],[.021,.45],[.034,.36],
-      [.049,.28],[.071,.20],[.098,.14],[.135,.09],[.185,.06]
-    ];
-    for(let i=0;i<len;i++){
-      const t=i/sr;
-      let v=(Math.random()*2-1)*Math.exp(-t*1.8)*0.18;
-      if(i<sr*.004) v*=(i/(sr*.004));
-      d[i]=v;
-    }
-    er.forEach(([dt,amp])=>{
-      const di=Math.floor(dt*sr);
-      if(di<len) d[di]+=(Math.random()*2-1)*amp*(ch===0?1.0:0.92);
-    });
-    // Comb diffusion ringan
-    const cd=Math.floor(sr*.0181);
-    for(let i=cd;i<len;i++) d[i]+=d[i-cd]*0.12;
-  }
+/* ════════════════════════════════════════════════════════════════
+   MASTER BUS — clean, punchy, tidak distorsi
+════════════════════════════════════════════════════════════════ */
+function makeMasterBus(ac){
+  // Slight presence boost agar jelas di speaker kecil
+  const pres=ac.createBiquadFilter();
+  pres.type='peaking'; pres.frequency.value=3200; pres.Q.value=1.2; pres.gain.value=2.5;
+  // High shelf sparkle
+  const air=ac.createBiquadFilter();
+  air.type='highshelf'; air.frequency.value=8000; air.gain.value=2.0;
+  // Brickwall limiter
+  const lim=ac.createDynamicsCompressor();
+  lim.threshold.value=-1.0; lim.knee.value=0; lim.ratio.value=20;
+  lim.attack.value=0.001; lim.release.value=0.05;
+  const vol=ac.createGain(); vol.gain.value=0.85;
+  pres.connect(air); air.connect(lim); lim.connect(vol); vol.connect(ac.destination);
+  return pres;
 }
 
-/* ── Master Bus: warm kalimba EQ ── */
-function mBus(ac){
-  // High-mid boost untuk shimmer metalik kalimba
-  const mid=ac.createBiquadFilter(); mid.type='peaking'; mid.frequency.value=1800; mid.Q.value=1.4; mid.gain.value=3.2;
-  // Air sparkle atas
-  const air=ac.createBiquadFilter(); air.type='highshelf'; air.frequency.value=7000; air.gain.value=3.8;
-  // Low cut — kalimba tidak punya bass berat
-  const lo=ac.createBiquadFilter(); lo.type='highpass'; lo.frequency.value=180; lo.Q.value=0.6;
-  // Soft limiter
-  const lim=ac.createDynamicsCompressor(); lim.threshold.value=-3; lim.knee.value=4; lim.ratio.value=8; lim.attack.value=.002; lim.release.value=.12;
-  const out=ac.createGain(); out.gain.value=0.78;
-  lo.connect(mid); mid.connect(air); air.connect(lim); lim.connect(out); out.connect(ac.destination);
-  return lo;
+/* ════════════════════════════════════════════════════════════════
+   SATU BEEP — nada bersih seperti alarm clock PC / Windows
+   freq   : Hz (880 = A5, 1046 = C6, dll)
+   dur    : durasi suara nyala (detik)
+   startT : waktu mulai (AudioContext.currentTime)
+   amp    : volume 0-1
+   mb     : master bus node
+════════════════════════════════════════════════════════════════ */
+function makeBeep(ac, freq, dur, startT, amp, mb){
+  const osc  = ac.createOscillator();
+  const env  = ac.createGain();
+
+  // Square wave 50% duty → suara alarm clock klasik yang ikonik
+  osc.type = 'square';
+  osc.frequency.value = freq;
+
+  // Envelope: attack sangat cepat (1ms), sustain penuh, release cepat (8ms)
+  // Persis seperti Windows / macOS alarm beep
+  env.gain.setValueAtTime(0, startT);
+  env.gain.linearRampToValueAtTime(amp, startT + 0.001);        // attack 1ms
+  env.gain.setValueAtTime(amp, startT + dur - 0.008);           // sustain
+  env.gain.linearRampToValueAtTime(0, startT + dur);            // release 8ms
+
+  // Soft low-pass agar tidak terlalu harsh di speaker kecil
+  const lp = ac.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = 4800; lp.Q.value = 0.5;
+
+  osc.connect(lp); lp.connect(env); env.connect(mb);
+  osc.start(startT);
+  osc.stop(startT + dur + 0.01);
 }
 
-/* ── Reverb send ── */
-function mkRev(ac,wet){
-  if(!rBuf)buildRev(ac);
-  const cv=ac.createConvolver(); cv.buffer=rBuf;
-  const wG=ac.createGain(); wG.gain.value=wet;
-  const dG=ac.createGain(); dG.gain.value=1-wet*0.3;
-  return{cv,wG,dG};
-}
-
-/* ══════════════════════════════════════════════════════════════
-   KALIMBA NOTE ENGINE
+/* ════════════════════════════════════════════════════════════════
+   PLAY ALARM — Pola alarm PC klasik SEMPURNA
    
-   Karakter fisik kalimba:
-   - Tine (bilah logam) dipetik → attack super cepat (~2ms)
-   - Partial 1 (fundamental): decay ~4-6 detik
-   - Partial 2 (× 2.76): inharmonic, decay ~2.5 detik  
-   - Partial 3 (× 5.4): sangat cepat hilang, ~1.2 detik
-   - Body resonance kayu: tambahan warmth di frekuensi rendah
-   - Tiny metallic click saat dipetik
-══════════════════════════════════════════════════════════════ */
-function kalimbaTone(ac, freq, amp, pan, t, mb, rv){
-  const send = n => { n.connect(rv.wG); n.connect(rv.dG); rv.dG.connect(mb); };
-
-  // Inharmonic partials khas kalimba (hasil riset akustik)
-  const partials = [
-    { r:1.000,  a:1.00, dec:5.2, type:'sine'     },  // Fundamental — paling panjang
-    { r:2.033,  a:0.28, dec:2.8, type:'sine'     },  // Octave + slight sharp (khas tine)
-    { r:5.872,  a:0.10, dec:1.4, type:'sine'     },  // Upper partial — shimmer
-    { r:11.34,  a:0.04, dec:0.6, type:'sine'     },  // Sparkle
-  ];
-
-  partials.forEach(({r, a, dec, type}) => {
-    const osc = ac.createOscillator();
-    const env = ac.createGain();
-    const filt = ac.createBiquadFilter();
-
-    osc.type = type;
-    // Kalimba pitch bends sedikit ke atas setelah dipetik (tine spring back)
-    osc.frequency.setValueAtTime(freq * r * 0.9985, t);
-    osc.frequency.exponentialRampToValueAtTime(freq * r, t + 0.015);
-
-    // Envelope: attack kilat, decay eksponensial panjang
-    env.gain.setValueAtTime(0, t);
-    env.gain.linearRampToValueAtTime(amp * a, t + 0.002);
-    env.gain.exponentialRampToValueAtTime(amp * a * 0.55, t + 0.08);
-    env.gain.exponentialRampToValueAtTime(0.00001, t + dec);
-
-    // Warm bandpass untuk body resonance
-    filt.type = 'peaking'; filt.frequency.value = freq * 0.85; filt.gain.value = 1.5; filt.Q.value = 2;
-
-    osc.connect(filt); filt.connect(env);
-
-    if(ac.createStereoPanner){
-      const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-1, Math.min(1, pan));
-      env.connect(pn); send(pn);
-    } else send(env);
-
-    osc.start(t); osc.stop(t + dec + 0.3);
-  });
-
-  // Metallic click — suara jari memetik tine (sangat singkat)
-  const clickLen = Math.floor(ac.sampleRate * 0.006);
-  const clickBuf = ac.createBuffer(1, clickLen, ac.sampleRate);
-  const cd = clickBuf.getChannelData(0);
-  for(let i = 0; i < clickLen; i++)
-    cd[i] = (Math.random()*2-1) * Math.exp(-i/(clickLen*0.08));
-  const cs = ac.createBufferSource();
-  const cf = ac.createBiquadFilter(); cf.type='bandpass'; cf.frequency.value=freq*4.5; cf.Q.value=4;
-  const ce = ac.createGain(); ce.gain.setValueAtTime(amp*0.12, t); ce.gain.exponentialRampToValueAtTime(0.00001, t+0.012);
-  cs.buffer = clickBuf; cs.connect(cf); cf.connect(ce); send(ce);
-  cs.start(t); cs.stop(t+0.02);
-
-  // Body resonance — wooden box warmth
-  const body = ac.createOscillator(); const bodyE = ac.createGain();
-  body.type = 'triangle'; body.frequency.value = freq * 0.498; // sub-octave hangat
-  bodyE.gain.setValueAtTime(0, t); bodyE.gain.linearRampToValueAtTime(amp*0.06, t+0.005);
-  bodyE.gain.exponentialRampToValueAtTime(0.00001, t+0.45);
-  body.connect(bodyE); send(bodyE);
-  body.start(t); body.stop(t+0.6);
-}
-
-/* ── Ping-pong delay untuk efek stereo kalimba ── */
-function pingPongDelay(ac, mb, delayTime, feedback, wet){
-  const dL=ac.createDelay(1.0), dR=ac.createDelay(1.0);
-  const fL=ac.createGain(), fR=ac.createGain();
-  const pL=ac.createStereoPanner?ac.createStereoPanner():null;
-  const pR=ac.createStereoPanner?ac.createStereoPanner():null;
-  dL.delayTime.value=delayTime; dR.delayTime.value=delayTime*1.5;
-  fL.gain.value=feedback; fR.gain.value=feedback*0.8;
-  const wG=ac.createGain(); wG.gain.value=wet;
-  if(pL){pL.pan.value=-0.7; pR.pan.value=0.7;}
-  dL.connect(fL); fL.connect(dR);
-  dR.connect(fR); fR.connect(dL);
-  if(pL){dL.connect(pL);dR.connect(pR);pL.connect(wG);pR.connect(wG);}
-  else{dL.connect(wG);dR.connect(wG);}
-  wG.connect(mb);
-  return dL; // input node
-}
-
-/* ══════════════════════════════════════════════════════════════
-   PLAY ALARM — Kalimba Melodi Sendu & Merdu
+   Pola: BEEP-BEEP  BEEP-BEEP  BEEP-BEEP  (pause)  ulang
+   ━━━━  ━━━━       ━━━━  ━━━━      ━━━━  ━━━━
    
-   Tangga nada: D minor pentatonic (D E F A C)
-   Motif: turun perlahan — terasa seperti pengingat lembut
-   Pola: intro note → melodi 8 nada → resolution
-   Dengan ping-pong delay & room reverb
-══════════════════════════════════════════════════════════════ */
+   Persis seperti: Windows XP / Windows 10 Clock Alarm
+   Frekuensi alternating: 880Hz (A5) dan 1046Hz (C6)
+   untuk efek "ding-dong" yang familiar dan jelas.
+   
+   Timeline satu siklus (~5 detik):
+   t=0.00: beep 880Hz 0.18s
+   t=0.25: beep 1046Hz 0.18s
+   t=0.65: beep 880Hz 0.18s
+   t=0.90: beep 1046Hz 0.18s
+   t=1.30: beep 880Hz 0.18s
+   t=1.55: beep 1046Hz 0.18s
+   t=1.95: beep 880Hz 0.18s
+   t=2.20: beep 1046Hz 0.18s  ← akhir grup 1
+   JEDA 0.7s
+   t=3.05: beep 880Hz 0.18s
+   t=3.30: beep 1046Hz 0.18s  ← grup 2
+   JEDA 0.7s
+   t=4.15: beep 880Hz 0.25s  ← long final tone
+   t=4.50: beep 1046Hz 0.35s
+════════════════════════════════════════════════════════════════ */
 function playAlarm(){
   try{
-    const ac=getAC(); buildRev(ac);
-    const mb=mBus(ac), rv=mkRev(ac,0.55);
-    rv.cv.connect(mb); rv.wG.connect(rv.cv);
+    const ac  = getAC();
+    const mb  = makeMasterBus(ac);
+    const t0  = ac.currentTime + 0.04;
 
-    // Ping-pong delay — efek echo stereo indah
-    const ppd=pingPongDelay(ac,mb,0.28,0.38,0.30);
-
-    const sendPP = n => { n.connect(rv.wG); n.connect(rv.dG); rv.dG.connect(mb); n.connect(ppd); };
-    const sendDirect = n => { n.connect(rv.wG); n.connect(rv.dG); rv.dG.connect(mb); };
-
-    const t0 = ac.currentTime + 0.08;
-
-    // D minor pentatonic scale — frekuensi dalam Hz
-    // D4=293.66, E4=329.63, F4=349.23, A4=440.00, C5=523.25
-    // D5=587.33, F5=698.46, A5=880.00
-    const notes = [
-      // [freq, pan, timing, amp]  — motif pembuka, dari atas turun
-      [880.00,  0.0,  0.00, 0.18],  // A5 — tinggi, lembut
-      [587.33, -0.3,  0.42, 0.20],  // D5
-      [523.25,  0.3,  0.80, 0.22],  // C5
-      [440.00, -0.2,  1.18, 0.24],  // A4
-      [349.23,  0.2,  1.62, 0.24],  // F4 — tengah
-      [329.63, -0.3,  2.10, 0.22],  // E4
-      [293.66,  0.0,  2.62, 0.26],  // D4 — resolusi ke root
-      // Jeda sejenak, lalu tiga nada akhir penutup
-      [440.00, -0.2,  3.50, 0.18],  // A4
-      [349.23,  0.2,  3.88, 0.16],  // F4
-      [293.66,  0.0,  4.32, 0.22],  // D4 — final, paling lama
+    // Grup 1: 4 pasang beep cepat
+    const beeps1 = [
+      [0.00, 880,  0.18],
+      [0.25, 1046, 0.18],
+      [0.62, 880,  0.18],
+      [0.87, 1046, 0.18],
+      [1.24, 880,  0.18],
+      [1.49, 1046, 0.18],
+      [1.86, 880,  0.18],
+      [2.11, 1046, 0.18],
     ];
 
-    notes.forEach(([freq, pan, dt, amp], i) => {
-      const t = t0 + dt;
-      // Note terakhir melalui ping-pong delay untuk efek fadeout indah
-      if(i >= 7) kalimbaTone(ac, freq, amp, pan, t, mb, {wG:{connect:n=>sendPP(n)}, dG:{connect:()=>{}}});
-      else        kalimbaTone(ac, freq, amp, pan, t, mb, rv);
+    // Jeda, lalu Grup 2: 2 pasang
+    const beeps2 = [
+      [2.95, 880,  0.18],
+      [3.20, 1046, 0.18],
+      [3.57, 880,  0.18],
+      [3.82, 1046, 0.18],
+    ];
+
+    // Final: 2 nada panjang — seperti "alarm finished"
+    const beepsFinal = [
+      [4.45, 880,  0.30],
+      [4.85, 1046, 0.40],
+    ];
+
+    [...beeps1, ...beeps2, ...beepsFinal].forEach(([dt, freq, dur]) => {
+      makeBeep(ac, freq, dur, t0 + dt, 0.72, mb);
     });
 
-    // Sub-tone body resonance D (wooden box ambience)
-    const sub=ac.createOscillator(), subE=ac.createGain();
-    sub.type='sine'; sub.frequency.value=73.42; // D2
-    subE.gain.setValueAtTime(0,t0); subE.gain.linearRampToValueAtTime(0.035,t0+0.3);
-    subE.gain.setValueAtTime(0.035,t0+2.5); subE.gain.exponentialRampToValueAtTime(0.00001,t0+5.5);
-    sub.connect(subE); subE.connect(mb);
-    sub.start(t0); sub.stop(t0+6);
-
-  }catch(e){console.warn('Kalimba audio error:',e);}
+  }catch(e){ console.warn('Alarm audio error:', e); }
 }
 
-/* ══════════════════════════════════════════════════════════════
-   PLAY HOKI — Kalimba Arpeggio Ceria & Menenangkan
+/* ════════════════════════════════════════════════════════════════
+   PLAY HOKI — Ascending chime tone mewah
    
-   Tangga nada: C major pentatonic (C D E G A)
-   Motif: naik cepat arpeggio → melodi mengambang indah
-   Terasa seperti angin sepoi membawa keberuntungan 🌟
-══════════════════════════════════════════════════════════════ */
+   Pola: nada naik bertangga (ding-ding-ding-DING!)
+   Seperti alarm "Good Morning" iPhone / Samsung premium.
+   Frekuensi: C5 → E5 → G5 → C6 (arpeggio C major)
+   Diulang dua kali dengan sedikit lebih keras.
+════════════════════════════════════════════════════════════════ */
 function playHoki(){
   try{
-    const ac=getAC(); buildRev(ac);
-    const mb=mBus(ac), rv=mkRev(ac,0.60);
-    rv.cv.connect(mb); rv.wG.connect(rv.cv);
+    const ac  = getAC();
+    const mb  = makeMasterBus(ac);
+    const t0  = ac.currentTime + 0.04;
 
-    // Ping-pong delay lebih cepat untuk efek sparkle
-    const ppd=pingPongDelay(ac,mb,0.18,0.42,0.35);
+    // Arpeggio naik C major: C5-E5-G5-C6
+    // Setiap nada 0.12s ON, 0.08s OFF
+    const chime = [
+      // [dt, freq, dur, amp]
+      [0.00, 523.25, 0.14, 0.55],  // C5
+      [0.22, 659.25, 0.14, 0.60],  // E5
+      [0.44, 783.99, 0.14, 0.65],  // G5
+      [0.66, 1046.5, 0.22, 0.72],  // C6 — paling tinggi, paling panjang
 
-    const t0 = ac.currentTime + 0.05;
+      // Ulang, sedikit lebih keras
+      [1.20, 523.25, 0.14, 0.60],
+      [1.42, 659.25, 0.14, 0.65],
+      [1.64, 783.99, 0.14, 0.70],
+      [1.86, 1046.5, 0.28, 0.80],  // C6 — lebih panjang
 
-    // C major pentatonic:
-    // C4=261.63, D4=293.66, E4=329.63, G4=392.00, A4=440.00
-    // C5=523.25, D5=587.33, E5=659.25, G5=783.99, A5=880.00, C6=1046.50
-
-    // Arpeggio naik cepat (sweep)
-    const arp = [
-      [261.63, -0.5, 0.00, 0.16],  // C4
-      [329.63, -0.3, 0.09, 0.16],  // E4
-      [392.00, -0.1, 0.18, 0.17],  // G4
-      [523.25,  0.1, 0.27, 0.17],  // C5
-      [659.25,  0.3, 0.36, 0.18],  // E5
-      [783.99,  0.5, 0.45, 0.20],  // G5 — puncak arpeggio
+      // Ulang ketiga — semakin kuat, dramatik
+      [2.45, 523.25, 0.12, 0.62],
+      [2.63, 659.25, 0.12, 0.67],
+      [2.81, 783.99, 0.12, 0.72],
+      [2.99, 1046.5, 0.12, 0.78],
+      [3.17, 1318.5, 0.32, 0.82],  // E6 — extra high sparkle
     ];
 
-    // Melodi utama setelah arpeggio
-    const melody = [
-      [880.00,  0.0,  0.70, 0.22],  // A5 — tinggi cerah
-      [783.99, -0.3,  1.12, 0.20],  // G5
-      [659.25,  0.3,  1.52, 0.22],  // E5
-      [783.99, -0.2,  1.90, 0.18],  // G5
-      [523.25,  0.2,  2.35, 0.24],  // C5
-      [587.33, -0.3,  2.78, 0.20],  // D5
-      [523.25,  0.0,  3.22, 0.22],  // C5
-      [440.00, -0.2,  3.72, 0.18],  // A4
-      [392.00,  0.2,  4.18, 0.16],  // G4
-      [523.25,  0.0,  4.65, 0.24],  // C5 — resolution
-      [783.99,  0.0,  5.20, 0.16],  // G5 — sparkle akhir
-      [1046.50, 0.0,  5.65, 0.12],  // C6 — tinkle paling atas
-    ];
-
-    // Render arpeggio
-    arp.forEach(([freq, pan, dt, amp]) => {
-      kalimbaTone(ac, freq, amp, pan, t0+dt, mb, rv);
-      // Double note: oktaf bawah lebih lembut, ping-pong
-      const o=ac.createOscillator(),e=ac.createGain();
-      o.type='sine'; o.frequency.value=freq*0.5;
-      e.gain.setValueAtTime(0,t0+dt); e.gain.linearRampToValueAtTime(amp*0.06,t0+dt+0.002);
-      e.gain.exponentialRampToValueAtTime(0.00001,t0+dt+1.8);
-      o.connect(e); e.connect(ppd); e.connect(mb);
-      o.start(t0+dt); o.stop(t0+dt+2.2);
+    chime.forEach(([dt, freq, dur, amp]) => {
+      makeBeep(ac, freq, dur, t0 + dt, amp, mb);
     });
 
-    // Render melodi utama
-    melody.forEach(([freq, pan, dt, amp]) => {
-      kalimbaTone(ac, freq, amp, pan, t0+dt, mb, rv);
-    });
-
-    // Chord resonance di bawah — C major warm pad
-    [[261.63,0],[329.63,0.3],[392.00,-0.3]].forEach(([f,pan],i)=>{
-      const o=ac.createOscillator(),e=ac.createGain(),filt=ac.createBiquadFilter();
-      o.type='triangle'; o.frequency.value=f;
-      filt.type='lowpass'; filt.frequency.value=f*3; filt.Q.value=0.8;
-      const st=t0+0.55;
-      e.gain.setValueAtTime(0,st); e.gain.linearRampToValueAtTime(0.030,st+0.6);
-      e.gain.setValueAtTime(0.030,st+3.2); e.gain.exponentialRampToValueAtTime(0.00001,st+6.5);
-      const pn=ac.createStereoPanner?ac.createStereoPanner():null;
-      if(pn){pn.pan.value=pan;o.connect(filt);filt.connect(e);e.connect(pn);pn.connect(mb);}
-      else{o.connect(filt);filt.connect(e);e.connect(mb);}
-      o.start(st); o.stop(st+7);
-    });
-
-  }catch(e){console.warn('Kalimba hoki audio error:',e);}
+  }catch(e){ console.warn('Hoki audio error:', e); }
 }
 
 /* ══════ ALARM LOOP ══════ */
